@@ -1,0 +1,3806 @@
+File Methods
+File methods can be used for accessing both local and temporary file systems or a network and manipulating file objects of any kind.
+
+The temporary file system specified by the memory:// protocol offers similar functionality to an ordinary file system. To prevent memory overflow, files saved in the temporary file system should be deleted when no longer needed, for example by executing the remove method. In addition, these files are available for any WFD within a single IPS instance.
+
+Because the speed of RAM is so much faster for most kinds of storage, files in the temporary file system can be accessed much more quickly.
+
+
+Example  The following script creates a temporary file, reads its content and then deletes the file when finished:
+File.TextStream outputStream;
+String filePath = "memory://readLine.txt";
+String filePath = Binary.generateUUID().toHex()+".txt";
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+String encoding = "UTF-8";
+
+// open a file and write some lines
+outputStream = File.openText(filePath, outputMode, encoding);
+outputStream.writeLine("Hello ");
+outputStream.writeLine("World!");
+outputStream.close();
+
+// open the same file and read the first line
+File.TextStream inputStream;
+File.Mode inputMode = File.Mode.ReadOnly;
+inputStream = File.openText(filePath, inputMode, encoding);
+String firstLine = inputStream.readLine();   
+// firstLine = "Hello "
+inputStream.close();
+
+// delete the file when finished
+File.remove(filePath);
+
+Note  Files saved in a temporary file system can only be used by the WFD that defines their filePath, within the same IPS instance. If you need to use such files across multiple WFDs, save them to a local or network file system.
+Files saved in a temporary file system can be used by various modules within one WFD. Pay attention to the processing order of such files. The module defining the files must be processed before modules that are supposed to use the files.
+
+To ensure that you are manipulating with the correct data, use the JobId which serves for precise job identification.
+
+Scripting API | File Methods
+binaryToStringWithUserCodec
+binaryToStringWithUserCodec (Binary aP1, String aCodecFileName, Bool aCheckUnassigned) : String
+Converts binary data to string using an external user-defined codec.
+
+The Boolean value of the aCheckUnassigned parameter specifies whether the Check unassigned feature will be enabled.
+
+String res = File.binaryToStringWithUserCodec(Input, "UserCodecFromDigitToLetter.cdc", true);
+Scripting API | File Methods
+cacheHttpLocation
+cacheHttpLocation(String aLocation) : Void
+Caches the content of the file located at the given URL address. The caching must be enabled first, see the enableHttpCache method.
+
+File.enableHttpCache(true, 8);
+File.cacheHttpLocation(urlToCache);
+ColorCoverage Methods
+ColorCoverage methods can be used for querying the color coverage of an image file in conjunction with the readColorCoverage stream method.
+
+String file = "C:\Cloud\FormatConvert.test\NetServer\VS9240_Perceptual.pdf";
+File.Stream st=File.open(file,File.Mode.ReadOnly);
+File.ColorCoverage cc = st.readColorCoverage();
+st.close();
+is (cc.ColorCoverage)
+   {
+   File.ColorCoverageType.Unknown:
+      logError("Unknown type");
+   File.ColorCoverageType.CMYK:
+      {
+      logMessage("C:"+cc.C.toString());
+      logMessage("M:"+cc.M.toString());
+      logMessage("Y:"+cc.Y.toString());
+      logMessage("K:"+cc.K.toString());
+      }
+   File.ColorCoverageType.RGB:
+      {
+      logMessage("R:"+cc.R.toString());
+      logMessage("G:"+cc.G.toString());
+      logMessage("B:"+cc.B.toString());
+      }
+   }
+Scripting API | File Methods | ColorCoverage Methods
+C / M / Y / K
+C : Double
+getC () : Double
+M : Double
+getM () : Double
+Y : Double
+getY () : Double
+K : Double
+getK () : Double
+Return the extent of coverage (a double between 0 and 1.00 where 1=100% coverage) of the Cyan / Magenta / Yellow / Black plane from an image of CMYK colorspace.
+
+Scripting API | File Methods | ColorCoverage Methods
+ColorCoverageType Enumerator
+ColorCoverageType.CMYK
+getColorCoverageType.CMYK
+ColorCoverageType.RGB
+ColorCoverageType.Unknown
+getColorCoverageType () : String
+Identify the colorspace used in the image or Unknown if the image could not be read or there is no image in a file.
+
+Scripting API | File Methods | ColorCoverage Methods
+R / G / B
+R : Double
+getR () : Double
+G : Double
+getG () : Double
+B : Double
+getB () : Double
+Return the extent of coverage (a double between 0 and 1.00 where 1=100% coverage) of the Red / Green / Blue plane from an image of RGB colorspace.
+
+Scripting API | File Methods
+copy
+copy(String SourceLocation, String TargetLocation) : Bool
+Copies files or folders.
+
+If the parameters specify files, the source file is copied to the target location. If the file in the target location already exists, it is overwritten. Alternatively, if the parameters specify folders, the source folder is recursively copied inside the target folder. Already existing files are overwritten, and unique folders/files in the target location are kept.
+
+The method returns the true Boolean value if copying has finished successfully.
+
+Bool isCopied = File.copy("C:\input.txt", "C:\temp\input.txt");
+Bool isFolderCopied = File.copy("C:\SourceFolder", "C:\temp\TargetFolder");
+Scripting API | File Methods
+detectImageType
+File.detectImageType(String aImageLocation) : String
+Returns image type.
+
+var imageType =
+File.detectImageType(Input).toLowerCase();
+logMessage(imageType);
+is (imageType)
+   {
+   "pdf": return true;
+   "pcl": return true;
+   "tno": return true;
+   "afp": return true;
+   "rtf": return true;
+   "ps": return true;
+   "eps": return true;
+   "ind": return true;
+   "rtf": return true;
+   else return false;
+   }
+Scripting API | File Methods
+DriveType Enumerator
+A set of named constants determining the drive type.
+
+CDRom  Optical disc drive. Compact discs, DVDs and Blu-ray discs are common types of optical media which can be read and recorded by such drives.
+Fixed  Hard disk drive.
+RamDisk  A RAM disk. It is a block of RAM that a computer's software is treating as if the memory were a disk drive.
+Remote  A shared storage area on a networked computer's hard drive.
+Removable  Removable storage media. Examples include external optical drives, floppy disks or USB flash drives.
+Unknown  An unknown drive type.
+VCSDrive  A storage of the Inspire Content Manager (VCS).
+File.FileInfoList driveList;
+File.FileInfoList hardDriveList;
+File.listDrives(driveList);
+
+for(Int i=0;i<driveList.Size;i++)
+   {
+   if (driveList[i].DriveType == File.DriveType.Fixed)
+      hardDriveList.add(driveList[i]);
+   }
+
+for(Int i=0;i<hardDriveList.Size;i++)
+   {
+   logMessage(hardDriveList[i].DriveName);
+   }
+Scripting API | File Methods
+enableHttpCache
+enableHttpCache(Bool aP1) : Void
+enableHttpCache(Bool aP1, Int aThreadCount) : Void
+Enables caching of the HTTP and HTTPS content.
+
+The parameter aThreadCount specifies the total number of threads used for simultaneous download. The default thread count is 4, the maximum is 100.
+
+File.enableHttpCache(true);
+File.cacheHttpLocation("http://www.domain.com/");
+ExecuteContext Methods
+ExecuteContext methods can be used for executing external executables, data exchange and synchronization with them.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | ExecuteContext Methods
+assign
+assign(ExecuteContext aP1) : Void
+Assigns an ExecuteContext object to the given executing context. The same result can be achieved using the equal sign =.
+
+File.ExecuteContext baseExecuteContext, clonedExecuteContext;
+clonedExecuteContext.assign(baseExecuteContext);
+Scripting API | File Methods | ExecuteContext Methods
+canReceive
+canReceive() : Bool
+Returns the Boolean value true if there is any stream where an executed process writes its output data.
+
+// Executes a utility which tests whether a particular IP address 
+// is reachable and captures all its output
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("ping", "10.10.10.10");
+Int64 canDoSomethingElse = 0;
+String output;
+while (process.isRunning() or process.canReceive())
+   {
+   String line;
+   if (process.receiveLine(line))
+      {
+      output+=line;
+      }
+   }
+Scripting API | File Methods | ExecuteContext Methods
+execute
+execute(String aCmd, String aParams) : Void
+Executes the specified command with the specified parameters.
+
+The path to the executable is taken relatively to the working directory.
+
+Note  In Inspire Designer versions 8.0 and earlier, the path to the directory containing the WFD file, in which it was used, was added as a prefix to the executable. To achieve the behavior prior to 8.1 version use map://wfd/ in the parameter before the executable name, which adds the path to the WFD.
+// Opens the specified file in the text editor
+File.ExecuteContext process;
+process.execute("notepad", "C:\output.txt");
+Scripting API | File Methods | ExecuteContext Methods
+Hidden
+Hidden : Bool
+getHidden() : Bool
+setHidden(Bool aP1) : Void
+Returns or sets a Boolean value representing the appearance of any window of the executed process. If the Boolean value is set to true, all windows are hidden.
+
+// Executes an external command to obtain a Java version
+File.ExecuteContext process;
+process.Hidden = true;
+process.MyInputOutput = true;
+process.execute("java", "-version");
+String javaVersionInfo, line;
+while(process.receiveLine(line))
+   {
+   javaVersionInfo += line + '\n';
+   }
+Scripting API | File Methods | ExecuteContext Methods
+isRunning
+isRunning : Bool
+Returns a Boolean value true if there is a running process in the given executing context.
+
+// Increases a variable value till the process finishes
+File.ExecuteContext process;
+process.execute("ping", "10.10.10.10");
+Int64 iterationCount;
+while(process.isRunning())
+   {
+   iterationCount++;
+   }
+Scripting API | File Methods | ExecuteContext Methods
+LastResult
+LastResult : Int
+getLastResult() : Int
+Returns an exit code of the finished process in the given executing context. To get the correct value the waitForFinish method must be applied first.
+
+// Executes an external command and returns an exit code
+File.ExecuteContext process;
+process.execute("java", "-version");
+process.waitForFinish();
+Int exitCode = process.LastResult;   // exitCode = 0
+Scripting API | File Methods | ExecuteContext Methods
+MyInputOutput
+MyInputOutput : Bool
+getMyInputOutput() : Bool
+setMyInputOutput(Bool aP1) : Void
+Returns or sets a Boolean value representing a state of redirection of both the standard input and output streams to the given executing context.
+
+// Captures a value of the JAVA_HOME environment variable
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("cmd", "/c echo %JAVA_HOME%");
+String javaHomeVariable = process.receiveLine();
+Scripting API | File Methods | ExecuteContext Methods
+receiveChar
+receiveChar() : Char
+Returns a character value from the standard output stream of the executed process. It blocks the script execution until the character value is returned.
+
+To use this method, a redirection of the standard output stream must be set, see the MyInputOutput method.
+
+// Captures the output of an external command, character by character
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("cmd", '/c echo "Hello World!"');
+String capturedOutput;
+while(process.isRunning())
+   {
+   if (process.canReceive())
+      {
+      capturedOutput += process.receiveChar();
+      }
+   }
+Scripting API | File Methods | ExecuteContext Methods
+receiveLine
+receiveLine() : String
+receiveLine(String & aLine) : Bool
+Returns either a string value representing one line of the standard output stream of the executed process or a Boolean value true if that value is available.
+
+While the first method blocks the script execution until either the string value is returned or the process ends, the second one does not actively wait.
+
+To use this method, a redirection of the standard output stream must be set, see the MyInputOutput method.
+
+// Captures the output of an external command, line by line
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("tasklist", "/FO CSV");
+String listOfProcesses, line;
+while(process.receiveLine(line))
+   {
+   listOfProcesses += line + '\n';
+   }
+Scripting API | File Methods | ExecuteContext Methods
+sendNewLine
+sendNewLine : Void
+Writes the line break to the standard input stream of the executed process.
+
+To use this method, a redirection of the standard input stream must be set, see the MyInputOutput method.
+
+// Executes an external command and sends 
+// a line break to the standard input stream
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("cmd", "/c pause");
+process.sendNewLine();
+String capturedOutput = process.receiveLine();
+Scripting API | File Methods | ExecuteContext Methods
+sendString
+sendString(String aP1) : Void
+Writes the given string to the standard input stream of the executed process.
+
+To use this method, a redirection of the standard input stream must be set, see the MyInputOutput method.
+
+// Executes an external command and sends 
+// a string to the standard input stream
+File.ExecuteContext process;
+process.MyInputOutput = true;
+process.execute("choice", '/M "Are you sure you want to continue"');
+process.sendString("N");
+process.waitForFinish();
+Int exitCode = process.LastResult;   // exitCode = 2
+Scripting API | File Methods | ExecuteContext Methods
+waitForFinish
+waitForFinish() : Void
+Waits for the executed process to be finished.
+
+// Executes an external command and waits till it finishes
+File.ExecuteContext process;
+process.execute("cmd", "/c nonExistingCommand");
+process.waitForFinish();
+Int exitCode = process.LastResult;   // non-zero value
+Scripting API | File Methods
+exist
+exist(String aLocation) : Bool
+Returns the Boolean value true if the specified location exists.
+
+Bool fileExists = File.exist("C:\input.txt");
+Tip  You can also enter paths to files stored in Inspire Content Manager that contain information such as label, state, version, etc.
+FileInfo Methods
+FileInfo methods can be used for reading of individual properties of the given file object. The file object represents a file, a directory or a drive.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | FileInfo Methods
+AccessTime
+AccessTime : DateTime
+getAccessTime() : DateTime
+Returns the last access time of the given file object.
+
+File.FileInfoList fileList;
+DateTime accessTime;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   accessTime = fileList[i].AccessTime;
+}
+Scripting API | File Methods | FileInfo Methods
+assign
+assign(FileInfo aP1) : Void
+Assigns a FileInfo object to the given file object. The same result can be achieved using the = assignment statement.
+
+File.FileInfoList fileList;
+File.FileInfo fileInfo;
+String filePath;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   fileInfo.assign(fileList[i]);
+   filePath = fileInfo.Location;
+}
+Scripting API | File Methods | FileInfo Methods
+Attributes
+Attributes : String
+getAttributes() : String
+Returns a string value representing attributes of the given file object. Zero or more of the following characters can be returned:
+
+Character
+
+Attribute
+
+d	
+directory
+
+a	
+archive
+
+r	
+read only
+
+h	
+hidden
+
+s	
+system
+
+c	
+compressed
+
+e	
+encrypted
+
+o	
+offline
+
+l	
+link
+
+File.FileInfoList fileList;
+String attributes;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   attributes = fileList[i].Attributes;   
+   // e.g. attributes = "-arhs---"
+}
+Scripting API | File Methods | FileInfo Methods
+CheckedUsers
+CheckedUsers : String
+Returns a comma separated list of all users that have the given file object checked out from Inspire Content Manager (VCS).
+
+File.FileInfoList fileList;
+String checkedOutBy;
+File.listWithMask(fileList, File.ListParam.Files, "C:\", "*.wfd");
+for(Int i=0;i<fileList.Size;i++) {
+   checkedOutBy = fileList[i].checkedUsers;   
+   // e.g. checkedOutBy = "John Doe"
+}
+Scripting API | File Methods | FileInfo Methods
+CreateTime
+CreateTime : DateTime
+getCreateTime() : DateTime
+Returns the creation time of the given file object.
+
+File.FileInfoList fileList;
+DateTime dateCreated;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   dateCreated = fileList[i].CreateTime;
+}
+Scripting API | File Methods | FileInfo Methods
+Drive
+Drive : String
+getDrive() : String
+Returns a string value representing the letter assigned to the given physical or logical drive.
+
+File.FileInfoList driveList;
+String driveLetter;
+File.listDrives(driveList);
+for(Int i=0;i<driveList.Size;i++) {
+   driveLetter = driveList[i].Drive;   
+   // e.g. driveLetter = "C"
+}
+Scripting API | File Methods | FileInfo Methods
+DriveLabel
+DriveLabel : String
+getDriveLabel() : String
+Returns the customized label of the given drive.
+
+File.FileInfoList driveList;
+String driveLabel;
+File.listDrives(driveList);
+for(Int i=0;i<driveList.Size;i++) {
+   driveLabel = driveList[i].DriveLabel;
+}
+Scripting API | File Methods | FileInfo Methods
+DriveName
+DriveName : String
+getDriveName() : String
+Returns a string value representing the name of the given drive.
+
+File.FileInfoList driveList;
+String driveName;
+File.listDrives(driveList);
+for(Int i=0;i<driveList.Size;i++) {
+   if (driveList[i].DriveType == File.DriveType.Remote) {
+      driveName = driveList[i].DriveName;   
+      // e.g. driveName = "\\pc\folder"
+   }
+}
+Scripting API | File Methods | FileInfo Methods
+DriveType
+DriveType : DriveType
+getDriveType() : DriveType
+Returns the drive type of the given drive.
+
+File.FileInfoList driveList;
+File.listDrives(driveList);
+for(Int i=0;i<driveList.Size;i++) {
+   if (driveList[i].DriveType == File.DriveType.Fixed) {
+      logMessage(driveList[i].Drive);
+   }
+} 
+Scripting API | File Methods | FileInfo Methods
+Ext
+Ext : String
+getExt() : String
+Returns the extension of the given file object.
+
+File.FileInfoList fileList;
+String extension;
+File.listWithMask(fileList, File.ListParam.Files, "C:\", "*.jp*");
+for(Int i=0;i<fileList.Size;i++) {
+   extension = fileList[i].Ext;
+}
+Scripting API | File Methods | FileInfo Methods
+isDirectory
+isDirectory() : Bool
+Returns the Boolean value true if the given file object is a directory.
+
+File.FileInfoList fileList;
+Bool isDirectory;
+File.list(fileList, File.ListParam.All, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   isDirectory = fileList[i].isDirectory();
+}
+Scripting API | File Methods | FileInfo Methods
+isDrive
+isDrive() : Bool
+Returns the Boolean value true if the given file object is a drive.
+
+File.FileInfoList driveList;
+File.listDrives(driveList);
+Bool isDrive;
+for(Int i=0;i<driveList.Size;i++) {
+   isDrive = driveList[i].isDrive();   // isDrive = true
+}
+Scripting API | File Methods | FileInfo Methods
+isExecutable
+isExecutable() : Bool
+Returns the Boolean value true if the given file object can be executed. Meaningful on non-Windows platforms only, where this kind of rights can be modified.
+
+File.FileInfoList fileList;
+File.FileInfoList execFileList;
+File.list(fileList, File.ListParam.All, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   if (fileList[i].isExecutable()) {
+      execFileList.add(fileList[i]);
+   }
+}
+logMessage(execFileList.Size.toString());
+Scripting API | File Methods | FileInfo Methods
+isFile
+isFile() : Bool
+Returns the Boolean value true if the given file object is a file.
+
+File.FileInfoList fileList;
+Bool isFile;
+File.list(fileList, File.ListParam.All, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+     isFile = fileList[i].isFile();
+}
+Scripting API | File Methods | FileInfo Methods
+isReadable
+isReadable() : Bool
+Returns the Boolean value true if the given file object has the read only attribute switched on (has no permission for writing).
+
+File.FileInfoList fileList;
+File.FileInfoList readOnlyFileList;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   if (fileList[i].isReadable()) {
+      readOnlyFileList.add(fileList[i]);
+   }
+}
+logMessage(readOnlyFileList.Size.toString());
+Scripting API | File Methods | FileInfo Methods
+isSymLink
+isSymLink() : Bool
+Returns the Boolean value true if the given file is a symbolic link that contains a reference to another file object.
+
+File.FileInfoList fileList;
+File.FileInfoList symLinkList;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   if (fileList[i].isSymLink()) {
+      symLinkList.add(fileList[i]);
+   }
+}
+logMessage(symLinkList.Size.toString());
+Scripting API | File Methods | FileInfo Methods
+isWritable
+isWritable() : Bool
+Returns the Boolean value true if the given file object has permissions for writing.
+
+function appendTextToFile(String filePath, String text) {
+   File.TextStream outputStream;
+   outputStream = File.openText(filePath, File.Mode.Append, "UTF-8");
+   outputStream.writeString(text);
+   outputStream.close();
+   return;
+}
+
+File.FileInfoList fileList;
+File.listWithMask(fileList, File.ListParam.Files, "C:\", "settings.txt");
+// if the specified file is found
+if (fileList.Size > 0) {
+   // and if it has permissions for writing
+   if (fileList[0].isWritable()) {
+      // call an user defined function for appending data to this file
+      appendTextToFile(fileList[0].Location, "textToAppend");
+   }
+}
+Scripting API | File Methods | FileInfo Methods
+Location
+Location : String
+getLocation() : String
+Returns a full path to the given file object.
+
+File.FileInfoList fileList;
+String filePath;
+File.ListParam listMode = File.ListParam.Files;
+File.listWithMask(fileList, listMode, "C:\Windows", "win.ini");
+for(Int i=0;i<fileList.Size;i++) {
+   filePath = fileList[i].Location;
+   // filePath = "C:\Windows\win.ini"
+}
+Scripting API | File Methods | FileInfo Methods
+ModifyTime
+ModifyTime : DateTime
+getModifyTime() : DateTime
+Returns the time of the last modification of the given file object.
+
+File.FileInfoList fileList;
+DateTime lastModifiedTime;
+File.list(fileList, File.ListParam.Files, "C:\");
+for(Int i=0;i<fileList.Size;i++) {
+   lastModifiedTime = fileList[i].ModifyTime;
+}
+Scripting API | File Methods | FileInfo Methods
+Name
+Name : String
+getName() : String
+Returns the name of the given file object without an extension.
+
+File.FileInfoList fileList;
+String baseName;
+File.ListParam listMode = File.ListParam.Files;
+File.listWithMask(fileList, listMode, "C:\Windows", "win.ini");
+for(Int i=0;i<fileList.Size;i++) {
+   baseName = fileList[i].Name;
+   // baseName = "win"
+}
+Scripting API | File Methods | FileInfo Methods
+NameExt
+NameExt : String
+getNameExt() : String
+Returns the name of the given file object.
+
+File.FileInfoList fileList;
+String fileName;
+File.ListParam listMode = File.ListParam.Files;
+File.listWithMask(fileList, listMode, "C:\Windows", "win.ini");
+for(Int i=0;i<fileList.Size;i++) {
+   fileName = fileList[i].NameExt;
+   // fileName = "win.ini"
+}
+Scripting API | File Methods | FileInfo Methods
+Size
+Size : Int64
+getSize() : Int64
+Returns the size of the given file in bytes.
+
+File.FileInfoList fileList;
+Int64 totalFolderSize;
+File.list(fileList, File.ListParam.AllRecursive, "C:\Temp");
+for(Int i=0;i<fileList.Size;i++) {
+   totalFolderSize += fileList[i].Size;
+}
+logMessage(totalFolderSize.toString());
+FileInfoList Methods
+FileInfoList methods can be used for creating and modifying lists of file or directory objects.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | FileInfoList Methods
+add
+add(FileInfo aP1) : Void
+Adds the specified FileInfo member to the given list.
+
+File.FileInfoList originalList;
+File.FileInfoList filteredList;
+if (File.list(originalList, File.ListParam.Files, "C:\"))
+   {
+   for (Int i=0;i<originalList.Size;i++) {
+      if (originalList[i].ModifyTime.equal(DateTime.Now))
+      // includes only files modified today
+      filteredList.add(originalList[i]);
+   }
+}
+Scripting API | File Methods | FileInfoList Methods
+assign
+assign(FileInfoList aP1) : Void
+Assigns a FileInfoList object to the given list. The same result can be achieved using the = assignment statement.
+
+File.FileInfoList baseFileInfoList, clonedFileInfoList;
+clonedFileInfoList.assign(baseFileInfoList);
+Scripting API | File Methods | FileInfoList Methods
+clear
+clear() : Void
+Removes all FileInfo members from the given list.
+
+File.FileInfoList baseFileInfoList, clonedFileInfoList;
+if (File.list(baseFileInfoList, File.ListParam.Files, "C:\")) {
+   clonedFileInfoList.assign(baseFileInfoList);
+   baseFileInfoList.clear();
+}
+Scripting API | File Methods | FileInfoList Methods
+get
+get(Int aP1) : FileInfo
+Returns a FileInfo member from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+File.FileInfoList resultList;
+if (File.list(resultList, File.ListParam.Files, "C:\"))
+   {
+   for (Int i=0;i<resultList.Size;i++) {
+      logMessage(resultList.get(i).Location);
+   }
+}
+Scripting API | File Methods | FileInfoList Methods
+insert
+insert(Int aP1, FileInfo aP2) : Void
+Inserts a FileInfo member at the specified position in the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+File.FileInfoList resultList;
+if (File.list(resultList, File.ListParam.Files, "C:\"))
+   {
+   if (resultList.Size > 1) {
+      // duplicates the last FileInfo member and inserts it 
+      // into the beginning of the list
+      resultList.insert(0, resultList[resultList.Size - 1]);
+      }
+   }
+Scripting API | File Methods | FileInfoList Methods
+remove
+remove(Int aP1) : Void
+Removes a FileInfo member from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+File.FileInfoList resultList;
+if (File.list(resultList, File.ListParam.Files, "C:\"))
+   {
+   for (Int i=resultList.Size;i>=0;i--) {
+      if (resultList[i].ModifyTime.equal(DateTime.Now))
+      // keep only files modified today
+      resultList.remove(i);
+   }
+}
+Scripting API | File Methods | FileInfoList Methods
+resize
+resize(Int aP1, FileInfo aP2) : Void
+Changes the total number of FileInfo members in the given list. If the new size is larger, the default value of all new members is set to the specified FileInfo object.
+
+File.FileInfoList txtFiles;
+File.FileInfoList xmlFiles;
+File.FileInfoList allFiles;
+if (File.listWithMask(txtFiles, File.ListParam.Files, "C:\", "*.txt")) 
+   {
+   if (txtFiles.Size > 0) {
+      Int originalSize = allFiles.Size;
+      allFiles.resize(allFiles.Size + txtFiles.Size, txtFiles[0]);
+      for (Int i = 0;i<txtFiles.Size;i++) {
+         allFiles[originalSize + i] = txtFiles[i];
+         }
+      }
+   }
+if (File.listWithMask(xmlFiles, File.ListParam.Files, "C:\", "*.xml"))
+   {
+   if (xmlFiles.Size > 0) {
+      Int originalSize = allFiles.Size;
+      allFiles.resize(allFiles.Size + xmlFiles.Size, xmlFiles[0]);
+      for (Int i = 0;i<xmlFiles.Size;i++) {
+         allFiles[originalSize + i] = xmlFiles[i];
+         }
+      }
+   }
+Scripting API | File Methods | FileInfoList Methods
+set
+set(Int aP1, FileInfo aP2) : Void
+Sets a FileInfo member at the specified position in the given list to the specified FileInfo object.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+File.FileInfoList txtFiles;
+File.FileInfoList xmlFiles;
+File.ListParam listMode = File.ListParam.Files;
+Bool txtResult = File.listWithMask(txtFiles, listMode, "C:\", "*.txt");
+Bool xmlResult = File.listWithMask(xmlFiles, listMode, "C:\", "*.xml");
+if (txtResult and xmlResult) {
+   if (txtFiles.Size > 0) and (xmlFiles.Size > 0)) {
+   // swaps the first items of both lists
+   File.FileInfo tempFileInfo = xmlFiles[0];   
+   xmlFiles.set(0, txtFiles[0]);
+   txtFiles.set(0, tempFileInfo);
+   }
+}
+Scripting API | File Methods | FileInfoList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of FileInfo members in the given list.
+
+File.FileInfoList resultList;
+if (File.list(resultList, File.ListParam.Files, "C:\")) {
+   Int listSize = resultList.Size;
+   }
+Scripting API | File Methods | FileInfoList Methods
+sort
+sort() : Void
+Sorts all FileInfo members in the given list by their location.
+
+Individual characters are compared using their Unicode code points.
+
+File.FileInfoList resultList;
+if (File.list(resultList, File.ListParam.FilesRecursive, "C:\Windows\"))
+   {
+   resultList.sort();
+   for (Int i=0;i<resultList.Size;i++) {
+      logMessage(resultList.get(i).Location);
+      }
+   }
+Scripting API | File Methods
+ImagePageCount
+ImagePageCount [Binary BinarySource] : Int
+getImagePageCount (Binary BinarySource) : Int
+ImagePageCount [Binary BinarySource, Bool ReadEpsAsPostScript] : Int
+getImagePageCount (Binary BinarySource, Bool ReadEpsAsPostScript) : Int
+ImagePageCount [String SourceLocation] : Int
+getImagePageCount (String SourceLocation) : Int
+ImagePageCount [String SourceLocation, Bool ReadEpsAsPostScript] : Int
+getImagePageCount (String SourceLocation, Bool ReadEpsAsPostScript) : Int
+Returns the number of pages for the image defined by the parameter (as binary source or path to the image).
+
+It has the same functionality as the Image Page Counter field converter.
+
+The variants with two parameters offer an additional possibility for PS files with multiple pages: As Inspire Designer is unable to distinguish between EPS and PS formats and EPS files can have only one page, the ImagePageCount always returns the value 1, even in case of multipage PS files. If the second parameter is used, the file is first read as PS file and the script returns a correct value.
+
+Int imagePageCountFromBinary = File.getImagePageCount(Input); //where Input is a variable with binary data coming from e.g. Data Input
+logMessage(imagePageCountFromBinary.toString());
+Int imagePageCountFromLocation = File.getImagePageCount("c:\PostScript\sample.ps",true);
+logMessage(imagePageCountFromLocation.toString());
+Scripting API | File Methods
+JSONNodeType Enumerator
+A set of named constants determining the node type. See an example in XML Data Input module.
+
+ArrayBegin  An array beginning. An array in JSON is a sequence of values, comma-separated and enclosed in square brackets.
+ArrayEnd  An array end. An array in JSON is a sequence of values, comma-separated and enclosed in square brackets.
+Key  A key of the current JSON object.
+ObjectBegin  An object beginning. A JSON object is an unordered collection of key:value pairs with the colon ':' character separating the key and the value.
+ObjectEnd  An object end. A JSON object is an unordered collection of key:value pairs with the colon ':' character separating the key and the value.
+Value  A value of the current JSON object.
+JSONReader Methods
+JSONReader methods can be used for reading the content from a JSON (JavaScript Object Notation) file.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | JSONReader Methods
+initFromString
+
+initFromString(String aP1) : Void
+
+Initializes the JSON reader with the specified string.
+
+String json = '{ \"MyDoubleValue\": 1234.56, \"MyTrue\": true, \"MyFalse\": false, \"MyString\": \"String\" , \"MyNull\": null}';
+File.JSONReader reader;
+reader.initFromString(json);
+while (reader.read())
+   {
+   is (reader.NodeType)
+      {
+      File.JSONNodeType.Value:
+         {
+         is (reader.ValueType)
+            {
+            File.JSONValueType.Number:  logMessage( reader.Key +" is "+"Number. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.Null:  logMessage( reader.Key +" is "+"Null. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.True:  logMessage( reader.Key +" is "+"True. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.False:  logMessage( reader.Key +" is "+"False. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.String:  logMessage( reader.Key +" is "+"String. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            }
+         }
+      }
+   }
+Scripting API | File Methods | JSONReader Methods
+initInputStream
+initInputStream(Stream aP1, String Codec) : Void
+Initializes the specified stream encoded with the specified encoding.
+
+String json = '{ \"MyKey\": \"MyValue\" }';
+File.Stream stream=File.open(Binary.fromStringWithCodec(json,"UTF-8"));
+File.JSONReader reader;
+reader.initInputStream(stream,"UTF-8");
+Scripting API | File Methods | JSONReader Methods
+Key
+Key : String
+getKey() : String
+Returns the key of the current JSON object. A JSON object is an unordered collection of key:value pairs with the colon ':' character separating the key and the value.
+
+String json = '{ \"MyKey\": \"MyValue\" }';
+File.JSONReader reader;
+reader.initFromString(json);
+while (reader.read())
+   {
+   is (reader.NodeType)
+      {
+      File.JSONNodeType.Key: logMessage("Reader has read Key="+reader.Key);
+      }
+   }
+Scripting API | File Methods | JSONReader Methods
+NodeType
+NodeType : JSONNodeType
+getNodeType() : JSONNodeType
+Returns the node type of the given node. See the example script by the description of the Key.
+
+Scripting API | File Methods | JSONReader Methods
+Number
+Number : Double
+getNumber() : Double
+Returns the value of the current JSON object as a Double, if the JSONValueType is Number. A JSON object is an unordered collection of key:value pairs with the colon ':' character separating the key and the value.
+
+String json = '{ \"MyDoubleValue\": 1234.56 }';
+File.JSONReader reader;
+reader.initFromString(json);
+while (reader.read())
+   {
+   is (reader.NodeType)
+      {
+      File.JSONNodeType.Value:
+         {
+         if (reader.ValueType==File.JSONValueType.Number) 
+              {
+              logMessage("Number = "+reader.Number.toString());
+              logMessage("Number as string is:"+reader.Value);
+              }
+         }
+      }
+   }
+Scripting API | File Methods | JSONReader Methods
+read
+read() : Bool
+Returns the Boolean value true if reading of the next node from the given stream has finished successfully.
+
+Scripting API | File Methods | JSONReader Methods
+Value
+Value : String
+getValue() : String
+Returns the value of the current JSON object. A JSON object is an unordered collection of key:value pairs with the colon ':' character separating the key and the value.
+
+String json = '{ \"MyDoubleValue\": 1234.56, \"MyTrue\": true, \"MyFalse\": false, \"MyString\": \"String\" , \"MyNull\": null}';
+File.JSONReader reader;
+reader.initFromString(json);
+while (reader.read())
+   {
+   is (reader.NodeType)
+      {
+      File.JSONNodeType.Value:
+         {
+         is (reader.ValueType)
+            {
+            File.JSONValueType.Number:  logMessage( reader.Key +" is "+"Number. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.Null:  logMessage( reader.Key +" is "+"Null. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.True:  logMessage( reader.Key +" is "+"True. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.False:  logMessage( reader.Key +" is "+"False. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            File.JSONValueType.String:  logMessage( reader.Key +" is "+"String. String Value is "+reader.Value+". Number value is "+reader.Number.toString());
+            }
+         }
+      }
+   }
+Scripting API | File Methods | JSONReader Methods
+ValueType
+ValueType : JSONValueType
+getValueType() : JSONValueType
+Returns the value type of the given object. See the example script by the description of the Value.
+
+Scripting API | File Methods
+JSONValueType Enumerator
+A set of possible value types: String, Number, True, False, Null.
+
+JSONWriter Methods
+JSONWriter methods can be used for writing a content to a JSON (JavaScript Object Notation) file, which is commonly used when communicating with a web service.
+
+Scripting API | File Methods | JSONWriter Methods
+addKey
+addKey(String aP1) : Void
+Adds a key to the current JSON object, i.e. it is typically used after the beginObject method has been used.
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+writer.beginObject();
+writer.addKey("array");
+   writer.beginArray();
+      writer.addValue();
+      writer.addValue("String");
+      writer.addValue(true);
+      writer.addValue(false);
+      writer.addValue(123.456);
+      writer.addValue(123456);
+   writer.end();
+writer.end();
+// content of the Test.json file:
+// {"array":[null,"String",true,false,123.456,123456]}
+Scripting API | File Methods | JSONWriter Methods
+addKeyValue
+addKeyValue(String aP1) : Void
+addKeyValue(String aP1, Bool aP2) : Void
+addKeyValue(String aP1, Double aP2) : Void
+addKeyValue(String aP1, Int aP2) : Void
+addKeyValue(String aP1, String aP2) : Void
+Adds a key and a corresponding value to the current JSON object, i.e. it is typically used after the beginObject method has been used. The key is entered as the first parameter (String). The value, entered as the second parameter, can be of the following types: String, Int, Double, Bool, Null.
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+writer.beginObject();
+writer.addKeyValue("key","value");
+writer.addKeyValue("keyDouble",123.456);
+writer.addKeyValue("keyInt",123456);
+writer.addKeyValue("keyBoolTrue",true);
+writer.addKeyValue("keyBoolFalse",false);
+writer.addKeyValue("keyNull");
+writer.end();
+// content of the Test.json file:
+// {"key":"value","keyDouble":123.456,"keyInt":123456,"keyBoolTrue":true,"keyBoolFalse":false,"keyNull":null}
+Scripting API | File Methods | JSONWriter Methods
+addValue
+addValue() : Void
+addValue(Bool aP1) : Void
+addValue(Double aP1) : Void
+addValue(Int aP1) : Void
+addValue(String aP1) : Void
+Adds a value to the current JSON object or array of values, i.e. it is typically used after the beginObject and addKey or beginArray methods have been used. The value can be of the following types: String, Int, Double, Bool, Null.
+
+See the example script by the description of the addKey method.
+
+Scripting API | File Methods | JSONWriter Methods
+beginArray
+beginArray() : Void
+Starts an array of JSON objects (see the example below) or values (see the example by the description of the addKey method).
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+writer.beginObject();
+writer.addKey("arrayOfObjects");
+   writer.beginArray();
+      writer.beginObject();
+         writer.addKeyValue("key","value");
+         writer.addKeyValue("keyDouble",123.456);
+         writer.addKeyValue("keyInt",123456);
+         writer.addKeyValue("keyBoolTrue",true);
+         writer.addKeyValue("keyBoolFalse",false);
+         writer.addKeyValue("keyNull");
+      writer.end();
+       writer.beginObject();
+         writer.addKeyValue("key","value");
+         writer.addKeyValue("keyDouble",123.456);
+         writer.addKeyValue("keyInt",123456);
+         writer.addKeyValue("keyBoolTrue",true);
+         writer.addKeyValue("keyBoolFalse",false);
+         writer.addKeyValue("keyNull");
+      writer.end();
+   writer.end();
+writer.end();
+// content of the Test.json file:
+// {"arrayOfObjects":[{"key":"value","keyDouble":123.456,"keyInt":123456,"keyBoolTrue":true,"keyBoolFalse":false,"keyNull":null},{"key":"value","keyDouble":123.456,"keyInt":123456,"keyBoolTrue":true,"keyBoolFalse":false,"keyNull":null}]}
+Scripting API | File Methods | JSONWriter Methods
+beginObject
+beginObject() : Void
+beginObject(String aP1) : Void
+Starts a JSON object.
+
+See the example script by the description of the addKey method.
+
+Scripting API | File Methods | JSONWriter Methods
+end
+end() : Void
+Ends a JSON object or an array.
+
+See the example script by the description of the addKey method.
+
+Scripting API | File Methods | JSONWriter Methods
+initStream
+initStream(Stream aP1) : Void
+Initializes the specified stream.
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+Scripting API | File Methods | JSONWriter Methods
+setMaxDigitsAfterDecimal
+setMaxDigitsAfterDecimal(Int aP1) : Void
+MaxDigitsAfterDecimal : Int
+Sets the maximum number of digits after decimal point for values of Double type.
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+writer.setMaxDigitsAfterDecimal(2);
+writer.beginObject();
+writer.addKeyValue("keyDouble",123.456789);
+writer.end();
+// content of the Test.json file:
+// {"keyDouble":123.46}
+Scripting API | File Methods | JSONWriter Methods
+setMinDigitsAfterDecimal
+setMinDigitsAfterDecimal(Int aP1) : Void
+MinDigitsAfterDecimal : Int
+Sets the minimum number of digits after decimal point for values of Double type.
+
+File.JSONWriter writer;
+File.Stream stream=File.open("Test.json",File.Mode.TruncateOrCreate);
+writer.initStream(stream);
+writer.setMinDigitsAfterDecimal(2);
+writer.setMaxDigitsAfterDecimal(2);
+writer.beginObject();
+writer.addKeyValue("keyDouble",123.4);
+writer.end();
+// content of the Test.json file:
+// {"keyDouble":123.40}
+Scripting API | File Methods
+list
+list(FileInfoList & aP1, ListParam aP2, String aDirectory) : Bool
+Returns the Boolean value true if a list containing files found in the given scope starting from the specified directory has been created successfully.
+
+File.FileInfoList fileList;
+if (File.list(fileList, File.ListParam.Files, "C:\")) {
+   for(Int i=0;i<fileList.Size;i++) {
+      logMessage(fileList[i].Location);
+   }
+}
+Scripting API | File Methods
+listDrives
+listDrives(FileInfoList & aP1) : Void
+Creates a list of drives. For Windows platform only.
+
+File.FileInfoList driveList;
+File.listDrives(driveList);
+for(Int i=0;i<driveList.Size;i++)
+   {
+   if (driveList[i].DriveType == File.DriveType.Fixed)
+      logMessage(driveList[i].DriveName + " [Hard Disk]"); 
+   else
+      logMessage(driveList[i].DriveName);     
+   }
+Scripting API | File Methods
+ListParam Enumerator
+A set of named constants determining the scope for file or directory listing.
+
+All  Applies to all files and subdirectories of the current directory.
+AllRecursive  Applies recursively to all files and directories of the current directory.
+Directories  Applies to all subdirectories of the current directory.
+DirectoriesRecursive  Applies recursively to all subdirectories of the current directory.
+Files  Applies to all files of the current directory.
+FilesRecursive  Applies recursively to all files and subdirectories of the current directory.
+File.FileInfoList fileInfo;
+File.list(fileInfo, File.ListParam.FilesRecursive, ".");
+Int totalSize;
+for (Int i=0;i<fileInfo.Size;i++)
+  {
+    totalSize += fileInfo[i].Size);
+  }
+Scripting API | File Methods
+listWithMask
+listWithMask(FileInfoList & aP1, ListParam aP2, String aDirectory, String aMask) : Bool
+Returns the true Boolean value if a list has successfully been created, i.e. the specified directory exists (even if it is empty). In addition, you can further specify matching criteria such as a file's extension.
+
+Tip  Use the fileList.Size method to return the total number of files present in the specified directory.
+The parameter aMask allows to filter files using the following wildcard characters:
+
+* substitutes for any zero or more characters
+
+? substitutes for any one character
+
+File.FileInfoList fileList;
+if (File.listWithMask(fileList, File.ListParam.Files, ".", "*.wfd"))
+   {
+   for(Int i=0;i<fileList.Size;i++)
+      {
+      logMessage(fileList[i].Location);
+      }
+   }
+Scripting API | File Methods
+makeDir
+makeDir(String aLocation) : Bool
+Returns the Boolean value true if a directory on a defined path (also a path to Inspire Content Manager is supported) was created successfully.
+
+if (File.makeDir("C:\MyBrandNewDir\"))
+  {
+  logMessage("Created successfully");
+  }
+MetaDataInfo Methods
+See also:
+
+readMetaData()
+MetaDataInfo methods provide access to a file's metadata, which extends the default file information. The content of metadata depends on the file type.
+
+The metadata can be viewed in the Open File dialog, e.g. when browsing for an image to insert it into Layout.
+
+There is a special metadata item called Type, which represents the following file types:
+
+Type Value	Object Description
+0	Other
+1	Folder
+2	Images and native files except TNO files.
+3	WFD
+4	Font
+5	TNO
+6	InteractiveDocument
+7	InteractiveBlock
+8	InteractiveTemplate
+9	InteractiveBaseTemplate
+10	InteractiveForm
+11	InteractiveFormData
+12	InteractiveRule
+13	InteractiveSubTemplate
+14	InteractiveBusinessProcess
+15	InteractiveMailMergeMapping
+16	InteractiveProject
+17	InteractiveProcess
+18	InteractiveDC
+19	InteractiveResources
+20	Categorization
+21	InteractiveDataDefinition
+22	InteractiveFunction
+100	Unknown
+Type values from 6 to 19, 21, and 22 are part of a feature used for integration with Inspire Interactive. See the Displaying Content Manager section of Inspire Interactive Configuration Guide for more information.
+
+There is a partial support for the Exif and the IPTC type of metadata contained in JPEG images. In case of the IPTC metadata the author, the copyright and the keywords are supported. In case of Exif, GPS info can be retrieved.
+
+Example  Basic Usage
+
+File.FileInfoList fileList;
+File.MetaDataInfo metaInfo;
+File.list(fileList, File.ListParam.FilesRecursive, "C:\temp"); 
+/*
+   the following structure is filled in the code below:
+
+   files : Array
+    |_ fileName : String
+    |_ filePath : String
+    |_ metaData : Array
+        |_ name : String
+        |_ value : String
+*/
+   for(Int i=0; i<fileList.Size; i++)
+   {
+   files.fileName = fileList[i].NameExt;
+   files.filePath = fileList[i].Location;
+   
+   File.readMetaData(metaInfo, fileList[i].Location);
+   
+   for(Int j=0;j<metaInfo.Count;j++)
+      {
+      files.metaData.name  = metaInfo.Name[j];
+      files.metaData.value = metaInfo.Value[j];
+      files.metaData.commit();
+      }
+   files.commit();
+   }
+
+Example  Reading Exif Metadata
+The following script allows to read and process Exif data and feed GPS data (geographic coordinates) through a link to a selected web map. That map would open in the default web browser marking the spot defined by the GPS data.
+
+File.FileInfoList fileList;
+File.listWithMask(fileList, File.ListParam.All, "C:\", "*.jp*g");
+/*
+   the following structure is filled in the code below:
+   
+   files : Array
+    |_ filePath : String
+    |_ isGeotagged : Bool
+    |_ longitude : String
+    |_ latitude : String
+    |_ elevation : String
+    |_ mapLink : String
+*/
+   for (Int i=0;i<fileList.Size;i++)
+   {
+   if (not fileList[i].isDirectory())
+      {
+      File.MetaDataInfo fileMetaData;
+      File.readMetaData(fileMetaData, fileList[i].Location);
+      files.filePath = fileList[i].Location;
+      files.isGeotagged = false;
+      
+      for (Int j=0;j<fileMetaData.Count;j++)
+         {
+         if (fileMetaData.Name[j] == "Exif.GPS.Location")
+            {
+            Util.StringList geoDataList;
+            String rawGeoData = fileMetaData.Value[j];
+            rawGeoData.parseLine('##\x0D\x0A', "", geoDataList);
+            files.latitude = geoDataList[0];
+            files.longitude = geoDataList[1];
+            if (geoDataList.Size > 2) {
+               files.elevation = geoDataList[2];
+               }            
+            String link = "http://maps.google.com/maps?q=";
+            link.append(files.latitude);
+            link.append(",");
+            link.append(files.longitude);
+            files.mapLink = link;
+            files.isGeotagged = true;
+            }
+         }
+      files.commit(); 
+      }
+   }
+Note  If you do not see the get methods during scripting, it is because the option Show getters in Workflow Options dialog is not checked.
+Scripting API | File Methods | MetaDataInfo Methods
+Count
+Count : Int
+getCount() : Int
+Returns the total number of metadata items.
+
+File.MetaDataInfo fileMetaData;
+File.readMetaData(fileMetaData, "C:\input.wfd");
+Int metaDataCount = fileMetaData.Count;
+Scripting API | File Methods | MetaDataInfo Methods
+get
+get(String aP1) : String
+Returns a string value of the specified metadata item name.
+
+File.MetaDataInfo fileMetaData;
+File.readMetaData(fileMetaData, "C:\input.wfd");
+String fileType = fileMetaData.get("Type");
+Scripting API | File Methods | MetaDataInfo Methods
+Name
+Name[Int aP1] : String
+getName(Int aP1) : String
+Returns the name of the metadata item at the specified position.
+
+File.MetaDataInfo fileMetaData;
+File.readMetaData(fileMetaData, "C:\input.wfd");
+String metaDataName = fileMetaData.Name(0);
+Scripting API | File Methods | MetaDataInfo Methods
+Value
+Value[Int aP1] : String
+getValue(Int aP1) : String
+Returns a string value of the metadata item at the specified position.
+
+File.MetaDataInfo fileMetaData;
+File.readMetaData(fileMetaData, "C:\input.wfd");
+String metaDataValue = fileMetaData.Value(0);
+Scripting API | File Methods
+Mode Enumerator
+A set of named constants specifying the file access mode.
+
+Append  Opens the file and sets the current pointer position to the end of the file, i.e. your text will be added behind the original content of the file.
+The file you use it for must exist, otherwise an error occurs when processing.
+
+This mode can only be used when writing to a file.
+
+AppendOrCreate  Opens the file if it exists and sets the current pointer position to the end of the file, or creates a new empty file together with all necessary folders. When appending your text, it will be added behind the original content of the file.
+This mode can only be used when writing to a file.
+
+ReadOnly  Opens the file so that you can read from it.
+The file you use it for must exist, otherwise an error occurs when processing.
+
+This mode can only be used when reading from a file.
+
+ReadWrite  Opens the file so that you can read from it and/or write into it. When writing into it, the text is added from the beginning over the original content, which is being overwritten. If there was more original text than you add, the original text remains behind the new text.
+The file you use it for must exist, otherwise an error occurs when processing.
+
+This mode can be used with both reading from and writing to a file.
+
+Tip  For opening a file from which you want to read/ or write into it, use the File.open method (File.openText cannot be used for this purpose).
+Truncate  Opens the file and sets its size to zero bytes, i.e. the original content is deleted and you start adding new text from the beginning.
+The file you use it for must exist, otherwise an error occurs when processing.
+
+This mode can only be used when writing to a file.
+
+TruncateOrCreate  Opens the file if it exists and sets its size to zero bytes, or creates a new empty file together with all necessary folders. If there was any, the original content of the file is deleted and you start adding new text from the beginning.
+This mode can only be used when writing to a file.
+
+WriteOnly  Opens the file so that you can write into it. The text is added from the beginning over the original content, which is being overwritten. If there was more original text than you add, the original text remains behind the new text.
+The file you use it for must exist, otherwise an error occurs when processing.
+
+This mode can only be used when writing to a file.
+
+File.TextStream inputStream;
+File.TextStream outputStream;
+// read and modify a file content
+File.Mode inputMode = File.Mode.ReadOnly;
+inputStream = File.openText("C:\input.txt", inputMode, "UTF-8");
+String fileContent = inputStream.readToEnd();
+fileContent.replace("@", "<at>");
+inputStream.close();
+// save the modified file content
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText("C:\output.txt", outputMode, "UTF-8");
+outputStream.writeString(fileContent);
+outputStream.close();
+Scripting API | File Methods
+move
+move (String SourceLocation, String TargetLocation) : Bool
+Returns the Boolean value true if moving of an existing file to a new location has finished successfully. If the file in the target location already exists, it is overwritten.
+
+Bool isMoved = File.move("C:\input.txt", "C:\temp\input.txt");
+open
+open(String aLocation, Mode aP2) : Stream
+Returns a stream of the given file opened in the specified file access mode. See Mode Enumerators.
+
+File.Stream outputStream;
+outputStream = File.open("C:\output.txt", File.Mode.TruncateOrCreate);
+File.TextStream encodedStream = outputStream.CodeTextStream["UTF-8"];
+encodedStream.writeString("Καλημέρα κόσμε");
+encodedStream.close();
+outputStream.close();
+Scripting API | File Methods | File Methods
+tryOpen
+tryOpen(String aLocation, Mode aP2) : Stream
+Returns the stream of the given file opened in the specified file access mode. See Mode Enumerators.
+
+If the file is not valid, then the script will not fail but instead the file will not be opened.
+
+File.Stream st= File.tryOpen(aOutputFile,File.Mode.TruncateOrCreate);
+     
+Scripting API | File Methods
+openText
+openText(String aLocation, Mode aP2, String aCodec) : TextStream
+Returns a text stream of the given file opened in the specified file access mode and encoded using the valid text encoding.
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+inputStream = File.openText(filePath, File.Mode.ReadOnly, "UTF-8");
+String fileContent = inputStream.readToEnd();
+Scripting API | File Methods
+openTextWithUserCodec
+openTextWithUserCodec(String aLocation, Mode aP2, String CodecFileName) : TextStream
+Returns a text stream of the given file opened in the specified file access mode and encoded using the user defined text encoding (stored in CDC format).
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+File.Mode mode = File.Mode.ReadOnly;
+String encoding = "C:\codec.cdc";
+inputStream = File.openTextWithUserCodec(filePath, mode, encoding);
+String fileContent = inputStream.readToEnd();
+Scripting API | File Methods
+readMetaData
+readMetaData(MetaDataInfo & aP1, String aLocation) : Void
+Reads metadata information of the given file object.
+
+Scripting API | File Methods
+remove
+remove(String aP1) : Bool
+Returns the Boolean value true if removing of the specified file has been finished successfully.
+
+Bool isRemoved = File.remove("C:\input.txt");
+Stream Methods
+Stream methods allow opening, modifying and saving a binary file content. For text manipulations it is better to use TextStream methods instead.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Example  Opening a Stream and Writing to It
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeInt(123456);
+
+Scripting API | File Methods | Stream Methods
+assign
+assign(Stream aP1) : Void
+Assigns a stream object to the given stream. The same result can be achieved using the equal sign =.
+
+File.Stream inputStream;
+inputStream.assign(File.open("C:\data.bin", File.Mode.ReadOnly));
+Scripting API | File Methods | Stream Methods
+close
+close() : Void
+Closes the given stream.
+
+Note  When scripting in Inspire Designer it is not necessary to close an open stream unless you want to open it again. The stream closes automatically.
+File.Stream inputStream;
+inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Binary binaryContent = inputStream.readToEnd();
+inputBinaryStream.close();
+Scripting API | File Methods | Stream Methods
+CodeTextStream
+CodeTextStream[String aP1] : TextStream
+getCodeTextStream(String aP1) : TextStream
+Encodes the given stream. A parameter is either a valid text encoding or a path to the custom codec.
+
+File.Stream outputStream;
+File.TextStream encodedTextStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+encodedTextStream = outputStream.CodeTextStream["UTF-8"];
+encodedTextStream.writeString("Καλημέρα κόσμε");
+Scripting API | File Methods | Stream Methods
+DecodeTextStream
+DecodeTextStream[String aP1] : TextStream
+getDecodeTextStream(String aP1) : TextStream
+Decodes the given stream. A parameter is either a valid text encoding or a path to the custom codec.
+
+File.Stream inputStream;
+File.TextStream decodedTextStream;
+inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+decodedTextStream = inputStream.DecodeTextStream["UTF-8"];
+String decodedContent = decodedTextStream.readToEnd();
+Scripting API | File Methods | Stream Methods
+isEOF
+isEOF() : Bool
+Returns a Boolean value true if the end of the given stream has been reached.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Int weakCheckSum;
+while (not inputStream.isEOF()) {
+   weakCheckSum += inputStream.readByte();
+}
+inputStream.close();
+Scripting API | File Methods | Stream Methods
+isOpen
+isOpen() : Bool
+Returns a Boolean value true if the given stream is open.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+if (inputStream.isOpen()) inputStream.close();
+Scripting API | File Methods | Stream Methods
+Position
+Position : Int64
+getPosition() : Int64
+setPosition(Int64 aP1) : Int64
+Returns or sets the current pointer position within the given stream.
+
+If the new pointer position exceeds the size of the stream, an error will be shown when processing.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+inputStream.Position = 1;
+Int secondByteValue = inputStream.readByte();
+Scripting API | File Methods | Stream Methods
+readBinary
+readBinary(Int aLength) : Binary
+Reads the specified number of bytes from the given stream, starting at the current pointer position.
+
+If that number of bytes exceeds the remaining length of the stream, an error will be shown when processing.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Binary binaryChunk = inputStream.readBinary(8);
+Scripting API | File Methods | Stream Methods
+readBool
+readBool() : Bool
+Reads a Boolean value from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Bool isFlagSet = inputStream.readBool();
+Scripting API | File Methods | Stream Methods
+readByte
+readByte() : Int
+Reads a byte value (a number within the range from -127 to 128) from the given stream, starting at the current pointer position. See also readUByte.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Int currentByteValue = inputStream.readByte();
+Scripting API | File Methods | Stream Methods
+readCurrency
+readCurrency() : Currency
+Reads a currency value from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Currency debit = inputStream.readCurrency();
+Scripting API | File Methods | Stream Methods
+readDouble
+readDouble() : Double
+Reads a double value from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Double monthAverage = inputStream.readDouble();
+Scripting API | File Methods | Stream Methods
+readInt
+readInt() : Int
+Reads an integer value from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Int userID = inputStream.readInt();
+Scripting API | File Methods | Stream Methods
+readInt64
+readInt64() : Int64
+Reads a 64-bit integer value from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Int64 binaryChunkSize = inputStream.readInt64();
+Scripting API | File Methods | Stream Methods
+readString
+readString() : String
+Reads a string value from the given stream, starting at the current pointer position, where a record of both the length of the string and its UTF-16 encoded content is expected.
+
+Warning  If the readString method is invoked at the pointer position in a stream where no appropriate string record is present, it will read meaningless data because of improperly detected string length. If that length exceeds the remaining length of the stream, an error will be shown when processing.
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+inputStream.Position = 8;
+String utf16EncodedString = inputStream.readString();
+Scripting API | File Methods | Stream Methods
+readStringWithCodec
+readStringWithCodec(Int aP1, String aP2) : String
+Reads the specified number of bytes from the given stream, starting at the current pointer position, and decodes them to text using the specified text encoding.
+
+If that number of bytes exceeds the remaining length of the stream, an error will be shown when processing.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+String decodedString = inputStream.readStringWithCodec(16, "UTF-8");
+Scripting API | File Methods | Stream Methods
+readStringWithUserCodec
+readStringWithUserCodec(Int aP1, String aP2) : String
+Reads the specified number of bytes from the given stream, starting at the current pointer position, and decodes them to text using the user defined text encoding (stored in CDC format).
+
+If the number of bytes exceeds the remaining length of the stream, an error will be shown when processing.
+
+String decodedString;
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+decodedString = inputStream.readStringWithCodec(16, "C:\userCodec.cdc");
+Scripting API | File Methods | Stream Methods
+readToEnd
+readToEnd() : Binary
+Reads the rest of data from the given stream, starting at the current pointer position.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Binary binaryContent = inputStream.readToEnd();
+Scripting API | File Methods | Stream Methods
+readUByte
+readUByte() : Int
+Reads an unsigned byte value (a number within the range 0-255) from the given stream, starting at the current pointer position. See also readByte.
+
+File.Stream inputStream = File.open("C:\data.bin", File.Mode.ReadOnly);
+Int currentUByteValue = inputStream.readUByte();
+Scripting API | File Methods | Stream Methods
+readColorCoverage
+readColorCoverage() : Int
+Returns the color coverage of an image and can be used with all file types which Inspire Designer supports. See the Images section for a list of supported images.
+
+This can be used with ColorCoverage Methods.
+
+Note  This method only reads the first page of a file.
+
+String file = "C:\Cloud\FormatConvert.test\NetServer\TestFiles\VS9240_Testfile 19x12_3 pages_simplex_Perceptual.pdf";
+File.Stream st=File.open(file,File.Mode.ReadOnly);
+File.ColorCoverage cc = st.readColorCoverage();
+st.close();
+
+Scripting API | File Methods | Stream Methods
+Size
+Size : Int64
+getSize() : Int64
+setSize(Int64 aP1) : Int64
+Returns or sets the given stream size in bytes. If the new size is smaller, the stream is truncated. Otherwise it is filled with null characters.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.Size = 1024;
+Scripting API | File Methods | Stream Methods
+writeBinary
+writeBinary(Binary aP1) : Void
+Writes a binary value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+Binary binaryData = Binary.fromHex("03BC006D");   // μm
+outputStream.writeBinary(binaryData);
+Scripting API | File Methods | Stream Methods
+writeBool
+writeBool(Bool aP1) : Void
+Writes a Boolean value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeBool(true);
+Scripting API | File Methods | Stream Methods
+writeByte
+writeByte(Int aP1) : Void
+Writes a byte value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeByte(169);   // ©
+Scripting API | File Methods | Stream Methods
+writeCurrency
+writeCurrency(Currency aP1) : Void
+Writes a currency value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeCurrency(12.1234);
+Scripting API | File Methods | Stream Methods
+writeDouble
+writeDouble(Double aP1) : Void
+Writes a double value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeDouble(12.123456);
+Scripting API | File Methods | Stream Methods
+writeInt
+writeInt(Int aP1) : Void
+Writes an integer value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeInt(0x7FFFFFFF);   // max. Int value
+outputStream.writeInt(-1234);
+Scripting API | File Methods | Stream Methods
+writeInt64
+writeInt64(Int64 aP1) : Void
+Writes a 64-bit integer value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeInt64(0x7FFFFFFFFFFFFFFF);   // max. Int64 value
+outputStream.writeInt64(-1234);
+Scripting API | File Methods | Stream Methods
+writeRawString
+writeRawString(String aP1) : Void
+Writes a string value on the given stream, starting at the current pointer position.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeRawString("Hello World!");
+Scripting API | File Methods | Stream Methods
+writeString
+writeString(String aP1) : Void
+Writes a string value on the given stream, starting at the current pointer position.
+
+A record stored in the stream consists of the length of the string followed with the content itself.
+
+File.Stream outputStream;
+outputStream = File.open("C:\data.bin", File.Mode.TruncateOrCreate);
+outputStream.writeString("Hello World!");
+TextStream Methods
+TextStream methods allow opening, modifying and saving a text file content. For binary content manipulations it is better to use Stream methods instead.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | TextStream Methods
+assign
+assign(TextStream aP1) : Void
+Assigns a TextStream object to the given text stream. The same result can be achieved using the equal sign =.
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+inputStream.assign(File.openText(filePath, File.Mode.ReadOnly, "UTF-8"));
+Scripting API | File Methods | TextStream Methods
+close
+close() : Void
+Closes the given text stream.
+
+Note  When scripting in Inspire Designer it is not necessary to close an open text stream unless you want to open it again. The text stream closes automatically.
+File.TextStream outputStream;
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText("C:\output.txt", outputMode, "UTF-8");
+outputStream.close();
+Scripting API | File Methods | TextStream Methods
+isEOF
+isEOF() : Bool
+Returns the Boolean value true when the end of the given text stream has been reached.
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+inputStream = File.openText(filePath, File.Mode.ReadOnly, "UTF-8");
+String fileContent;
+while (not inputStream.isEOF()) {
+   fileContent += inputStream.readLine();
+}
+inputStream.close();
+Scripting API | File Methods | TextStream Methods
+isOpen
+isOpen() : Bool
+Returns the Boolean value true if the given text stream is open.
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+inputStream = File.openText(filePath, File.Mode.ReadOnly, "UTF-8");
+if (inputStream.isOpen()) inputStream.close();
+Scripting API | File Methods | TextStream Methods
+readChar
+readChar() : Char
+Reads a character value from the given text stream, starting at the current pointer position.
+
+File.TextStream outputStream;
+String filePath = "C:\readChar.txt";
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+String encoding = "UTF-8";
+// open a file and write a line
+outputStream = File.openText(filePath, outputMode, encoding);
+outputStream.writeLine("abc");
+outputStream.close();
+// open the same file and read the first character
+File.TextStream inputStream;
+File.Mode inputMode = File.Mode.ReadOnly;
+inputStream = File.openText(filePath, inputMode, encoding);
+Char firstCharacter = inputStream.readChar();
+// firstCharacter = "a"
+inputStream.close();
+Scripting API | File Methods | TextStream Methods
+readLine
+readLine() : String
+Reads a string value up to the line break from the given text stream, starting at the current pointer position.
+
+If the line break is not detected, it reads the rest of the string value from the given stream, starting at the current pointer position.
+
+The line break is any one of a line feed (0x0A), a carriage return (0x0D), or a carriage return followed immediately by a line feed.
+
+File.TextStream outputStream;
+String filePath = "memory://readLine.txt";
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+String encoding = "UTF-8";
+// open a file and write some lines
+outputStream = File.openText(filePath, outputMode, encoding);
+outputStream.writeLine("Hello ");
+outputStream.writeLine("World!");
+outputStream.close();
+// open the same file and read the first line
+File.TextStream inputStream;
+File.Mode inputMode = File.Mode.ReadOnly;
+inputStream = File.openText(filePath, inputMode, encoding);
+String firstLine = inputStream.readLine();   
+// firstLine = "Hello "
+inputStream.close();
+Scripting API | File Methods | TextStream Methods
+readString
+readString(Int aP1) : String
+Reads the specified number of characters from the given text stream, starting at the current pointer position.
+
+File.TextStream inputStream = File.openText("c:\readString.txt", File.Mode.ReadOnly, "UTF-8");
+String s = inputStream.readString(10);
+Scripting API | File Methods | TextStream Methods
+readStringBM
+readStringBM(Int aP1) : String
+Reads a string value representing the specified number of bytes from the given text stream, starting at the current pointer position.
+
+If that number of bytes exceeds the remaining length of the stream, or it is insufficient for building a complete double-byte character, an error will be shown when processing.
+
+File.TextStream outputStream;
+String filePath = "C:\readStringBM.txt";
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText(filePath, outputMode, "UTF-8");
+outputStream.writeString("12€");
+outputStream.close();
+File.TextStream inputStream;
+File.Mode inputMode = File.Mode.ReadOnly;
+inputStream = File.openText(filePath, inputMode, "UTF-8");
+String result = inputStream.readStringBM(4);
+// inputStream.readStringBM(3) would cause an error when processing,
+// a Euro sign is a double-byte character
+inputStream.close();
+Scripting API | File Methods | TextStream Methods
+readStringS
+readStringS(Int aP1) : String
+Reads the specified number of characters from the given text stream, starting at the current pointer position. In addition to the readString functionality, readStringS reads a surrogate pair (consisting of two characters) as one character, if it occurs in the input file.
+
+Scripting API | File Methods | TextStream Methods
+readToEnd
+readToEnd() : String
+Reads the rest string value from the given text stream, starting at the current pointer position.
+
+File.TextStream inputStream;
+String filePath = "C:\input.txt";
+inputStream = File.openText(filePath, File.Mode.ReadOnly, "UTF-8");
+String fileContent = inputStream.readToEnd();
+Scripting API | File Methods | TextStream Methods
+writeChar
+writeChar(Char aP1) : Void
+Writes a character value on the given text stream, starting at the current pointer position.
+
+File.TextStream outputStream;
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText("C:\output.txt", outputMode, "UTF-8");
+outputStream.writeChar("α");
+Scripting API | File Methods | TextStream Methods
+writeLine
+writeLine(String aP1) : Void
+Writes a string value, followed by a line break, on the given text stream, starting at the current pointer position.
+
+The line break is any one of a line feed (0x0A), a carriage return (0x0D), or a carriage return followed immediately by a linefeed.
+
+File.TextStream outputStream;
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText("C:\output.txt", outputMode, "UTF-8");
+outputStream.writeLine("Καλημέρα");
+outputStream.writeLine(" ");
+outputStream.writeLine("κόσμε");
+outputStream.close();   // three separate lines in the output
+Scripting API | File Methods | TextStream Methods
+writeString
+writeString(String aP1) : Void
+Writes a string value on the given text stream, starting at the current pointer position.
+
+File.TextStream outputStream;
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.openText("C:\output.txt", outputMode, "UTF-8");
+outputStream.writeString("Καλημέρα");
+outputStream.writeString(" ");
+outputStream.writeString("κόσμε");
+outputStream.close();   // a single line in the output
+VCS Methods
+See also:
+
+Inspire Content Manager Overview
+VCS methods manage files that are in Inspire Content Manager (previously known as Version Control System or VCS). To be able to use these methods (e.g. in the Script Data Input module), you need to be logged into Inspire Content Manager. The following VCS methods need to be permitted via the Edit User dialog: getAllGroups, getAllUsers, getGroup, getUser, removeGroup, removeUser, unlockUser and all methods under GroupInfo and UserInfo.
+
+Paths to files and directories in Inspire Content Manager can also include branch and version information in order to access a specific version of that file. See the separate section Paths to Files in Content Manager.
+
+Example  
+File.VCS.getVersionId("vcs:L:MyLabel:B:MyBranch1//FroodecoMail.wfd");
+Scripts using any File.VCS methods that return a string value should also confirm that the returned value is valid.
+
+Example  
+File.VCS.Metadata md;
+String result=File.VCS.readMetadata("icm://test.wfd",md);
+if(result!="OK")
+   logError("Error reading metadata: "+result);
+
+Scripting API | File Methods | VCS Methods
+aliasLabel
+aliasLabel(String aLocation, String AliasName, String LabelName, String aComment, String FileComment, Bool AppendNewFileComment, LabelComment LabelCommentType, Bool Recursive) : String
+Labels the specified file or directory with the specified alias if its label matches the specified label name. Such operation can be complemented by the specified comment.
+
+This method can also modify the current file comment. In such case the new comment must be specified and the next parameter set to the Boolean value true. It either replaces or appends the current value, regarding to the specified label comment type. In case of directory the last Boolean value specifies whether such operation will be applied also to all children of that directory.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+logMessage(File.VCS.aliasLabel("vcs://folder", 
+                               "released", 
+                               "approved", 
+                               "2009-10-15", 
+                               "", 
+                               false, 
+                               File.VCS.LabelComment.Apply, 
+                               true));
+ApprovalState Methods
+File.VCS.ApprovalState declares an approval state object for inclusion in an ApprovalStates list, which is used inside a History Info object to read approval states from versions of files.
+
+It is used inside a list because there can be more than one approval state applied to any single file version. See HistoryInfoList for an example of use. Once declared, the following methods can be applied to the object:
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+assign
+assign(ApprovalState aP1) : Void
+Assigns the object (in brackets) to the current object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+Comment
+Comment : String
+getComment() : String
+setComment(String aP1) : Void
+Returns or sets a comment of the approval state applied to the file version.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+CreationTime
+CreationTime : DateTime
+getCreationTime() : DateTime
+Returns the time that the approval state was applied to the file version.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+Name
+Name : String
+getName() : String
+setName(String aP1) : Void
+Returns or sets the name of the approval state applied to a file version.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+UserName
+Username : String
+getUserName() : String
+setUserName(String aP1) : Void
+Returns or sets the name of the user who is linked to the change of the approval state to a file version.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+ValidFrom
+ValidFrom : DateTime
+getValidFrom() : DateTime
+setValidFrom(DateTime aP1) : Void
+Returns or sets an initial validity date of the approval state applied to a file version.
+
+Scripting API | File Methods | VCS Methods | ApprovalState Methods
+ValidTo
+ValidTo : DateTime
+getValidTo() : DateTime
+setValidTo(DateTime aP1) : Void
+Returns or sets a final validity date of the approval state applied to a file version.
+
+Scripting API | File Methods | VCS Methods
+branch
+branch(String aLocation, String BranchName, String aComment, Bool Recursive) : String
+Splits the specified file or directory into two parallel versions. Such operation can be complemented with the specified label name and comment. In case of directory the last Boolean value specifies whether such operation will be applied also to all children of that directory.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+logMessage(File.VCS.branch("vcs://folder", "v2.0", "New design", true));
+Scripting API | File Methods | VCS Methods
+checkIn
+checkIn(String aLocation, String aComment) : String
+checkIn(String aLocation, String aComment, Stream aStream) : String
+Updates the content of the specified file in ICM server. Such operation can be complemented with the specified comment. A new content is taken from previously checked out and updated file or passed as a specified stream.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+File.Stream outputStream;
+File.Mode outputMode = File.Mode.TruncateOrCreate;
+outputStream = File.open("memory://output.txt", outputMode);
+outputStream.CodeTextStream["UTF-8"].writeString("Hello World!");
+logMessage(File.VCS.checkIn("vcs://file.txt", "v1.0", outputStream));
+Scripting API | File Methods | VCS Methods
+checkOut
+checkOut(String aLocation) : String
+Copies the specified file or directory into a temporary location on local disc.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+logMessage(File.VCS.checkOut("vcs://file.txt"));
+File.TextStream stream;
+stream = File.openText("vcs://file.txt", File.Mode.Append, "UTF-8");
+stream.writeString("Καλημέρα κόσμε");
+stream.close();
+logMessage(File.VCS.checkIn("vcs://file.txt", "Greek version added"));
+DataValue Methods
+DataValue declares a value for use in a DataValueList.
+
+See MetadataValueList for an example of use. Once declared, the following methods can be applied to the value:
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+assign
+assign(DataValue aP1) : Void
+Assigns the specified DataValue object to the given DataValue object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+BoolValue
+BoolValue : Bool
+getBoolValue() : Bool
+setBoolValue(Bool aP1) : Void
+Returns or sets a Boolean value of the DataValue object.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+DateTimeValue
+DateTimeValue : DateTime
+getDateTimeValue() : DateTime
+setDateTimeValue(DateTime aP1) : Void
+Returns or sets a DateTime value of the DataValue object.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+DoubleValue
+DoubleValue : Double
+getDoubleValue() : Double
+setDoubleValue(Double aP1, Int aPrecision) : Void
+Returns or sets a Double value of the DataValue object. When a precision is specified, it sets the number of decimal places.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+IntValue
+IntValue : Int
+getIntValue() : Int
+setIntValue(Int aP1) : Void
+Returns or sets a Int value of the DataValue object.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+StringValue
+StringValue : String
+getStringValue() : String
+setStringValue(String aP1) : Void
+Returns or sets a String value of the DataValue object.
+
+Scripting API | File Methods | VCS Methods | DataValue Methods
+Type
+Type : DataValueType
+getType() : DataValueType
+Returns a DataValueType of the DataValue object.
+
+DataValueList Methods
+DataValueList methods can be used for storing, manipulating and retrieving DataValue objects.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+add
+add(DataValue aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+assign
+assign(DataValueList aP1) : Void
+Assigns a DataValueList object to the given list. The same result can be achieved using the equal sign =.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+get
+get(Int aP1) : DataValue
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+insert
+insert(Int aP1, DataValue aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+resize
+resize(Int aP1, DataValue aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+set
+set(Int aP1, DataValue aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Scripting API | File Methods | VCS Methods | DataValueList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Scripting API | File Methods | VCS Methods
+DataValueType
+Returns data-types, for use in naming Types for DataValues.
+
+File.VCS.MetadataValue mdv;
+File.VCS.DataValue size;
+
+function valueTypeToString(File.VCS.DataValueType aValue) : String
+   {
+   is(aValue)
+      {
+      File.VCS.DataValueType.Bool:return "Bool";
+      File.VCS.DataValueType.DateTime:return "DateTime";
+      File.VCS.DataValueType.Double:return "Double";
+      File.VCS.DataValueType.Int:return "Int";
+      File.VCS.DataValueType.String:return "String";
+      }
+   logError("No Data Type");
+   }
+
+mdv.Name="Int(301)-Type:" + valueTypeToString(size.Type);
+Scripting API | File Methods | VCS Methods
+exportMetadata
+exportMetadata(String SourceLocation, String TargetLocation) : Bool
+Exports any edited or added metadata as a separate file with the extension .metadata to the same directory as the main file.
+
+Scripting API | File Methods | VCS Methods
+getAllGroups
+getAllGroups(GroupInfoList & aGroupInfoList) : String
+Retrieves a list of existing groups and their details.
+
+Scripting API | File Methods | VCS Methods
+getAllUsers
+getAllUsers(UserInfoList & aUserInfoList) : String
+Retrieves a list of existing users and their details.
+
+Scripting API | File Methods | VCS Methods
+getInspireEnvironmentVariable
+getInspireEnvironmentVariable(String aName, InspireEnvironmentVariable & aValue) : String
+Retrieves the value of a specified Inspire environment variable.
+
+
+Example  
+
+File.VCS.InspireEnvironmentVariable value;
+String result=File.VCS.getInspireEnvironmentVariable("Production/ResourcesDirectory",value);
+if(result!="OK")
+   {
+   logError("Error reading environment variable");
+   }
+ 
+String resourcesDirectory=value.getString();
+logMessage(resourcesDirectory);
+
+
+Scripting API | File Methods | VCS Methods
+getGroup
+getGroup(String aGroupName, GroupInfo & aGroupInfo) : String
+Retrieves a group with the specified name.
+
+
+Example  
+
+File.VCS.GroupInfo gi;
+String result=File.VCS.getGroup("Designers",gi);
+
+for(Int j=0;j<gi.Users.Size;j++)           
+   {
+   logMessage(gi.Users[j]);   
+   }  
+
+
+Scripting API | File Methods | VCS Methods
+getReferencedBy
+getReferencedBy(String aSearchInLocation, String aSearchForLocation, Bool aRecursive, StringList) : String
+Lists any files in the aSearchInLocation that reference the files (i.e. use the file as a resource) at the aSearchForLocation.
+
+If the file is a resource, this can be used to discover which workflows are using it. It searches for references in the metadata item Dependencies of all files in the aSearchInLocation. Dependencies is added to workflows (WFD files) when they are placed in Inspire Content Manager.
+
+The Boolean aRecursive determines whether it will also search for referencing external workflows to any workflows found in aSearchInLocation, even if they are not in that directory.
+
+Scripting API | File Methods | VCS Methods
+getReferences
+getReferences(String aLocation, Bool aRecursive, StringList) : String
+Lists files which the file String aLocation references, i.e. any references that are listed in the metadata item Dependencies of the file at aLocation.
+
+Scripting API | File Methods | VCS Methods
+getPreview
+getPreview(String aLocation, PreviewType aPreviewMode, Binary aImage) : String
+Gets a preview image assigned to the file at String aLocation. The preview image is stored in binary form (Binary aImage) and its required size is defined using the PreviewType aPreviewMode parameter.
+
+Scripting API | File Methods | VCS Methods
+getType
+Type : InspireEnvironmentVariableType
+getType() : InspireEnvironmentVariableType
+Returns the type of a specified Inspire environment variable (String, Bool, Password, Number, Unset).
+
+Example  
+
+File.VCS.InspireEnvironmentVariable variable;
+File.VCS.getInspireEnvironmentVariable("Variable",variable);
+if(variable.getType()==File.VCS.InspireEnvironmentVariableType.String)
+   return variable.getString();
+
+Scripting API | File Methods | VCS Methods
+getUser
+getUser(String aUserName, UserInfo & aUserInfo) : String
+Retrieves a user with the specified name.
+
+GroupInfo Methods
+GroupInfo methods are used for reading and modifying group properties.
+
+Note  For any changes to be saved on the server, the save method must be used.
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+AccessRights
+Returns user permissions to be applied to all the group members.
+
+File.VCS.GroupInfo gi;
+String result=File.VCS.getGroup("Managers",gi);
+if(result!="OK")
+   logError(result);
+gi.AccessRights.CanEditSimpleProduction=File.VCS.UserAccessRightsState.Deny;
+result=gi.save();
+if(result!="OK")
+   logError(result);
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Active
+Active : Bool
+getActive() : Bool
+setActive(Bool aP1) : Void
+Returns true if the group is active.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+addUser
+addUser(String aP1) : Void
+Adds a new user to the specified group.
+
+File.VCS.GroupInfo gi;
+String result=File.VCS.getGroup("Managers",gi);
+if(result!="OK")
+   logError(result);
+gi.addUser("LocalManager01");
+result=gi.save();
+if(result!="OK")
+   logError(result);
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+assign
+assign(GroupInfo aP1) : Void
+Assigns the specified GroupInfo object to the given GroupInfo object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+AzureADGroup
+AzureADGroup : String
+getAzureADGroup() : String
+setAzureADGroup(String aP1) : Void
+Returns or sets a group of users from Azure Active Directory that will be synchronized with the Inspire Content Manager group.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Company
+Company : Bool
+getCompany() : Bool
+setCompany(Bool aP1) : Void
+Returns true if the group is marked as a company group.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+CompanyLogo
+CompanyLogo() : Binary
+getCompanyLogo() : Binary
+setCompanyLogo(Binary aP1) : Void
+Sets a new logo to the company group.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+CompanyRoot
+CompanyRoot : String
+getCompanyRoot() : String
+setCompanyRoot(String aP1) : Void
+Returns or sets the directory of the company inside Inspire Content Manager.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Icon
+Icon() : Binary
+getIcon() : Binary
+setIcon(Binary aP1) : Void
+Returns or sets a new group icon to the group.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPEmail
+LDAPEmail : String
+getLDAPEmail() : String
+setLDAPEmail(String aP1) : Void
+Returns or sets the LDAP Email attribute.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPFilter
+LDAPFilter : String
+getLDAPFilter() : String
+setLDAPFilter(String aP1) : Void
+Returns or sets the LDAP Filter.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPFullName
+LDAPFullName : String
+getLDAPFullName() : String
+setLDAPFullName(String aP1) : Void
+Returns or sets the LDAP Full name attribute.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPSearchBase
+LDAPSearchBase : String
+getLDAPSearchBase() : String
+setLDAPSearchBase(String aP1) : Void
+Returns or sets the LDAP Search base.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPSearchSubtree
+LDAPSearchSubtree : Bool
+getLDAPSearchSubtree() : Bool
+setLDAPSearchSubtree(String aP1) : Void
+Returns true if the information about users is taken also from sub-directories one level below the selected one.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPSynchronize
+LDAPSynchronize : Bool
+getLDAPSynchronize() : Bool
+setLDAPSynchronize(String aP1) : Void
+Returns true if synchronization is enabled for integration of local LDAP directory entries into Inspire Content Manager.
+
+This method is kept for backward compatibility.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPSyncPoint
+LDAPSyncPoint : String
+getLDAPSyncPoint() : String
+setLDAPSyncPoint(String aP1) : Void
+Returns or sets a new synchronization point.
+
+This method is kept for backward compatibility.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+LDAPUsername
+LDAPUsername : String
+getLDAPUsername() : String
+setLDAPUsername(String aP1) : Void
+Returns or sets the LDAP Username attribute.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Name
+Name : String
+getName() : String
+setName(String aP1) : Void
+Returns or sets the name of the given group.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+removeUser
+removeUser(String aP1) : Bool
+Returns true if removing of the user from the specified group has been finished successfully.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+save
+save() : String
+Saves the modified content on the server.
+
+Returns "OK" or an error message depending on whether saving was successful or not.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Synchronize
+Synchronize : Bool
+getSynchronize() : Bool
+setSynchronize(String aP1) : Void
+Returns true if synchronization is enabled for integration of local LDAP/Azure directory entries into Inspire Content Manager.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+SyncPoint
+SyncPoint : String
+getSyncPoint() : String
+setSyncPoint(String aP1) : Void
+Returns or sets a new synchronization point.
+
+Scripting API | File Methods | VCS Methods | GroupInfo Methods
+Users
+Users : StringList &
+Returns the list of users in the specified group.
+
+Scripting API | File Methods | VCS Methods
+GroupInfoList Methods
+GroupInfoList methods can be used for storing, manipulating and retrieving GroupInfo objects.
+
+The list of methods available for GroupInfo object is the same as for HistoryInfoList Methods.
+
+Scripting API | File Methods | VCS Methods
+hardMove
+hardMove(String aSourceLocation, String aTargetLocation) : Bool
+Permanently moves the file at String aLocation to String aTargetLocation. You can rename the file during this relocation.
+
+Scripting API | File Methods | VCS Methods
+hardRemove
+hardRemove(String aLocation) : Bool
+Permanently removes (deletes) the file at String aLocation.
+
+HistoryInfo Methods
+File.VCS.HistoryInfo declares a HistoryInfo object for use in HistoryInfoLists.
+
+The file from which the history is read is determined with readFileHistory.
+
+Example  In the Script Data Input module, this structure of fields has been created:
+
+And this script is used to read history from the file to the fields:
+
+FileName="vcs://GFBankSummerOffer11.wfd";   // gives value to Filename field
+File.VCS.HistoryInfoList list;              // declares HistoryInfoList
+File.VCS.readFileHistory(FileName,list);    // Determines that file history will be read from file to list
+
+for(Int i=0;i<list.Size;i++)                // loop for History array 
+   {
+   File.VCS.HistoryInfo cur=list[i];        // Declares HistoryInfo object
+
+   History.Branch=cur.Branch;               // reads to fields
+   History.Comment=cur.Comment;
+   History.CreationTime=cur.CreationTime;
+   History.UserName=cur.UserName;
+   History.VersionDeleted=cur.VersionDeleted;
+   
+   for(Int j=0;j<cur.Labels.Size;j++)       // loop for Labels array
+      {
+      History.Labels.Label=cur.Labels[j];   // reads to field
+      History.Labels.commit();
+      }
+
+   for(Int j=0;j<cur.ApprovalStates.Size;j++)  // loop for ApprovalState array
+   {
+    File.VCS.ApprovalState curAS=cur.ApprovalStates[j];      // declares ApprovalState object called Approved
+    History.ApprovalState.CreationTime=curAS.CreationTime;   // reads to fields 
+    History.ApprovalState.Name=curAS.Name;
+    History.ApprovalState.UserName=curAS.UserName;
+    History.ApprovalState.ValidTo=curAS.ValidTo;
+    History.ApprovalState.commit(); 
+      }
+   History.commit();
+   }
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+ApprovalStates
+ApprovalStates : ApprovalStatesList
+getApprovalStates() : ApprovalStatesList
+Returns a list of ApprovalStates.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+assign
+assign(HistoryInfo aP1) : Void
+Assigns the specified HistoryInfo object to the given object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+Branch
+Branch : String
+getBranch() : String
+Returns the branch name from the version of the file.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+Comment
+Comment : String
+getComment() : String
+Returns any comments made to the version of the file on check-in or check-out.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+CreationTime
+CreationTime : DateTime
+getCreationTime() : DateTime
+Returns the creation time of the version of the file.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+Labels
+Labels : StringList
+getLabels() : StringList
+Returns a list of labels from the version of the file. Each version can have multiple labels.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+Metadata
+Metadata : Metadata
+getMetadata() : Metadata
+Returns the Metadata object from the version of the file.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+UserName
+Username : String
+getUsername() : String
+Returns the user name (i.e. creator of the file) from the file declared by readFileHistory.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+VersionDeleted
+VersionDeleted : Bool
+getVersionDeleted() : Bool
+Returns true if the version is a deleted version of the file.
+
+Scripting API | File Methods | VCS Methods | HistoryInfo Methods
+VersionId
+VersionId : Int
+getVersionId()
+Returns the version Id from the version of the file.
+
+HistoryInfoList Methods
+HistoryInfoList methods can be used for storing, manipulating and retrieving HistoryInfo objects.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+add
+add(HistoryInfo aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+assign
+assign(HistoryInfoList aP1) : Void
+Assigns a HistoryInfoList object to the given list. The same result can be achieved using the equal sign =.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+get
+get(Int aP1) : HistoryInfo
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+insert
+insert(Int aP1, HistoryInfo aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+resize
+resize(Int aP1, HistoryInfo aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+set
+set(Int aP1, HistoryInfo aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Scripting API | File Methods | VCS Methods | HistoryInfoList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Scripting API | File Methods | VCS Methods
+importMetadata
+importMetadata(String SourceLocation, String TargetLocation) : Bool
+Imports the external metadata, exported as .METADATA file, back to Inspire Content Manager.
+
+Scripting API | File Methods | VCS Methods
+label
+label (String aLocation, String LabelName, String aComment, String FileComment, Bool AppendNewFileComment, LabelComment LabelCommentType, Bool Recursive) : String
+Tags the specified file or directory with the specified label name. Such operation can be complemented with the specified comment.
+
+This method can also modify the current file comment. In such a case the new comment must be specified and the next parameter set to the Boolean value true. It either replaces or appends the current value, regarding of the specified label comment type. In case of directory the last Boolean value specifies whether such operation will be applied also to all children of that directory.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+logMessage(File.VCS.label("vcs://file.txt", 
+                          "approved", 
+                          "2009-10-10", 
+                          "", 
+                          false, 
+                          File.VCS.LabelComment.Append, 
+                          false));
+Scripting API | File Methods | VCS Methods
+LabelComment
+A set of named constants determining the method of applying the label comments.
+
+Append  Appends a new label comment to the current one.
+Apply  Replaces the current label comment with the new one.
+ApplyOnNew  Applies a new label comment only if the current one is empty.
+Scripting API | File Methods | VCS Methods
+listWithSoftDeleted
+listWithSoftDeleted(FileInfoList & aP1, ListParam aP2, String aLocation) : Bool
+Lists all files including those which have been soft deleted, e.g. using the softMove or softRemove methods.
+
+File.FileInfoList filSoft;
+File.VCS.listWithSoftDeleted(filSoft,File.ListParam.All,"vcs://");
+for(Int i=0;i<filSoft.Size;i++)
+   {
+   logMessage(filSoft[i].Name+" "+filSoft[i].Attributes);
+   }
+;  // Soft deleted files will have letter ‚s‘ in filSoft[i].Attributes 
+Metadata Methods
+File.VCS.Metadata declares an object that stores various file metadata.
+
+Example  In the Script Data Input module, this structure of fields has been created:
+
+And this script is used to read metadata from the file to the fields:
+
+// reads the file path to FileName field
+FileName="vcs://GFBankSummerOffer11.wfd";
+// declares Metadata object
+File.VCS.Metadata md;
+// reads the metadata from file to object
+File.VCS.readMetadata(FileName,md);
+
+//Specifies the valueTypeToString function (to return the data-type of a value as a string)
+function valueTypeToString(File.VCS.DataValueType aValue) : String
+   {
+   is(aValue)
+      {
+      File.VCS.DataValueType.Bool:return "Bool";
+      File.VCS.DataValueType.DateTime:return "DateTime";
+      File.VCS.DataValueType.Double:return "Double";
+      File.VCS.DataValueType.Int:return "Int";
+      File.VCS.DataValueType.String:return "String";
+      }
+   logError("No Data Type");
+   }
+                                      
+// loop for array
+for(Int i=0;i<md.SystemValues.Size;i++)
+   {
+   // declares MetadataValues for SystemValues array
+   File.VCS.MetadataValue mdv=md.SystemValues[i];
+   // reads MetadataValue to field
+   Metadata.SystemValues.Name=mdv.Name;
+   // loop for dependent array
+   for(Int j=0;j<mdv.DataValues.Size;j++)
+      {
+      // declares DataValues for DataValues array
+      File.VCS.DataValue dv=mdv.DataValues[j];
+      // reads DataValue's Type as string to field Type
+      Metadata.SystemValues.DataValues.Type=valueTypeToString(dv.Type);
+      Metadata.SystemValues.DataValues.Value=dv.toString();
+      Metadata.SystemValues.DataValues.commit();
+      }
+   Metadata.SystemValues.commit();
+   }
+
+for(Int i=0;i<md.UserValues.Size;i++)
+   {
+   // declares MetadataValues are user-defined metadata
+   File.VCS.MetadataValue mdv=md.UserValues[i];
+   Metadata.UserValues.Name=mdv.Name;
+   for(Int j=0;j<mdv.DataValues.Size;j++)
+      {
+      File.VCS.DataValue dv=mdv.DataValues[j];
+      Metadata.UserValues.DataValues.Type=valueTypeToString(dv.Type);
+      Metadata.UserValues.DataValues.Value=dv.toString();
+      Metadata.UserValues.DataValues.commit();
+      }
+   Metadata.UserValues.commit();
+   }
+Scripting API | File Methods | VCS Methods | Metadata Methods
+assign
+assign(Metadata aP1) : Void
+Assigns the specified Metadata object to the given Metadata object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | Metadata Methods
+SystemValues
+SystemValues : MetadataValueList
+getSystemValues() : MetadataValueList
+Returns the MetadataValueList object that stores system-defined metadata of the given file.
+
+Scripting API | File Methods | VCS Methods | Metadata Methods
+UserValues
+UserValues : MetadataValueList
+getUserValues() : MetadataValueList
+Returns the MetadataValueList object that stores user-defined metadata of the given file.
+
+MetadataValue Methods
+File.VCS.MetadataValue declares a value for use in a MetadataValueList. See MetadataValueList for an example of use.
+
+Scripting API | File Methods | VCS Methods | MetadataValue Methods
+assign
+assign(MetadataValue aP1) : Void
+Assigns the specified MetadataValue object to the given MetadataValue object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | MetadataValue Methods
+DataValues
+DataValues : DataValueList
+getDataValues() : DataValueList
+setDataValues(DataValueList) : Void
+Returns or sets a DataValueList object of the given MetadataValue.
+
+Scripting API | File Methods | VCS Methods | MetadataValue Methods
+Name
+Name() : String
+getName() : String
+setName(String aP1) : Void
+Returns or sets the name of the given MetadataValue.
+
+MetadataValueList Methods
+MetadataValueList methods can be used for storing, manipulating and retrieving MetadataValue objects.
+
+The following example creates a MetadataList and writes it to a file's metadata.
+
+File.FileInfoList fil;                                             //declare FileInfoList
+File.list(fil,File.ListParam.FilesRecursive,"vcs://images/");      //nominate directory vcs://images/ for recursive file manipulation
+
+String temp,gps_x,gps_y,ID;                                        //declare strings for naming properties of file
+File.VCS.DataValueList values;                                     //declare DataValueList
+
+readLine();
+
+while (not isEOF())     //read each file
+   {                                                      
+   temp = readLine();                                              //determine which lines of file are which properties
+   ID = temp.Part[0,";"];
+   gps_x = temp.Part[1,";"];
+   gps_y = temp.Part[2,";"];
+   
+   for (Int i=0; i<fil.Size;i++)                                   //loop for assigning items to list
+      {
+      if (fil[i].NameExt == ID)
+         {         
+         File.VCS.DataValue gpsDataX;                              //declare DataValue
+         gpsDataX.setDoubleValue(gps_x.toDouble(),8);              //assign value to DataValue
+         values.add(gpsDataX);                                     //add value to DataValueList
+         
+         File.VCS.DataValue gpsDataY;
+         gpsDataY.setDoubleValue(gps_y.toDouble(),8);
+         values.add(gpsDataY);
+         
+         File.VCS.MetadataValue mdv;                                //declare MetadataValue
+         mdv.Name="Exif.GPS.Location";                              //name MetadataValue
+         mdv.DataValues=values;                                     //assign complete DataValueList to single MetadataValue
+         
+         File.VCS.MetadataValueList mdvl;                           //declare MetadataValueList
+         mdvl.add(mdv);                                             //add MetadataValue to list
+         File.VCS.writeUserMetadata(fil[i].Location,mdvl,true);     //write data in MetadataList to file.
+         
+         mdvl.clear();                                              //reset MetadataList for next loop
+         values.clear();                                            //reset DataValueList for next loop
+         break;
+         }      
+      }
+   }
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+add
+add(MetadataValue aP1) : Void
+add(String aName, DateTime aValue) : Void
+add(String aName, Int aValue) : Void
+add(String aName, String aValue) : Void
+Adds a list item with the specified value to the given list.
+
+File.VCS.MetadataValue mdv; 
+mdv.Name = "Exif.GPS.Location";               
+mdv.DataValues = values;
+         
+File.VCS.MetadataValueList mdvl;
+mdvl.add(mdv);
+File.VCS.MetadataValueList mdlist;
+String User = Util.OSUserName;
+mdlist.add("Time", DateTime.Now.toString());
+mdlist.add("User Name","time" + User);
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+assign
+assign(MetadataValueList aP1) : Void
+Assigns a MetadataValueList object to the given list. The same result can be achieved using the equal sign =.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+get
+get(Int aP1) : MetadataValue
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+insert
+insert(Int aP1, MetadataValue aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+resize
+resize(Int aP1, MetadataValue aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+set
+set(Int aP1, MetadataValue aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Scripting API | File Methods | VCS Methods | MetadataValueList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Scripting API | File Methods | VCS Methods
+readFileHistory
+readFileHistory(String aLocation, HistoryInfoList) : String
+Reads history from the ICM file String aLocation so that it can be used in the HistoryInfoList. See HistoryInfoList for an example of use.
+
+Scripting API | File Methods | VCS Methods
+readMetadata
+readMetadata(String aLocation, Metadata) : String
+Reads metadata from the ICM file String aLocation to be used in the Metadata object.
+
+Scripting API | File Methods | VCS Methods
+removeGroup
+removeGroup(String aGroupName) : String
+Removes the specified group from the Inspire Content Manager.
+
+Scripting API | File Methods | VCS Methods
+removeLabel
+removeLabel(String aLocation, String LabelName, Bool aRecursive) : String
+Removes the specified label from the object.
+
+Scripting API | File Methods | VCS Methods
+removeUser
+removeUser(String aUserName) : String
+Removes the specified user from the Inspire Content Manager.
+
+Scripting API | File Methods | VCS Methods
+restore
+restore(String aLocation) : String
+Restores files that have previously had softMove or softRemove applied.
+
+Scripting API | File Methods | VCS Methods
+setPreview
+setPreview(String aLocation, Binary aImage) : Void
+Sets a new preview image to the file at String aLocation.
+
+Scripting API | File Methods | VCS Methods
+setVersionApprovalState
+setVersionApprovalState(String aLocation, ApprovalState aApprovalState) : String
+Sets a predefined approval state to the file at String aLocation.
+
+Scripting API | File Methods | VCS Methods
+softMove
+softMove(String aLocation, String aTargetLocation) : Bool
+Moves the file at String aLocation to String aTargetLocation keeping a hidden version of the original file in its original location. You can rename the file during this relocation.
+
+Scripting API | File Methods | VCS Methods
+softRemove
+softRemove(String aLocation) : Bool
+Removes (deletes) the file at String aLocation keeping a hidden version of the original file.
+
+Scripting API | File Methods | VCS Methods
+undoCheckOut
+undoCheckOut(String aLocation) : String
+Reverts the specified file or directory into the original, not the checked out state. Any changes made to the local copy of the file will be lost.
+
+Returns a string value representing the ICM server response to the operation. Either OK as a confirmation that the operation succeeded, or an error code indicating the error type.
+
+logMessage(File.VCS.checkOut("vcs://file.txt"));
+logMessage(File.VCS.undoCheckOut("vcs://file.txt"));
+Scripting API | File Methods | VCS Methods
+unlockUser
+unlockUser(String aUserName) : String
+Unlocks the user whose account has been locked after too many attempts to login.
+
+Scripting API | File Methods | VCS Methods
+UserAccessRights Methods
+Sets user permissions. The available access rights are the same as in the Edit User dialog.
+
+Scripting API | File Methods | VCS Methods
+UserAccessRightsState Methods
+Specifies one of the following states for the UserAccessRights methods: allow, deny and inherit. The inherit state means that the permissions will be inherited from any group which the user belongs to or, if they are not assigned to any group, the default user permissions.
+
+UserInfo Methods
+UserInfo methods can be used for reading and modifying of individual properties of users.
+
+Note  For any modifications to be saved on the server, the save method must be used.
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+AccessRights
+Returns user permissions to be applied to the selected user.
+
+File.VCS.UserInfo ui;
+String result=File.VCS.getUser("LocalManager1",ui);
+if(result!="OK")
+   logError(result);
+ui.AccessRights.CanEditProduction=File.VCS.UserAccessRightsState.Deny;
+result=ui.save();
+if(result!="OK")
+   logError(result);
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+assign
+assign(UserInfo aP1) : Void
+Assigns the specified UserInfo object to the given UserInfo object. The same result can be achieved using the = assignment statement.
+
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+Email
+Email : String
+getEmail() : String
+setEmail(String aP1) : Void
+Returns or sets the user's email address.
+
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+FullName
+FullName : String
+getFullName() : String
+setFullName(String aP1) : Void
+Returns or sets the user's full name.
+
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+Name
+Name : String
+getName() : String
+setName(String aP1) : Void
+Returns or sets the user's name.
+
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+Password
+Password : String
+setPassword(String aP1) : Void
+Sets the user's password.
+
+File.VCS.UserInfo ui;
+String result=File.VCS.getUser("LocalManager1",ui);
+if(result!="OK")
+   logError(result);
+ui.Password= "Secure_Password";
+result=ui.save();
+if(result!="OK")
+   logError(result);
+Scripting API | File Methods | VCS Methods | UserInfo Methods
+save
+save() : String
+Saves the modified content on the server.
+
+Returns "OK" or an error message depending on whether saving was successful or not.
+
+Scripting API | File Methods | VCS Methods
+UserInfoList Methods
+UserInfoList methods can be used for storing, manipulating and retrieving UserInfo objects.
+
+The list of methods available for GroupInfo object is the same as for HistoryInfoList methods.
+
+Scripting API | File Methods | VCS Methods
+UserName
+UserName : String
+getUserName() : String
+Returns the name of the user that is currently logged into ICM.
+
+String currentUserName = File.VCS.UserName;
+Scripting API | File Methods | VCS Methods
+VersionId
+VersionId[String aLocation] : Int
+getVersionId(String aLocation) : Int
+Returns the version Id of the specified file in ICM.
+
+Int versionID = File.VCS.VersionId["vcs://file.txt"];
+Scripting API | File Methods | VCS Methods
+writeUserMetadata
+writeUserMetadata(String aLocation, MetadataValueList, Bool aMerge) : String
+Adds a new metadata from MetadataValueList and its related information to the file aLocation in Inspire Content Manager.
+
+The Boolean value determines whether it will overwrite any current metadata items, e.g. if file has 10 metadata items and new MetadataValueList has only 1 item then false will result in only 1 item, however true will replace any metadata item with the same name or add the new item so the result is either 10 or 11 metadata items.
+
+FileName="vcs://GFBankSummerOffer11.wfd"; // value of FileName field in the Script Data Input module
+File.VCS.MetadataValueList mdvl;         
+mdvl.add("NameString","Value");                 
+mdvl.add("NameInt",32);
+mdvl.add("NameDateTime",DateTime(5,5,2010,0,0,0)); //adds 3 items to list
+File.VCS.writeUserMetadata(FileName,mdvl,false);  //writes 3 items to metadata
+WebRequest Methods
+See also:
+
+WebResponse Methods
+Known Limitations section of the Inspire Designer Release Notes
+WebRequest methods enable creating, modifying and sending HTTP and HTTPS requests to web servers.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | WebRequest Methods
+assign
+assign(WebRequest aP1) : Void
+Assigns a WebRequest object to the given web request. The same result can be achieved using an equal sign =.
+
+File.WebRequest request;
+request.assign(File.WebRequest.create("http://www.w3.org/"));
+Scripting API | File Methods | WebRequest Methods
+create
+create(String aP1) : WebRequest
+Creates a web request to the specified URL.
+
+For Windows OS, this method uses the system proxy settings by default.
+
+For Linux and Mac OS, use the HTTP_PROXY and HTTPS_PROXY environment variables to configure the proxy server.
+
+The content of the variables should be in the following format:
+
+[<USER>:<PASS>@]<PROXY>:<PORT>
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.w3.org/");
+Scripting API | File Methods | WebRequest Methods
+createWininet
+createWininet(String aUrl) : WebRequest
+For Windows OS, creates a web request to the specified URL to be processed by MS Windows native library.
+
+If Proxy is not defined, then uses system proxy settings.
+
+File.WebRequest wr = File.WebRequest.createWininet("http://www.w3.org/");
+wr.Proxy="http://localhost:8888";
+Scripting API | File Methods | WebRequest Methods
+forceUseSSL3
+forceUseSSL3() : Void
+This option is obsolete. It is kept here because of compatibility reasons (required if you want to use Java 7 on the server). For security reasons, TLS protocol is used instead.
+
+File.XMLReader reader;
+File.WebRequest wr = File.WebRequest.create("https://service/api"); 
+wr.forceUseSSL3();
+Scripting API | File Methods | WebRequest Methods
+getFromPool
+File.WebRequest.getFromPool(aUrl)
+Uses a web request pool while performing an HTTP request. For example, this can be used for communication with Inspire Cloud.
+
+File.WebRequest.getFromPool(aUrl); implemented
+Scripting API | File Methods | WebRequest Methods
+Property
+Property : String
+setProperty(String aP1, String aP2) : Void
+Sets the specified request header property to the specified value.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.w3.org/");
+request.setProperty("Accept-Language", "en-gb");
+Scripting API | File Methods | WebRequest Methods
+Proxy
+Proxy : String
+setProxy(String aUrl) : Void
+Sets the proxy server to be used for web requests.
+
+Scripting API | File Methods | WebRequest Methods
+ProxyCredentials
+setProxyCredentials(String aName, String aPassword) : Void
+Sets the user credentials (user name and password) of the proxy server for web requests.
+
+File.WebRequest wr = File.WebRequest.create(url);
+wr.Proxy="localhost:8888";
+wr.setProxyCredentials("user", "pwd");
+Scripting API | File Methods | WebRequest Methods
+Response
+Response : WebResponse
+Response[Stream aP1] : WebResponse
+Response[String aContent, String aCodec] : WebResponse
+getResponse() : WebResponse
+getResponse(Stream aP1) : WebResponse
+getResponse(String aContent, String aCodec) : WebResponse
+Returns a web response on the request sent to the server. If it is necessary to send any additional data via the POST method, it can be passed in the form of stream or encoded text.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.website.com/form.jsp");
+Int statusCode = request.Response["userid=1234", "UTF-8"].StatusCode;
+Scripting API | File Methods | WebRequest Methods
+Timeout
+Timeout: Int
+setTimeout(Int aMilliseconds) : Void
+Sets the timeout for receiving data from a server. The default value is 30 seconds.
+
+File.WebRequest wr=File.WebRequest.create("http://www.data.com/long");
+wr.Timeout=100000; //100 sec
+File.WebResponse resp = wr.Response;
+if(resp.StatusCode!=200)
+   logError("Request has failed.");
+Scripting API | File Methods | WebRequest Methods
+treatConnectionErrorAsStatus590
+treatConnectionErrorAsStatus590() : Void
+Returns a status 590 error (standard web calling status) if a requested connection fails. This avoids the script failing and causing the abortion of processing of the workflow, which would otherwise happen in such an event.
+
+File.WebRequest wr = File.WebRequest.create("http://nonsence.non");
+wr.treatConnectionErrorAsStatus590();
+Field0=wr.Response.StatusCode;
+Scripting API | File Methods | WebRequest Methods
+WaitForContinue
+WaitForContinue : Bool
+Adds Expect: 100-continue\r\n to the http header during request, i.e. a Code 100 status request. Upon receiving a request which includes an Expect request-header field with the "100-continue" expectation, an origin server will either respond with 100 (Continue) status and continue to read from the input stream, or respond with a final status code. If the server returns 100 then the Boolean is true and the rest of the request will be read by the server, thus avoiding processing of requests if the server is not accepting them.
+
+Note  This method is essential for Facebook posting requests.
+WebResponse Methods
+See also:
+
+WebRequest Methods
+WebResponse methods enable parsing web server responses.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Example  You can use the XML Data Input module for calling a web server and using the downloaded data in the workflow. In this example, a XML file is retrieved from a website, then the script template of the XML Data Input module reads the XML input and copies it to the output.
+
+File.XMLReader reader;
+File.WebRequest request;
+File.WebResponse response;
+request = File.WebRequest.create("http://www.website.com/file.xml");
+response = request.Response;
+// if the request has not been successful, an error message is logged
+if (response.StatusCode != 200) logError(response.StatusDescription);
+File.Stream xmlStream = response.ResponseStream;
+String encoding = response.CharacterSet;
+reader.initInputStream(xmlStream, encoding, true);
+while(reader.read())
+   {
+   is(reader.NodeType)
+      {
+      File.XMLNodeType.Element:
+         {
+         elementBegin(reader.Name);
+         for(Int i=0;i<reader.AttributeCount;i++)
+            {
+            attribute(reader.AttributeName[i], reader.Attribute[i]);
+            }
+         }
+      File.XMLNodeType.EndElement:
+         elementEnd();
+      
+      File.XMLNodeType.Text:
+         unparsed(reader.Value);      
+      
+      File.XMLNodeType.CDATA:
+         unparsed(reader.Value);
+      }
+   }
+
+Scripting API | File Methods | WebResponse Methods
+assign
+assign(WebResponse aP1) : Void
+Assigns a WebResponse object to the given web response. The same result can be achieved using an equal sign =.
+
+File.WebRequest request;
+File.WebResponse response;
+request = File.WebRequest.create("http://www.w3.org/");
+response.assign(request.Response);
+Scripting API | File Methods | WebResponse Methods
+CharacterSet
+CharacterSet : String
+getCharacterSet() : String
+Returns a string value representing the character set of the given response content.
+
+File.WebRequest request;
+File.WebResponse response;
+request = File.WebRequest.create("http://www.w3.org/");
+response = request.Response;
+String characterSet = response.CharacterSet;
+// characterSet = "utf-8"
+Scripting API | File Methods | WebResponse Methods
+ContentType
+ContentType : String
+getContentType() : String
+Returns a string value representing the Internet media type of the given response content.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.w3.org/");
+String contentType = request.Response.ContentType;
+// contentType = "text/html; charset=utf-8"
+Scripting API | File Methods | WebResponse Methods
+HeaderProperty
+HeaderProperty[String aP1] : String
+getHeaderProperty(String aP1) : String
+Returns a string value of the specified header property of the given response.
+
+File.WebRequest request;
+File.WebResponse response;
+request = File.WebRequest.create("http://www.w3.org/");
+response = request.Response;
+String serverName = response.HeaderProperty["Server"];
+// serverName = "Apache/2"
+Scripting API | File Methods | WebResponse Methods
+ResponseHeader
+ResponseHeader : String
+getResponseHeader() : String
+Returns a string value representing the entire header of the given response.
+
+File.WebRequest request;
+File.WebResponse response;
+request = File.WebRequest.create("http://www.w3.org/");
+response = request.Response;
+String responseHeader = response.ResponseHeader;
+Scripting API | File Methods | WebResponse Methods
+ResponseStream
+ResponseStream() : Stream
+getResponseStream() : Stream
+Returns a stream representing the content of the given response.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://w3.org/Icons/w3c_home");
+Binary imageData = request.Response.ResponseStream.readToEnd();
+Scripting API | File Methods | WebResponse Methods
+StatusCode
+StatusCode() : Int
+getStatusCode() : Int
+Returns a status code from the status line of the given response.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.w3.org/");
+Int statusCode = request.Response.StatusCode;
+// statusCode = 200
+Scripting API | File Methods | WebResponse Methods
+StatusDescription
+StatusDescription() : String
+getStatusDescription() : String
+Returns a status description from the status line of the given response.
+
+File.WebRequest request;
+request = File.WebRequest.create("http://www.w3.org/");
+String statusDecription = request.Response.StatusDescription;
+// statusDescription = "200 OK"
+Scripting API | File Methods
+XMLNodeType Enumerator
+A set of named constants determining the node type.
+
+CData  A character data section, used to escape blocks of text that would otherwise be recognized as markup.
+Comment  A comment.
+Document  An entire XML document.
+DocumentFragment  A portion of an existing document tree.
+Document Type  A document type declaration.
+Element  An element.
+EndElement  A closing tag of the element.
+EndEntity  A type returned when XmlReader gets to the end of the entity replacement as a result of a call to ResolveEntity.
+Entity  An entity declaration.
+EntityReference  A reference to an entity.
+None  A type returned by the XmlReader if a Read method has not been called.
+Notation  A notation in the document type declaration.
+ProcessingInstruction  A processing instruction.
+SignificantWhitespace  A white space between markup in a mixed content model or white space within the xml:space="preserve" scope.
+Text  A text content of a node.
+Whitespace  A white space between markup.
+XMLDeclaration  The XML declaration.
+XMLReader Methods
+XMLReader methods can be used for reading the content from a XML file.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | XMLReader Methods
+Attribute
+Attribute[Int aP1] : String
+Attribute[String aP1] : String
+getAttribute(Int aP1) : String
+getAttribute(String aP1) : String
+Returns the value of the attribute with the specified name or index from the current element.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String isbn = reader.Attribute["ISBN"];
+// isbn = "1-861003-78"
+xmlStream.close();
+<book genre="novel" ISBN="1-861003-78" pubdate="1987"/>
+Scripting API | File Methods | XMLReader Methods
+AttributeCount
+AttributeCount : Int
+getAttributeCount() : Int
+Returns the number of attributes of the current element.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String attributeCount = reader.AttributeCount;
+// attributeCount = 3
+xmlStream.close();
+<book genre="novel" ISBN="1-861003-78" pubdate="1987"/>
+Scripting API | File Methods | XMLReader Methods
+AttributeName
+AttributeName[Int aP1] : String
+getAttributeName(Int aP1) : String
+Returns the attribute name on the specified position of the current element.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String attributeName = reader.AttributeName[0];   
+// attributeName = "genre"
+xmlStream.close();
+
+<book genre="novel" ISBN="1-861003-78" pubdate="1987"/>
+Scripting API | File Methods | XMLReader Methods
+Depth
+Depth : Int
+getDepth() : Int
+Returns an integer value representing the depth of the current node in the given XML document.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+reader.readStartElement();
+reader.readStartElement();
+String subitemDepth = reader.Depth;
+// subitemDepth = 3
+xmlStream.close();
+<root>
+   <item>
+      <subitem>Hello World!<subitem>
+   </item>
+</root>
+Scripting API | File Methods | XMLReader Methods
+initInputStream
+initInputStream(Stream aP1, String Codec, Bool IgnoreNamespaces) : Void
+Initializes the specified stream encoded with the specified encoding and with namespaces treated according to the specified Boolean value. If that value is true, namespaces are ignored.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String elementContent = reader.readOuterXML();
+xmlStream.close();
+Scripting API | File Methods | XMLReader Methods
+initFromString
+initFromString(String aP1) : Void
+initFromString(String aP1, Bool IgnoreNamespaces) : Void
+Initializes the given reader with the specified string.
+
+If the second parameter is used, namespaces are treated according to the specified Boolean value. If that value is true, namespaces are ignored.
+
+File.XMLReader reader;
+reader.initFromString("<root><node id='first'/></root>");
+reader.moveToContent();
+String xmlContent = reader.readOuterXML();
+// xmlContent = "<root><node id='first'/></root>"
+Scripting API | File Methods | XMLReader Methods
+isEOF
+isEOF() : Bool
+Returns the Boolean value true when the end of the given stream has been reached.
+
+File.XMLReader reader;
+Int elementCount;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+while (not reader.isEOF()) {
+   reader.read();
+   if (reader.NodeType == File.XMLNodeType.Element) {
+      elementCount++;
+   }
+}
+// elementCount = 2
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root "root.dtd">
+<root>
+   <!-- comment -->
+   <?insert-toc?>
+   <item/>
+</root>
+Scripting API | File Methods | XMLReader Methods
+isStartElement
+isStartElement() : Bool
+Returns the Boolean value true if the current content node is a start tag or empty element tag. The content node is one of the following node types: Text, CData, Element, EndElement, EntityReference or EndEntity.
+
+File.XMLReader reader;
+String currentElementName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+if (reader.isStartElement()) {
+   currentElementName = reader.Name;
+   // currentElementName = "root"
+   reader.readStartElement();
+   if (reader.isStartElement()) {
+      currentElementName = reader.Name;
+      // currentElementName = "item"
+      }
+   }
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root "root.dtd">
+<root>
+   <!-- comment -->
+   <?insert-toc?>
+   <item/>
+</root>
+Scripting API | File Methods | XMLReader Methods
+moveToContent
+moveToContent() : XMLNodeType
+Moves the reading position to the next content node in the given stream. The content node is one of the following node types: Text, CData, Element, EndElement, EntityReference or EndEntity.
+
+File.XMLReader reader;
+String currentElementName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+currentElementName = reader.Name;
+// currentElementName = "root"
+reader.readStartElement();
+reader.moveToContent();
+currentElementName = reader.Name;
+// currentElementName = "item"
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root "root.dtd">
+<root>
+   <!-- comment -->
+   <?insert-toc?>
+   <item>
+      <subitem>Hello World!<subitem>
+   </item>
+</root>
+Scripting API | File Methods | XMLReader Methods
+Name
+Name : String
+getName() : String
+Returns the name of the current node, if applicable.
+
+File.XMLReader reader;
+String currentElementName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.read();
+currentElementName = reader.Name;
+// currentElementName = "";
+reader.read();
+currentElementName = reader.Name;
+// currentElementName = "root";
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root/>
+Scripting API | File Methods | XMLReader Methods
+NodeType
+NodeType : XMLNodeType
+getNodeType() : XMLNodeType
+Returns the node type of the given node.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+while(reader.read()) {
+   is(reader.NodeType) {
+   File.XMLNodeType.Element: {
+      logMessage("Element: " + reader.Name);
+      }
+   File.XMLNodeType.XMLDeclaration: {
+      logMessage("XML declaration: " + reader.Value);
+      }
+   }
+}
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root "root.dtd">
+<root>
+   <!-- comment -->
+   <?insert-toc?>
+   <item/>
+</root>
+Scripting API | File Methods | XMLReader Methods
+read
+read() : Bool
+Returns the Boolean value true if reading of the next node from the given stream has finished successfully.
+
+File.XMLReader reader;
+Bool containsPI = false;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+while(reader.read()) {
+   if (reader.NodeType == File.XMLNodeType.ProcessingInstruction) {
+   containsPI = true;
+   }
+}
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root "root.dtd">
+<root>
+   <!-- comment -->
+   <?insert-toc?>
+   <item/>
+</root>
+Scripting API | File Methods | XMLReader Methods
+readElementString
+readElementString() : String
+Returns the text value of the current text-only (String) element and jumps to the next element.
+
+To read text values in cycles or from a mixed content (i.e. containing other types than String), use the readString method instead.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+reader.readStartElement();
+reader.moveToContent();
+String itemContent = reader.readElementString();
+// itemContent = "Hello World!"
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <item>Hello World!</item>
+</root>
+Scripting API | File Methods | XMLReader Methods
+readEndElement
+readEndElement() : Void
+If the current content node is an end element, it moves the reading position in the given stream to the next node.
+
+File.XMLReader reader;
+String currentElementName;
+String personName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+currentElementName = reader.Name;
+// currentElementName = "person"
+reader.readStartElement();
+currentElementName = reader.Name;
+// currentElementName = "name"
+personName = reader.readElementString();
+reader.readEndElement();
+currentElementName = reader.Name;
+// currentElementName = "surname"
+personName += " " + reader.readElementString();
+// personName = "John Doe"
+reader.readEndElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<person>
+   <name>John</name>
+   <surname>Doe</surname>
+</person>
+Scripting API | File Methods | XMLReader Methods
+readInnerXML
+readInnerXML() : String
+Returns the content, including markup, representing all children of the current node.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String innerElementContent = reader.readInnerXML();
+xmlStream.close();
+Scripting API | File Methods | XMLReader Methods
+readOuterXML
+readOuterXML() : String
+Returns the content, including markup, representing the current node and all its children.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+String outerElementContent = reader.readOuterXML();
+xmlStream.close();
+Scripting API | File Methods | XMLReader Methods
+readStartElement
+readStartElement() : Void
+If the current content node is a start element, it moves the reading position in the given stream to the next node.
+
+File.XMLReader reader;
+String currentElementName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+currentElementName = reader.Name;
+// currentElementName = "person"
+reader.readStartElement();
+currentElementName = reader.Name;
+// currentElementName = "name"
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<person>
+   <name>John</name>
+   <surname>Doe</surname>
+</person>
+Scripting API | File Methods | XMLReader Methods
+readString
+readString() : String
+Returns the content of an element or text node.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+reader.readStartElement();
+reader.moveToContent();
+String itemContent = reader.readString());
+// itemContent = "Hello"
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <item>Hello <emphasis>World!</emphasis></item>
+</root>
+Scripting API | File Methods | XMLReader Methods
+skip
+skip() : Void
+Skips the children of the current node.
+
+In the following XML input, if the reader is positioned on the <a> node or any of its attributes, calling skip positions the reader to the <b> node.
+
+If the reader is positioned on a leaf node already (such as the <x> node or the text node abc), calling skip is the same as calling read.
+
+<a name="John" surname="Doe">
+   <x/>abc<y/>
+</a>
+<b>...</b>
+File.XMLReader reader;
+String currentElementName;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.moveToContent();
+reader.read();
+reader.skip();   // skip the first message element
+String currentMessage = reader.readString();
+// currentMessage = "Καλημέρα κόσμε"
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+   <message language="en">Hello World!</message>
+   <message language="gr">Καλημέρα κόσμε</message>
+</messages>
+Scripting API | File Methods | XMLReader Methods
+Value
+Value : String
+getValue() : String
+Returns the value of the current node, if applicable.
+
+File.XMLReader reader;
+File.Stream xmlStream = File.open("C:\input.xml", File.Mode.ReadOnly);
+reader.initInputStream(xmlStream, "UTF-8", false);
+reader.read();
+String xmlPrologContent = reader.Value;
+// xmlPrologContent = 'version="1.0" encoding="UTF-8"?'
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root/>
+XMLWriter Methods
+XMLWriter methods can be used for writing the content to a XML file.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | File Methods | XMLWriter Methods
+addAttribute
+addAttribute(String aP1, String aP2) : Void
+Adds an attribute with the corresponding value to the current element.
+
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+xmlWriter.beginElement("root");
+xmlWriter.addAttribute("id", "id_001");
+xmlWriter.endElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root id="id_001"/>
+Scripting API | File Methods | XMLWriter Methods
+addPCData
+addPCData(String aP1) : Void
+Adds a text content to the current element.
+
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+xmlWriter.beginElement("root");
+xmlWriter.addPCData("<message>Hello World!</message>");
+xmlWriter.endElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root>&lt;message&gt;Hello World!&lt;/message&gt;</root>
+Scripting API | File Methods | XMLWriter Methods
+addXMLFragment
+addXMLFragment(String aP1) : Void
+Adds a fragment of XML code. It is the only method for inserting document type, comments or processing instructions.
+
+Warning  The XMLWriter does not validate the data that is passed to the addXMLFragment method. You should not pass arbitrary data to this method.
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+// insert document type
+xmlWriter.addXMLFragment("<!DOCTYPE root SYSTEM 'root.dtd'>");
+// insert root element
+xmlWriter.beginElement("root");
+// insert comment
+xmlWriter.addXMLFragment("<!-- welcome message -->");
+// insert processing instruction
+xmlWriter.addXMLFragment("<?font color='blue'?>");
+// insert complete child element
+xmlWriter.addXMLFragment("<message>Hello World!</message>");
+// insert closing tag of the root element
+xmlWriter.endElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM 'root.dtd'>
+<root>
+   <!-- welcome message -->
+   <?font color='blue'?>
+   <message>Hello World!</message>
+</root>
+Scripting API | File Methods | XMLWriter Methods
+beginElement
+beginElement(String aP1) : Void
+beginElement(String aP1, Bool PreserveSpaces) : Void
+Adds an opening tag of the element aP1 to the given stream. If the Boolean value of the parameter PreserveSpaces is set to true, an attribute xml:space with value set to preserve is added.
+
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+xmlWriter.beginElement("root", true);
+xmlWriter.endElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root xml:space="preserve"/>
+Scripting API | File Methods | XMLWriter Methods
+endElement
+endElement() : Void
+Adds a closing tag of the current element to the given stream.
+
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+xmlWriter.beginElement("root");
+xmlWriter.beginElement("rule");
+xmlWriter.endElement();
+xmlWriter.addPCData("Hello world!");
+xmlWriter.endElement();
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root><rule/>Hello World!</root>
+Scripting API | File Methods | XMLWriter Methods
+initStream
+initStream(Stream aP1, string Codec) : Void
+Assigns a stream encoded with a specified codec to the given XMLWriter. The parameter Codec is either a valid text encoding or a path to a custom codec.
+
+File.Stream xmlStream;
+File.XMLWriter xmlWriter;
+xmlStream = File.open("c:\output.xml", File.Mode.TruncateOrCreate);
+xmlWriter.initStream(xmlStream, "UTF-8");
+xmlWriter.addXMLFragment("<root id='id_001'/>");
+xmlStream.close();
+<?xml version="1.0" encoding="UTF-8"?>
+<root id='id_001'/>
+Scripting API | File Methods | XMLWriter Methods
+initStringOutput
+initStringOutput() : Void
+Initializes the given XMLWriter in a way that it serializes all the output into string.
+
+File.XMLWriter xmlWriter;
+xmlWriter.initStringOutput();
+xmlWriter.beginElement("root", true);
+xmlWriter.endElement();
+String writerContent = xmlWriter.StringOutput;
+// writerContent = "<root/>"
+Scripting API | File Methods | XMLWriter Methods
+StringOutput
+StringOutput() : String
+getStringOutput() : String
+Returns a string output of the given XMLWriter, if that XMLWriter was initialized using the initStringOutput method. Otherwise an error is shown when processing.
+
+File.XMLWriter xmlWriter;
+xmlWriter.initStringOutput();
+xmlWriter.addXMLFragment("<root id='id_001'/>");
+String writerContent = xmlWriter.StringOutput;
+// writerContent = "<root id='id_001'/>"

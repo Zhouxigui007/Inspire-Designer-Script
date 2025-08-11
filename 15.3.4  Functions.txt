@@ -1,0 +1,120 @@
+15.3.4  Functions
+A function is a piece of code that is declared once in a script and sits dormant until it is later called upon to do its job. This means that the function can be used repeatedly throughout the script, without the necessity to type the same chunk of code multiple times. Functions can take parameters and they can return a value. They are defined using the function keyword.
+
+
+function stringIsLong(String Parameter1) : Bool 
+   {
+   return Parameter1.Length > 20;
+   }
+
+Example  Show the number of days remaining in a month. The script is a function called DaysInMonth.
+function DaysInMonth(Int month):Int  
+	 //this is the declaration for this function. DaysInMonth is the function name.
+	//(Int month) month is the Int value passed into the function.
+	//The function will also return an integer based on the ":Int"
+	{
+	if (month == 1) return 31; 
+	if (month == 2) return 28; 
+	if (month == 3) return 31; 
+	if (month == 4) return 30; 
+	if (month == 5) return 31; 
+	if (month == 6) return 30; 
+	if (month == 7) return 31; 
+	if (month == 8) return 31; 
+	if (month == 9) return 30; 
+	if (month == 10) return 31; 
+	if (month == 11) return 30; 
+	if (month == 12) return 31; 
+	}
+	return(DaysInMonth(6) - 10);
+	//the final answer of the script is 20 since June (month 6) has
+	//30 days and we subtract 10 from it.
+Example  Show the number of days remaining to Christmas in text form. The name of the function CountTillXMas: it counts the remaining days and returns an integer value that is further processed in the script itself.
+String SPassedDate="Passed date is: ";
+//Declaration of string constants
+String	SOnly="Only "; 
+String SDay=" day"; 
+String SDays=" days"; 
+String STillXmas=" till Christmas.";
+DateTime dt=Given_date; 
+//Given_date is a DateTime variable coming from DataInput (as string) and
+//DataTransformer connected to Layout 
+logMessage("The given date is: "+dt.toString());
+//we want to see the input date in the log 
+function CountTillXMas(DateTime date): Int 
+//declaration of function counting days until next Christmas from the date given 
+  { 
+  function IsLeapYear(Int year): Bool 
+   { 
+    if (year%4!=0) return false; 
+    else if (year<1582) return true; 
+    //Adoption of the Gregorian Calendar
+		  else if (year==4840) return false; 
+    else if (year%400==0) return true; 
+    else if (year%100==0) return false; 
+    else return true; 
+   } 
+ DateTime cdt; 
+ cdt.Day=24; 
+ cdt.Month=12; 
+ if (cdt.Day==date.Day
+ //Christmas is today 
+ and 
+ cdt.Month==date.Month) return 0; 
+ else if (cdt.Day<date.Day 
+ //date from December 25th till 31st 
+ and 
+ cdt.Month==date.Month)
+  { 
+   Int i=358; 
+   //number of days from January 1st till December 24th 
+   Bool Temp=IsLeapYear(date.Year+1);
+   //if next year is a leap one than add one day
+		 if (Temp) i++; 
+   return i + 7 - (date.Day-cdt.Day); 
+  }  
+ else return cdt.Days-date.Days; 
+ }
+Int d;
+//Declaration of variables: day 
+Int m; 
+//Declaration of variables: month 
+Int y; //Declaration of	variables: year 
+dt.getDMY(d, m, y); 
+String StringDate=SPassedDate+d.toString()+"/"+m.toString()+"/"+y.toString(); 
+String StringXMas; 
+Int DX=CountTillXMas(dt); 
+logMessage("The difference is: "+DX.toString());
+if (DX==0) StringXMas="It's Chritmas!"; 
+else if (DX==1) StringXMas = SOnly+DX.toString()+SDay+STillXmas; 
+else StringXMas=SOnly+DX.toString() + SDays+STillXmas; 
+return StringDate+". "+StringXMas;
+15.3.4.1  Function Parameters
+There are two ways of passing a parameter to a function: by value and by reference.
+
+Passing by Value
+When the parameter is passed by value, the function will work with a copy of this value. All changes to the value of the parameter are local to the function. You can use a constant, an expression, a variable or a function result to set a parameter passed by value.
+
+Example  
+function f1(Int val)
+   {
+   val = 10;
+   }
+f1(30); // using a constant
+f1(1+2); // using an expression
+Int x=20;
+f1(x);
+// x is 20 as the last line only changes the value locally
+Passing by Reference
+When the parameter is passed by reference, the function will work directly with the variable, which was used for this parameter. Any changes to the value of the parameter will change the original variable. You can use only a variable to set a parameter passed by reference.
+
+Example  
+function f2(Int & val)
+   {
+   val = 10;
+   }
+//f2(30); // this won't compile
+//f2(1+2); // this won't compile
+Int x=20;
+f2(x);
+// x is 10 as the last line changes the value of the original x variable

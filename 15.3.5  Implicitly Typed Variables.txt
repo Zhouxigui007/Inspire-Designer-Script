@@ -1,0 +1,59 @@
+15.3.5  Implicitly Typed Variables
+In addition to the usual method of declaring a variable by stating its type followed by the variable's name, which is commonly referred to as 'explicitly typed variables', it is also possible to use an inferred "type", using the keyword var in place of the variable's type identifier and let the script compiler infer (determine) the actual data type.
+
+Int a = 1;       // explicitly typed variable
+var b = 5;       // implicitly typed variable (compiled as Int)
+var s = "Hello"; // implicitly typed variable (compiled as String)
+It is generally not necessary to use this scripting language construct, it simply helps to create nice looking, more readable code. Sometimes, however, the use of the var "type" makes it possible to declare variables that are otherwise not possible to declare at all, because of the limitations of the scripting language, e.g. declaring a variable that represents an object inside an array which is itself inside another array.
+
+Example  The following scripts show various approaches which achieve the same result, to get access to an object inside a complex data structure in the Imposition Script module.
+
+We want to access individual items of the Transactions array, i.e. declare a variable of the type Transactions.ItemType and access its members, Description and Amount.
+
+
+The straightforward approach would be to dereference and access the members directly, as shown in the following script:
+
+for (Int custIdx = 0; custIdx < Input_0.Customers.Count; custIdx++)
+   {
+   for (Int transIdx = 0; transIdx < Input_0.Customers[custIdx].Transactions.Count; transIdx++)
+      {
+      logMessage(Input_0.Customers[custIdx].Transactions[transIdx].Amount.toString());
+      logMessage(Input_0.Customers[custIdx].Transactions[transIdx].Description);
+      }
+   }
+The better approach would be to successively dereference the data structure and create temporary variables. It helps to create more obvious code:
+
+for (Int custIdx = 0; custIdx < Input_0.Customers.Count; custIdx++)
+   {
+   Input_0.Customers.ItemType customer = Input_0.Customers[custIdx];
+   
+   for (Int transIdx = 0; transIdx < customer.Transactions.Count; transIdx++)
+      {
+      customer.Transactions.ItemType transaction = customer.Transactions[transIdx];
+      logMessage(transaction.Amount.toString());
+      logMessage(transaction.Description);
+      }
+   }
+Using the var data type, it is possible to achieve even more readable code, and it is also possible to directly reference the individual transaction objects, without the need to create the intermediate customer variable:
+
+for (Int custIdx = 0; custIdx < Input_0.Customers.Count; custIdx++)
+   {
+   for (Int transIdx = 0; transIdx < Input_0.Customers[custIdx].Transactions.Count; transIdx++)
+      {
+      var transaction = Input_0.Customers[custIdx].Transactions[transIdx]; // it is impossible to have transaction variable explicitly typed
+      logMessage(transaction.Amount.toString());
+      logMessage(transaction.Description);
+      }
+   }
+
+A variable of the var type must always be initialized, i.e. some data must be assigned to it. This is because the actual data type is determined from the assigned value when the script is being compiled. The failure to do so will result in a script validation error being reported.
+
+Some data types cannot be correctly inferred, because their initial value can be ambiguously cast to various types. They need to be explicitly cast, as shown below.
+
+Example  
+var s;                     // generates an error, the variable is not initialized
+var i = 1;                 // correctly initialized variable of Int type
+var c = Currency(5.99);    // c is cast to the Currency type
+var d = 5.99.toCurrency(); // d is also cast to the Currency type
+var e = 5.99;              // e is inferred as Double type
+Note  Variables declared with the keyword static cannot be implicitly typed (using the var keyword), i.e. their type must always be directly specified.

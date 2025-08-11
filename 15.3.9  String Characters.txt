@@ -1,0 +1,63 @@
+15.3.9  String Characters
+You can specify special text characters in scripts (for example a non-printable character) using the following values. The value has to be enclosed in single quotes, e.g. '\r'.
+
+Any Unicode character
+
+\u####
+
+E.g. \u20ac for € character
+
+Backslash followed by u and Unicode hexadecimal value.
+
+Any single-byte character
+
+\x##
+
+E.g. \xA9 for © character
+
+Backslash followed by x and hexadecimal value.
+
+Carriage return
+
+\r
+
+Inserts a Carriage Return character. Equals \x0D.
+
+New line
+
+\n
+
+Inserts a Line Feed character. Equals \x0A.
+
+Apostrophe
+
+\'
+
+Used for specifying an apostrophe character within the string enclosed in apostrophes. See example.
+
+See also the Field separators option for the Data Input module.
+
+15.3.9.1  Enclosing String Values
+To specify a string value in script, it is necessary to enclose it:
+
+in quotation marks, e.g. "sample string"
+
+or in apostrophes, e.g. 'another sample string'
+
+However, there are differences between handling strings enclosed in quotation marks and in apostrophes:
+
+Strings enclosed in 'apostrophes' are checked for the presence of substitute characters (\n , \', \x## etc.) and these characters are processed, i.e. replaced by their equivalents.
+
+Strings enclosed in "quotation marks" are not checked for presence of the substitute characters, i.e. the string is left as "it is".
+
+To use apostrophe or quotation mark in the strings, follow these rules:
+
+Use apostrophe in a string value enclosed in quotation marks: String s = "My father's car"
+
+Use substitute character for apostrophe in a string value enclosed in apostrophes: String s = 'My father\'s car' or String s = 'Eva\'s book'
+
+Use quotation mark apostrophe in a string value enclosed in apostrophes: String s = 'This is a quotation mark: "'
+
+Proof Sample of Usage of Substitute Characters Used in String Variables
+Figure 15.1  Proof Sample of Usage of Substitute Characters Used in String Variables
+

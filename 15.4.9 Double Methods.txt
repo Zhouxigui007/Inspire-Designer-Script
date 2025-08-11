@@ -1,0 +1,166 @@
+Double Methods
+Double methods can be used for manipulation with double-precision floating-point numbers.
+
+Scripting API | Double Methods
+assign
+assign(Double aP1) : Void
+assign(Int aP1) : Void
+assign(Int64 aP1) : Void
+Assigns the specified value to the given double variable. The same result can be achieved using the equal sign =.
+
+Double diameter, area;
+diameter.assign(10);
+area.assign(Math.PI * (Math.pow(diameter, 2) / 4);
+// area = 78.5398163397448
+Scripting API | Double Methods
+DateTime
+DateTime (Double aP1) : Void
+Converts the specified number to a DateTime value that represents the date calculated as the specified number of days passed since December 30th, 1899, 00:00:00.
+
+Double days = 43466;
+DateTime (days) //1.1.2019 0:00:00.000
+Scripting API | Double Methods
+divide
+divide(Double aP1) : Void
+divide(Int aP1) : Void
+divide(Int64 aP1) : Void
+Divides the given number by the specified value.
+
+If zero is entered, an error is shown when processing.
+
+Double number = 25;
+number.divide(100);
+// number = 0.25
+Scripting API | Double Methods
+equal
+equal(Double aP1) : Bool
+Returns the Boolean value true when the specified value equals the given number. The same result can be achieved using the equality operator ==.
+
+Double dividend = 1;
+Double divisor = 8;
+Double quotient = 0;
+if (divisor.equal(0)) {
+   logError("Division by zero");
+} else {
+   quotient = dividend / divisor;
+}
+// quotient = 0.125
+Scripting API | Double Methods
+less
+less(Double aP1) : Bool
+Returns the Boolean value true if the given number is lower than the specified value. The same result can be achieved using the less than operator <.
+
+Double minValue = 100;
+Double maxValue = 150;
+Double value = 125;
+Bool isInRangeExclusive = minValue.less(value) and 
+                          value.less(maxValue);
+// isInRangeExclusive = true
+Scripting API | Double Methods
+minus
+minus() : Double
+minus(Double aP1) : Void
+minus(Int aP1) : Void
+minus(Int64 aP1) : Void
+Returns the negative value of the given number if no parameter is specified.
+
+Subtracts the specified value from the given number.
+
+Double number = 100;
+number.minus(number * 0.9);
+// number = 10
+Scripting API | Double Methods
+multiply
+multiply(Double aP1) : Void
+multiply(Int aP1) : Void
+multiply(Int64 aP1) : Void
+Multiplies the given number by the specified value.
+
+Double number = 100;
+number.multiply(0.1);
+// number = 10
+Scripting API | Double Methods
+plus
+plus() : Double
+plus(Double aP1) : Void
+plus(Int aP1) : Void
+plus(Int64 aP1) : Void
+Returns the value of the given variable when no parameter is specified.
+
+Adds the specified value to the given number.
+
+Double number = 100;
+number.plus(number * 0.1);
+// number = 110
+Scripting API | Double Methods
+toCurrency
+toCurrency() : Currency
+Returns a currency representation of the given number.
+
+Double number = 12.12345678;
+Currency currencyValue = number.toCurrency();
+// currencyValue = 12.1235
+Scripting API | Double Methods
+toInt
+toInt() : Int
+Returns an integer representation of the given number.
+
+Double positiveNumber = 1.8;
+Int positiveInt = positiveNumber.toInt();
+// positiveInt = 1
+Double negativeNumber = -1.8;
+Int negativeInt = negativeNumber.toInt();
+// negativeInt = -1
+Scripting API | Double Methods
+toInt64
+toInt64() : Int64
+Returns a 64-bit integer representation of the given number.
+
+Double number = 1.8;
+Int64 integer = number.toInt64();
+// integer = 1
+Scripting API | Double Methods
+toSpell
+toSpell(String aP1) : String
+Returns a lexical representation of the given currency value in the language specified by the corresponding language code.
+
+Double number = -12.1234;
+String valueInWords = number.toSpell("en");
+// valueInWords = "minus twelve point one two three four"
+Scripting API | Double Methods
+toString
+toString() : String
+toString(Int aMaxDecimalPlaces, Int aMinDecimalPlaces) : String
+toString(Int aMaxDecimalPlaces,Int aMinDecimalPlaces,String aThousandSeparator,String aDecimalSeparator) : String
+toString(Int aPrecision) : String
+Returns a string representation of the given number.
+
+In addition, you can also specify maximum and minimum number of decimal places, a thousands separator (to separate thousands, millions etc.), and a decimal separator.
+
+Finally, the total number of significant digits can also be specified.
+
+Double number = 1234567.1234567;
+String strNumber = number.toString();
+// strNumber = "1234567.1234567"
+String strNumber = number.toString(4, 2);
+// strNumber = "1234567.1235"
+strNumber = number.toString(2, 2 "," , ".");
+// strNumber = "1,234,567.12"
+strNumber = number.toString(4);
+// strNumber = "1.235e+006"
+
+number = 12.123456;
+strNumber = number.toString(4);
+// strNumber = "12.12"
+Scripting API | Double Methods
+toStringWithoutE
+toStringWithoutE(Int aPrecision) : String
+Returns a string representation of the given number with the specified precision, omitting the exponent part.
+
+That precision is determined by the total number of significant digits.
+
+Double number = 123456;
+String strNumber = number.toString(4);
+// strNumber = "1.235e+005"
+strNumber = number.toStringWithoutE(4);
+// strNumber = "123500"

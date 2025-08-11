@@ -1,0 +1,74 @@
+do Methods
+The do object, available anywhere that you can write script, allows you to perform and to run dynamic script:
+
+Scripting API | do Methods
+eval
+do.eval (Type aResultType, String aScript) : ResultType
+Compiles (at runtime) and executes a script passed as a string, and returns the result in the specified type. This allows the creation of script based on requirements only known at runtime. For example, complex validation or calculation rules can be read from a file / database or built up during runtime.
+
+The return type is specified in the first parameter.
+
+String script;
+Double result;
+
+script = "40/10";
+result = do.eval(Double,script);
+
+logMessage(result.toString());
+Multi-line script using local variables:
+
+String script;
+Double result;
+
+script = "Int A = 50; Int B=10; return A/B;";
+result = do.eval(Double,script);
+
+logMessage(result.toString());
+Using variables declared outside of the script:
+
+String script;
+Double result;
+
+// A and B are also declared in an Auto Include Script library
+static Int A;
+static Int B;
+
+A = 60;
+B = 30;
+
+script = "Double total; total = A*B; return total;";
+result = do.eval(Double,script);
+
+logMessage(result.toString());
+Using function declared outside the script.
+
+String script;
+Double result;
+
+// getA() and getB() are declared in an Auto Include Script Library
+script = "Double total; total = getA()*getB(); return total;";
+result = do.eval(Double,script);
+
+logMessage(result.toString());
+Note  To use variables or functions from outside of the script, they should be declared in a Script Library module.
+Scripting API | do Methods
+evalFile
+do.evalFile (Type aResultType, String aPath) : ResultType
+Calls and executes a script saved in an external file.
+
+The first parameter, aResultType, specifies the script's return type, and the second, aPath, the path to that external script.
+
+ 
+do.evalFile(Bool, "c:/File.txt");
+This method is used by Inspire Interactive (to call display rules saved in a JSON file), for more information please see the documentation of that application.
+
+Scripting API | do Methods
+typeof
+Returns the TypeKeeper for the given expression which allows reflection to be performed.
+
+do.typeof([Expression aResultType]) : TypeKeeper
+
+TypeKeeper tk = do.typeof(File);
+
+logMessage("File has " + String(tk.MemberCount) + " members.");
+See also the How to Replace Text with Variable Data example for the Imposition Script module.

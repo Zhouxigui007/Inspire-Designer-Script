@@ -1,0 +1,206 @@
+Extension Methods
+Extension methods simplify operations with collections of data such as lists and arrays. They include methods for search and filtering that are simple to use and that replace otherwise complex scripting solutions.
+
+Scripting API | Extension Methods
+any
+any () : Bool
+any (Bool expression) : Bool
+If no parameter is specified, returns true when the collection is filled. If a parameter is specified, returns true if at least one element in the collection fulfills the condition.
+
+Util.IntList il;
+il.add(1);
+il.add(2);
+il.add(3);
+il.add(5);
+
+logMessage("Has any item? " + il.any().toString());
+for (Int i = 0; i < 6; i++)
+   {
+   logMessage("Has '" + i.toString() + "' item? " + il.any(value == i).toString());
+   }
+Scripting API | Extension Methods
+average
+average () : <T>
+average (support plus and divide) : <T support plus and divide>
+Returns the average value of all elements. When a selector is used as parameter, returns the average of the specified attribute. For Double, Int, and Int64 data types, the returned value is a rounded Double.
+
+Util.IntList il;
+for(Int i = 0; i < 10; i++)
+   {
+   il.add(i);
+   }
+logMessage("Average value is: " + il.average().toString());
+logMessage("Excepted value is: 4");
+Note  The method can only be used as parameterless if the element contains the plus and divide methods.
+Scripting API | Extension Methods
+elementAt
+elementAt (Int index) : <T>
+Returns element at the specified position. If the collection is empty, returns the error message: "Cannot call on empty collection." If the specified index number is smaller than 0 or exceeds the number of elements, returns the error message: "Index is out of range."
+
+Util.IntList il;
+il.add(2);
+il.add(7);
+logMessage("ElementAt(0): " + il.elementAt(0).toString());
+logMessage("ElementAt(1): " + il.elementAt(1).toString());
+//logMessage("ElementAt(2): " + il.elementAt(2).toString());
+//logMessage("ElementAt(-1): " + il.elementAt(-1).toString());
+Scripting API | Extension Methods
+elementAtOrDefault
+elementAtOrDefault (Int index) : <T>
+If the specified index number is smaller than the number of elements, returns element at the specified position. If the specified index number exceeds the number of elements, returns default element. If the specified index number is smaller than 0, results in script runtime error.
+
+Scripting API | Extension Methods
+first
+first () : <T>
+Returns the first element of the collection. If the collection is empty, returns the error message: "Cannot call on empty collection."
+
+Scripting API | Extension Methods
+firstOrDefault
+firstOrDefault () : <T>
+Returns the first element of the collection. If the collection is empty, returns the default element.
+
+Util.IntList il;
+il.add(2);
+il.add(7);
+logMessage("First: " + il.firstOrDefault().toString());
+
+Util.IntList il2;
+logMessage("Empty - First: " + il2.firstOrDefault().toString());
+Scripting API | Extension Methods
+last
+last () : <T>
+Returns the last element of the collection. If the collection is empty, returns the error message: "Cannot call on empty collection."
+
+Scripting API | Extension Methods
+lastOrDefault
+lastOrDefault () : <T>
+Returns the last element of the collection. If the collection is empty, returns the default element.
+
+Util.IntList il;
+il.add(2);
+il.add(7);
+logMessage("Last: " + il.lastOrDefault().toString());
+
+Util.IntList il2;
+logMessage("Empty - Last: " + il2.lastOrDefault().toString());
+Scripting API | Extension Methods
+max
+max () : <T>
+max (support less) : <T>
+Returns the maximal element or, if it is a selector, its maximal value. If the collection is empty, returns the error message: "Cannot call on empty collection."
+
+Util.IntList il;
+il.add(3);
+il.add(5);
+il.add(1);
+il.add(7);
+il.add(4);
+logMessage("Max value is: " + il.max().toString());
+logMessage("Expected value is: 7");
+Note  The method can only be used as parameterless if the element contains the less method.
+Scripting API | Extension Methods
+min
+min () : <T>
+min (support less) : <T>
+Returns the minimal element or, if it is a selector, its minimal value. If the collection is empty, returns the error message: "Cannot call on empty collection."
+
+Util.IntList il;
+il.add(3);
+il.add(5);
+il.add(1);
+il.add(7);
+il.add(4);
+logMessage("Min value is: " + il.min().toString());
+logMessage("Expected value is: 1");
+Note  The method can only be used as parameterless if the element contains the less method.
+Scripting API | Extension Methods
+orderBy
+orderBy () : Enumerable<T>
+orderBy (support less) : Enumerable<T>
+Returns the collection in ascending order based on the value of the element or on the selector.
+
+Util.StringList sl;
+sl.add("ccc");
+sl.add("a");
+sl.add("dd");
+sl.add("bbbb");
+
+var ordered = sl.orderBy(Length);
+for (Int i = 0; i < ordered.Size; i++)
+   {
+   logMessage("Ordered[" + i.toString() + "]: " + ordered[i]);
+Note  The method can only be used as parameterless if the element contains the less method.
+Scripting API | Extension Methods
+orderByDescending
+orderByDescending () : Enumerable<T>
+orderByDescending (support less) : Enumerable<T>
+Returns the collection in descending order based on the value of the element or on the selector.
+
+Note  The method can only be used as parameterless if the element contains the less method.
+Scripting API | Extension Methods
+select
+select (NewPropertyName = expression) : Enumerable<T + NewProperty>
+Returns a new collection that contains all original data with the specified parameter as a new collection column. If the new column name is identical with the set attribute, the name is used for the new attribute. When the method is called on a simple list (e.g. IntList), the original data is accessed through the Value property.
+
+Util.IntList il;
+il.add(1);
+il.add(2);
+il.add(3);
+il.add(4);
+
+var output = il.select(IsEven = value % 2 == 0);
+
+for (Int i = 0; i < output.Size; i++)
+   {
+   var item = output[i];
+   logMessage("output[" + i.toString() + "]: {" +  item.Value.toString() + ", " + item.IsEven.toString() + "}");
+   }
+Scripting API | Extension Methods
+single
+single () : <T>
+Returns the element if it is the only element in the collection. If the collection contains more than one element, return the error message: "Array must contains exactly one item."
+
+Util.IntList il;
+il.add(2);
+logMessage("Single: " + il.single().toString());
+Scripting API | Extension Methods
+singleOrDefault
+singleOrDefault () : <T>
+Returns the element if it is the only element in the collection. If the collection contains more than one element, return the error message: "Array must contains exactly one item." If the collection is empty, returns the default element.
+
+Util.IntList il;
+il.add(2);
+logMessage("Single: " + il.singleOrDefault().toString());
+Util.IntList il2;
+logMessage("Single - empty: " + il2.singleOrDefault().toString());
+Scripting API | Extension Methods
+sum
+sum () : <T>
+sum (support plus) : <T support plus>
+Returns the sum of the values of all elements. If a selector is used as parameter, returns the sum of the specified attribute.
+
+Util.IntList il;
+Int sum = 0;
+for(Int i = 0; i < 10; i++)
+   {
+   il.add(i);
+   sum += i;
+   }
+logMessage("Sum is: " + il.sum().toString());
+logMessage("Excepted is:" + sum.toString());
+Note  The method can only be used as parameterless if the element contains the plus method.
+Scripting API | Extension Methods
+where
+where (Bool expression) : Enumerable<T>
+Returns a collection of all elements that fulfill the specified condition.
+
+Util.IntList il;
+for(Int i = 0; i < 10; i++)
+   {
+   il.add(i);
+   }  
+var higherThanThree = il.where(value < 3);
+logMessage(higherThanThree.Size.toString());
+var two = higherThanThree.where(value == 2);
+logMessage(two.Size.toString());
+Note  The value of the condition expression is always considered in the context of the current record.

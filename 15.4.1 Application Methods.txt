@@ -1,0 +1,41 @@
+Application Methods
+Application methods are static methods which call Inspire Designer to perform a task while the script is being processed, i.e. they do not manipulate the objects in the script but the application.
+
+Scripting API | Application Methods
+logError
+logError(String aString) : Void
+Writes the specified error message to the application log (e.g. Log window-pane) and terminates script execution.
+
+if (not File.exist("C:\input.txt")) {
+   logError("The specified file could not be found.");
+}
+Scripting API | Application Methods
+logMessage
+logMessage(String aString) : Void
+Writes the specified information message to the application log, e.g. Log window-pane.
+
+String strCities = "Tokyo|Seoul|Mexico City";
+Util.StringList cities;
+strCities.parseLine("|", "", cities);
+logMessage("Total number of parsed cities: " + cities.Size.toString());
+Scripting API | Application Methods
+logWarning
+logWarning(String aString) : Void
+Writes the specified warning message to the application log, e.g. Log window-pane.
+
+String strPrice = "$300";
+Double Price;
+Int currentPosition = 0;
+if (strPrice.parseDouble(currentPosition, Price) != 0) {
+   logWarning("The specified value could not be parsed. The value of zero will be used instead.");
+} 
+Scripting API | Application Methods
+pauseAfterCurrentSheet
+pauseAfterCurrentSheet(String aString) : Void
+Pauses the processing of the workflow during proof or production and writes the specified message to the log, e.g. Log window-pane. This method interrupts printing on IPDS printers, perhaps so that some manual check can be performed. It is only intended for use with the IPDS engine.
+
+Example  If pausing of production on every 100th sheet is required, it can be accomplished using the new calculated Bool variable placed somewhere on the layout page. The code is:
+if (SYS.GlobalSheetCounter % 100 == 0)
+  {
+    pauseAfterCurrentSheet('Paused. Current sheet is #' + SYS.GlobalSheetCounter.toString());
+  }

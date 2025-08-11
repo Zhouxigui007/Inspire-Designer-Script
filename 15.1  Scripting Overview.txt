@@ -1,0 +1,76 @@
+15.1  Scripting Overview
+See also:
+
+Scripting Features
+Scripting Syntax
+Scripting Methods
+Scripting in Inspire Designer expands the functionality available in GUI, making more advanced designs and solutions possible.
+
+Scripts can be entered in many workflow modules in order to: Manipulate data; create conditions for the appearance of design content; or to imposition sheets.
+
+A script is usually entered via the Script Editor dialog of a specific object or component to specify additional functionality that cannot be accomplished using the GUI. While it is possible to script complex solutions using advanced scripts at various placed of the workflow, in most cases only short and simple scripts are required because the context of the object is given by the GUI location. Scripted functionality includes:
+
+Creating functions to be shared throughout a workflow in the Script Library module.
+
+Reading data input files and creating a data structure from them in the Script Data Input module.
+
+Converting and creating conditional fields in the Data Transformer module.
+
+Calculating values of the variables in the Layout module.
+
+Creating a scripted area for a design in the Layout module.
+
+Describing complex shapes on the Path Description tab of area-defining objects in the Layout module.
+
+Manipulating data or sheets in the Imposition Script module.
+
+See the Scripting Features section for more details about the available scripting input options.
+
+The scripting syntax is object-oriented, taking much of its formulation from C++. You can declare objects and variables, use conditional control statements (e.g. if, else), and employ loops (e.g. while, for) using methods that relate to the object being scripted, offered by the Script Assistant as you write the script.
+
+Tip  In addition to the general scripting language, you might also need to call methods specific to the functionality of Inspire Designer. See the Scripting Methods section for their list with descriptions and examples.
+In the following examples of scripts, notice how // is used for annotations. Nothing that appears behind // on any single line is processed as script.
+
+Tip  When writing complex scripts, adding comments with a short summary of what the script does can help you keep everything organized.
+Example  Using a simple script, you can create a Boolean field in the Data Transformer module that will control whether certain content appears in a design or not. In this example, we will create a variable that will be used to control whether bonus content, e.g., a discount voucher, is displayed for each customer.
+Add this script to an unlinked field  in a Data Transformer module:
+
+if (CustomerType=='premium' or ServiceType=='gold')
+  {
+  return true;       //  if the field CustomerType returns the value premium or the field ServiceType returns the value gold, the value of the Boolean field containing this script is set to True
+  }
+
+return false;        // otherwise, the field's value is set to False
+Example  You can use a script to read text from a data file to a data structure via the Script Data Input module.
+Select a file in Input file and define the data structure (one field MyField in array MyArray) in the Structure column of the module. Then add the following script:
+
+String MyLine;                  // declares a string variable called MyLine into which the text will be stored
+
+while (not isEOF() )              // creates a while loop; the code inside will be executed repeatedly until the end of the file is reached (i.e. it will run while it is not the end of the file, determined by isEOF)
+ {
+ MyLine = readStringBM(133);                     // applies the readStringBM data input method to the string variable, i.e. reads the first 133 characters from the input file in byte mode 
+ logMessage("RESTLINE:" + readLine() + ";" );    // logs a message to the log window-pane while the script is being processed by the workflow
+ MyArray.commit();                               // commits the repetition of the array (i.e. finishes up the record)
+ MyArray.MyField = MyLine;                       // writes the string read from the file to MyField
+ }
+Example  Using a script, you can write a text read from a flow to a scripted area.
+Select the flow as the object AddressFlow on the Used Objects tab of the scripted area. Then add the following script:
+
+RVector MyArea = RVector(frommm(30),1.0);           // creates an area with the dimensions 30mm x 1m     
+RVector MySize = formatFlowTo(MyArea,AddressFlow);    // gets the size (X&Y) of the flow in the area     
+if (MySize.Y>frommm(30))                      
+ {
+ MyArea = RVector(frommm(40),1.0); 
+ MySize = formatFlowTo(MyArea,AddressFlow);
+ }                                          // if the flow is longer (Y) than 30mm, widen the area
+if (MySize.Y>frommm(30))
+ {
+ MyArea = RVector(frommm(50),1.0); 
+ MySize = formatFlowTo(MyArea,AddressFlow);   
+ }                                          // if the flow is still longer than 30mm, widen the area
+Transformation MyMoveTo;
+MyMoveTo.translate(RVector(frommm(35),0));  // move to position of origin for flow
+drawFlow(MyMoveTo,MySize,AddressFlow) ;     // flow is written at position
+There are more features to help you write valid and well-formatted scripts in the Script Editor dialog and, when you process the workflow in Proof or Production, there is the Script Debugger which discovers (and helps you correct) errors found if the data used does not correspond to the expectation of the script.
+
+Note  Keep in mind that if choosing between a GUI-based and script-based solution, using GUI is always recommended. This ensures that your design will be as optimized as possible.

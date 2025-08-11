@@ -1,0 +1,145 @@
+Binary Methods
+Binary methods can be used for manipulation with binary data.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Binary Methods
+assign
+Assigns binary data to the given binary variable. The same result can be achieved using the equal sign =.
+
+assign(Binary) : Void
+Binary binaryData;
+binaryData.assign(Binary.fromStringWithCodec("Hello World!", "UTF-8"));
+Scripting API | Binary Methods
+calcSHA / calcSHA256 / calcSHA512
+Calculates hash values of binary data using the Secure Hash Algorithms. Both SHA-1 and SHA-2 can be applied, but SHA-2 is the newer and more secure algorithm.
+
+calcSHA() : Binary - for 20-byte SHA-1
+calcSHA256() : Binary - for 32 byte SHA-2
+calcSHA512() : Binary - for 64 byte SHA-2
+Binary content = Binary.fromStringWithCodec("abc","UTF-8");
+Binary hash = content.calcSHA();
+logMessage(hash.toHex());  //  Translates the binary code to hexadecimal which is shorter and more easily readable.
+Scripting API | Binary Methods
+decryptCFB
+Decrypts encrypted binary data using the parameters. Both parameters' length must be 16 bytes.
+
+decryptCFB(Binary aKey, Binary aInitialVector) : Binary
+Scripting API | Binary Methods
+encryptCFB
+Encrypts binary data using the parameters key and initial vector to achieve even higher level of complexity. Both parameters' length must be 16 bytes (as it is AES-128 in CFB mode).
+
+encryptCFB(Binary aKey, Binary aInitialVector) : Binary
+function createInitializationVector() : Binary
+   {
+   Binary b;
+   b.Length=16;
+   for(Int i=0; i<b.Length; i++)
+      {
+      b[i]=i;
+      }   
+   return b;
+   }
+
+Binary plain=Binary.fromStringWithCodec("Hello", "ASCII");
+logMessage("Plain: "+plain.toStringWithCodec("ASCII"));
+
+Binary key = Binary.fromStringWithCodec("SecretKey1234567", "ASCII");
+Binary iv = createInitializationVector();
+
+Binary encrypted = plain.encryptCFB(key, iv);
+logMessage("Encrypted: "+encrypted.toStringWithCodec("ASCII"));
+
+Binary decrypted = encrypted.decryptCFB(key, iv);
+logMessage("Decrypted: "+decrypted.toStringWithCodec("ASCII"));
+Scripting API | Binary Methods
+fillByte
+assign(Int aFillByte, Int aNewLength) : Void
+Fills the given binary variable with the specified byte value and sets the variable length to the specified value.
+
+Binary binaryVariable;
+binaryVariable.fillByte(128, 15);
+Scripting API | Binary Methods
+fromBase64
+fromBase64(String aString) : Binary
+Returns binary data from the specified string encoded in Base64 encoding.
+
+Binary binaryData = Binary.fromBase64("SGVsbG8gV29ybGQh");
+Scripting API | Binary Methods
+fromHex
+fromHex(String aString) : Binary
+Returns binary data from the specified string encoded in hexadecimal encoding.
+
+Binary binaryData = Binary.fromHex("48656C6C6F20576F726C6421");
+Note  When proofing your workflow, the converted binary data is always displayed as a hexadecimal value. This ensures legibility.
+Scripting API | Binary Methods
+fromStringWithCodec
+fromStringWithCodec(String aString, String aCodecName) : Binary
+Returns binary data from the specified string encoded in the specified encoding.
+
+Binary binaryData;
+binaryData = Binary.fromStringWithCodec("Hello World!", "UTF-8");
+Scripting API | Binary Methods
+generateUUID
+generateUUID() : Binary
+Returns a Universally Unique Identifier (UUID), i.e. a binary value which is unique each and every time it is parsed.
+
+This is useful for creating IDs, passwords etc.
+
+Binary uuid = Binary.generateUUID();
+Scripting API | Binary Methods
+get
+get(Int aInt) : Int
+Returns a byte value at the specified zero based position in the given binary variable.
+
+If that position is greater than the length of the binary data, an error is shown when processing.
+
+Binary binaryData = Binary.fromHex("48656C6C6F20576F726C6421");
+Int theFirstByte = binaryData.get(0);
+Int theLastByte = binaryData[binaryData.Length - 1];
+Scripting API | Binary Methods
+Length
+Length() : Int
+getLength() : Int
+setLength(Int aNewLength) : Void
+Returns or sets the number of bytes in the given binary variable.
+
+Binary binaryData = Binary.fromHex("20");
+Int dataLength = binaryData.Length;   // dataLength = 1
+Scripting API | Binary Methods
+set
+set(Int aInt, Int aInt) : Void
+Sets the specified byte value at the specified zero based position in the given binary variable.
+
+If that position is greater than the length of the binary data, an error is shown when processing.
+
+Binary binaryData = Binary.fromHex("0000");
+binaryData.set(0, 127);
+binaryData[1] = 255;
+String hexResult = binaryData.toHex();
+// hexResult = "7FFF"
+Scripting API | Binary Methods
+toBase64
+toBase64() : String
+Returns a string that represents the Base64 notation of the given binary data.
+
+File.Stream imageStream = File.open("C:\image.png", File.Mode.ReadOnly);
+Binary binaryData = imageStream.readToEnd();
+imageStream.close();
+String base64Data = binaryData.toBase64();
+Scripting API | Binary Methods
+toHex
+toHex() : String
+Returns a string that represents the hexadecimal notation of the given binary data.
+
+Binary binaryData;
+binaryData = Binary.fromStringWithCodec("Hello World!", "UTF-8");
+String hexData = binaryData.toHex();
+// hexData = "48656C6C6F20576F726C6421"
+Scripting API | Binary Methods
+toStringWithCodec
+toStringWithCodec(String aCodecName) : String
+Returns a string that represents the given binary data encoded using the specified encoding.
+
+Binary binaryData = Binary.fromBase64("SGVsbG8gV29ybGQh");
+String decodedText = binaryData.toStringWithCodec("UTF-8");
+// decodedText = "Hello World!"

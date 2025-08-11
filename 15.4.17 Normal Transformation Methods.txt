@@ -1,0 +1,75 @@
+Normal Transformation Methods
+Normal Transformation methods are used on the Content tab of Scripted Areas to move and position different Layout objects in a similar way that objects can be done via the Position tab. They can also be used to manipulate page-level objects via the Imposition Script module.
+
+With Normal Transformation methods (as opposed to Transformation methods) individual items of the transformation matrix are not influenced by each other.
+
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to millimeters.
+Scripting API | NormalTransformation Methods
+assign
+assign (NormalTransformation aFlip) : Void
+assign (Transformation aT) : Void
+Assigns another transformation object value to the given tranformation. Same as the = assignment statement.
+
+Scripting API | NormalTransformation Methods
+FlipX
+FlipX : Bool
+getFlipX : Bool
+Returns the flip value for X / Y.
+
+Scripting API | NormalTransformation Methods
+Rotation
+Rotation : Double
+getRotation () : Double
+Returns the rotation value.
+
+Scripting API | NormalTransformation Methods
+ScaleX / ScaleY
+ScaleX : Double
+getScaleX () : Double
+ScaleY : Double
+getScaleY () : Double
+Gets scale value for X/Y.
+
+Scripting API | NormalTransformation Methods
+ShearX
+ShearX : Double
+getShearX () : Double
+Gets shear value for X/Y.
+
+Scripting API | NormalTransformation Methods
+Transposition
+Transposition : RVector
+getTransposition () : RVector
+Gets Transposition.
+
+Scripting API | NormalTransformation Methods
+setFlipX
+setFlipX (Bool aFlip) : Void
+Sets flip value for X.
+
+Scripting API | NormalTransformation Methods
+setRotation
+setRotation (Double aRotation) : Void
+Sets rotation.
+
+Scripting API | NormalTransformation Methods
+setScaleX / setScaleY
+setScaleX (Double aScaleX) : Void
+Sets scale value for X / Y.
+
+Example  
+NormalTransformation nt;
+nt.setRotation(90);
+nt.setScaleX(0.5);
+Transformation t;
+t.assign(nt);
+drawImage(t,Image01);
+Scripting API | NormalTransformation Methods
+setShearX
+setShearX (Double aShearX) : Void
+Sets shear value for X.
+
+Scripting API | NormalTransformation Methods
+setTransposition
+setTransposition (RVector aRV) : Void
+Sets transposition.

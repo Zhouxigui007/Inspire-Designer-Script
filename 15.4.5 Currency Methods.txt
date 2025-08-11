@@ -1,0 +1,129 @@
+Currency Methods
+Currency methods can be used for manipulation with currency values.
+
+Scripting API | Currency Methods
+assign
+assign(Currency aP1) : Void
+assign(Double aP1) : Void
+assign(Int aP1) : Void
+assign(Int64 aP1) : Void
+Assigns the specified number to the given currency variable. The same result can be achieved using the equal sign =.
+
+
+Currency currencyValue;
+currencyValue.assign(12.123456);
+// currencyValue = 12.1235
+
+Scripting API | Currency Methods
+equal
+equal(Currency aP1) : Bool
+Returns the Boolean value true if the specified number equals to the given currency value. The same result can be achieved using the equality operator ==.
+
+Currency currencyValue = 12.1234;
+Bool isTheSame = currencyValue.equal(12.12);
+// isTheSame = false
+Scripting API | Currency Methods
+less
+less(Currency aP1) : Bool
+Returns the Boolean value true if the specified number is lower than the given currency value. The same result can be achieved using the less than operator <.
+
+Currency currencyValue = 12.1234;
+Bool isLess = currencyValue.less(12.12);
+// isLess = true
+Scripting API | Currency Methods
+minus
+minus() : Currency
+minus(Currency aP1) : Void
+minus(Int aP1) : Void
+Returns the negative value of the given currency variable if no parameter is specified.
+
+Subtracts the specified number from the given currency value.
+
+Currency currencyValue = 12.1234;
+Currency negativeValue = currencyValue.minus();
+// negativeValue = -12.1234
+Currency currencyValue = 12.1234;
+currencyValue.minus(12);
+// currencyValue = 0.1234
+Scripting API | Currency Methods
+multiply
+multiply(Currency aP1) : Void
+multiply(Int aP1) : Void
+Multiplies the given currency value by the specified number.
+
+Currency currencyValue = 12.1234;
+currencyValue.multiply(1.1);
+// currencyValue = 13.3357
+Scripting API | Currency Methods
+plus
+plus() : Currency
+plus(Currency aP1) : Void
+plus(Int aP1) : Void
+Returns the positive value of the given currency variable if no parameter is specified.
+
+Adds the specified number to the given currency value.
+
+Currency currencyValue = 12.1234;
+Currency positiveValue = currencyValue.plus();
+// positiveValue = 12.1234
+
+Currency currencyValue = 12.1234;
+currencyValue.plus(-12);
+// currencyValue = 0.1234
+Scripting API | Currency Methods
+toDouble
+toDouble() : Double
+Returns a double-precision floating-point number representation of the given currency value.
+
+Currency currencyValue = 12.1234;
+Double doubleValue = currencyValue.toDouble();
+// doubleValue = 12.1234
+Scripting API | Currency Methods
+toInt
+toInt() : Int
+Returns an integer representation of the given currency value.
+
+Currency currencyValue = 12.1234;
+Int integerValue = currencyValue.toInt();
+// integerValue = 12
+Scripting API | Currency Methods
+toInt64
+toInt64() : Int64
+Returns a 64-bit integer representation of the given currency value.
+
+Currency currencyValue = 12.1234;
+Int integer64Value = currencyValue.toInt();
+// integer64Value = 12
+Scripting API | Currency Methods
+toSpell
+toSpell(String aP1) : String
+Returns a lexical representation of the given currency value in the language specified by the corresponding language code.
+
+Currency currencyValue = -12.1234;
+String valueInWords = currencyValue.toSpell("en");
+// valueInWords = "minus twelve point one two three four"
+Scripting API | Currency Methods
+toString
+toString() : String
+toString(Int aDecimalPlaces) : String
+toString(Int aMaxDecimalPlaces, Int aMinDecimalPlaces) : String
+toString(Int aMaxDecimalPlaces,Int aMinDecimalPlaces,String aThousandSeparator,String aDecimalSeparator) : String
+Returns a string representation of the given currency value.
+
+Optionally, you can also specify maximum and minimum number of decimal places, a thousands separator (to separate thousands, millions etc.), and a decimal separator.
+
+Currency currencyValue = 12.1234;
+String result = currencyValue.toString();
+// result = "12.1234"
+
+Currency currencyValue = 12.12;
+String result = currencyValue.toString(4);
+// result = "12.1200"
+
+Currency currencyValue = 12.003;
+String result = currencyValue.toString(2, 1);
+// result = "12.0"
+
+Currency currencyValue = 1234567.8;
+String result = currencyValue.toString(2, 2, "," , ".");
+// result = "1,234,567.80"

@@ -1,0 +1,235 @@
+15.3.7  Operators
+The script language supports:
+
+Assignment operators - Assigns the value of the left operand (general expression) to the value of the right operand (variable or array element).
+
+Arithmetic operators - Take operands of any numeric data type.
+
+Comparison operators - Take operands of any data type with the data type result always boolean.
+
+Boolean operators - Take Boolean operands and also resulting in a Boolean value.
+
+The highest precedence operators are evaluated first. See the list ordered from the highest to lowest priority:
+
+function calls
+
+brackets ( )
+
+unary minus, !, not
+
+*, /, %
+
++, -
+
+&, ^
+
+|
+
+< > <= >=
+
+== != is
+
+and, xor
+
+or
+
+15.3.7.1  Arithmetic Operators
+
+Operator
+
+Operand
+
+Result
+
+Operation
+
++
+
+Numeric
+
+Numeric
+
+Add
+
+-
+
+Numeric
+
+Numeric
+
+Subtract, negate
+
+*
+
+Numeric
+
+Numeric
+
+Multiply
+
+/
+
+Numeric
+
+Numeric
+
+Divide
+
+%
+
+Numeric
+
+Numeric
+
+Modulus of a number with respect to a base value. The modulus is the remainder from dividing the number by the base value.
+
+~
+
+Numeric
+
+Numeric
+
+Binary not
+
+&
+
+Numeric
+
+Numeric
+
+Binary and
+
+^
+
+Numeric
+
+Numeric
+
+Binary xor
+
+|
+
+Numeric
+
+Numeric
+
+Binary or
+
+++
+
+1
+
+Numeric
+
+Adds 1
+
+--
+
+1
+
+Numeric
+
+Subtracts 1
+
+
+15.3.7.2  Boolean Operators
+
+Operator
+
+Operand
+
+Result
+
+Operation
+
+not
+
+Boolean
+
+Boolean
+
+Logical not
+
+and
+
+Boolean
+
+Boolean
+
+Logical and
+
+xor
+
+Boolean
+
+Boolean
+
+Logical xor
+
+or
+
+Boolean
+
+Boolean
+
+Logical or
+
+
+15.3.7.3  Comparison Operators
+
+Operator
+
+Operand
+
+Result
+
+Operation
+
+==
+
+Numeric
+
+Boolean
+
+Is equal to
+
+!=
+
+Numeric
+
+Boolean
+
+Not equal to
+
+<
+
+Numeric
+
+Boolean
+
+Less than
+
+>
+
+Numeric
+
+Boolean
+
+Greater than
+
+<=
+
+Numeric
+
+Boolean
+
+Less than or equal to
+
+>=
+
+Numeric
+
+Boolean
+
+Greater than or equal to
+

@@ -1,0 +1,379 @@
+DateTime Methods
+DateTime methods can be used for manipulation with date and time variables.
+
+If any date or time component is set into the invalid range, date or time is automatically converted into a valid value.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+date.Day = 40;
+String strDate = date.toString("yyyy-MM-dd", "en");
+// strDate = "2000-02-09"
+The minimum DateTime value is 1.1.1.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | DateTime Methods
+assign
+assign(DateTime aP1) : Void
+assign(Double aP1) : Void
+assign(Int aDay, Int aMonth, Int aYear, Int aHour, Int aMinute, Int aSecond) : Void
+Assigns the specified value(s) to the given DateTime variable.
+
+If that value is DateTime variable, the same result can be achieved using the equal sign =.
+
+The specified value can also be passed as the double-precision floating-point number or set of integer values in the following order: day, month, year, hour, minute and second.
+
+
+DateTime currentDate, exactDate, annualDate;
+currentDate.assign(DateTime.NowGMT);
+exactDate.assign(36526.123);
+annualDate.assign(21, 6, DateTime.NowGMT.Year, 0, 0, 0);
+
+Scripting API | DateTime Methods
+Day
+Day : Int
+getDay() : Int
+setDay(Int aDay) : Void
+Returns or sets an integer value that represents the day of the month for the given DateTime variable.
+
+DateTime date = DateTime.fromDate(1, 3, DateTime.Now.Year);
+date.Day--;
+Bool isLeapYear = (date.Day == 29);
+DateTime date = DateTime.fromDate(1, 1, 2000);
+date.Day = 31;
+String strDate = date.toString("yyyy-MM-dd", "en");
+// strDate = "2000-01-31"
+Scripting API | DateTime Methods
+DayOfWeek
+DayOfWeek : Int
+getDayOfWeek() : Int
+Returns a zero based integer value that represents the day of the week for the given DateTime variable, starting from Sunday.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+Int dayOfWeek = date.DayOfWeek;
+// dayOfWeek = 6 (Saturday)
+Scripting API | DateTime Methods
+DayOfYear
+DayOfYear : Int
+getDayOfYear() : Int
+setDayOfYear(Int aDayOfYear) : Void
+Returns or sets an integer value that represents the day of the year for the given DateTime variable.
+
+DateTime date = 36526;  // 2000-01-01
+Int dayOfYear = date.DayOfYear();
+// dayOfYear = 1
+Scripting API | DateTime Methods
+Days
+Days : Int
+getDays() : Int
+setDays(Int aDays) : Void
+Returns or sets an integer value that represents the number of days passed since December 30th, 1899, 00:00:00. Moreover, the method can be used to return number of days between two dates.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+Int days = date.Days();
+// days = 36526
+Scripting API | DateTime Methods
+equal
+equal(DateTime aP1) : Bool
+Returns the Boolean value true if the given DateTime variable equals the specified value. The same result can be achieved using the equality operator ==.
+
+DateTime date_01 = DateTime.fromDate(1, 1, 2000);
+DateTime date_02 = 36526;
+Bool isEqual = date_01.equal(date_02);
+// isEqual = true
+Scripting API | DateTime Methods
+format
+format(String aPattern, String aLocale) : String
+Returns a string representation of the given DateTime variable, formatted according to the specified pattern and using the specified language code.
+
+For the pattern reference see Format pattern syntax. Additionally, one of the following keywords can also be used: FullDate, LongDate, MediumDate, ShortDate, FullTime, LongTime, MediumTime and ShortTime.
+
+DateTime date = 36526.123;
+String strFullDate = date.format("FullDate", "en");
+// strFullDate = "Saturday, January 1, 2000"
+String strCustomDate = date.format("yyyy-MM-dd", "en");
+// strCustomDate = "2000-01-01"
+String strShortTime = date.format("ShortTime", "en");
+// strShortTime = "2:57 AM"
+Scripting API | DateTime Methods
+fromDate
+fromDate(Int aDay, Int aMonth, Int aYear) : DateTime
+Returns a DateTime value that represents the specified day, month and year.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+Scripting API | DateTime Methods
+fromDouble
+fromDouble (Double aDays) : DateTime
+Returns a DateTime value that represents the date calculated as the specified number of days passed since December 30th, 1899, 00:00:00.
+
+Double days = 43466
+DateTime date = DateTime.fromDouble(days) //1.1.2019 0:00:00.000
+Scripting API | DateTime Methods
+fromString
+fromString(String aDateTime, String aPattern, String aLocale, Bool aLenient) : DateTime
+Returns a DateTime value that corresponds with the specified string formatted using the specified pattern in the language specified by the language code.
+
+If the Boolean value of the specified lenient parameter is set to true, parsing succeeds even if the input string does not match the pattern but can still be parsed as a date. If set to false, parsing of an input string with invalid value will return the default zero date, i.e. 30-12-1899. For example, parsing the date 29-2-2015 with the lenient parameter set to false will return the default zero date (2015 is not a leap year and therefore, the input date is invalid). However, if you set this parameter to true, the returned date will be 1-3-2015.
+
+For details about using patterns see the format method.
+
+DateTime date, time;
+date = DateTime.fromString("Jan 01, 2000", "MMM dd, yyyy", "en", true);
+date = DateTime.fromString("1. ledna 2000", "dd. MMMM yyyy", "cs", true);
+time = DateTime.fromString("2:57 AM", "hh:mm a", "en", true);
+time = DateTime.fromString("2:57 AM", "ShortTime", "en", true);
+Scripting API | DateTime Methods
+fromISOString
+fromISOString(String aDateTime, String aPattern, String aLocale, Bool aLenient) : DateTime
+Parses a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z".
+
+DateTime date, time;
+date = DateTime.fromISOString("Jan 01, 2000", "MMM dd, yyyy", "en", true);
+Scripting API | DateTime Methods
+fromTime
+fromTime(Int aHour, Int aMinute, Int aSecond) : DateTime
+fromTime(Int aHour, Int aMinute, Int aSecond, Int aMillisecond) : DateTime
+Returns a DateTime value that represents the specified hours, minutes, seconds and optionally also milliseconds.
+
+DateTime time_01 = DateTime.fromTime(13, 30, 0);
+DateTime time_02 = DateTime.fromTime(0, 0, 0, 3600000);
+Scripting API | DateTime Methods
+getDMY
+getDMY(Int & aDay, Int & aMonth, Int & aYear) : Void
+Updates the specified day, month and year variables passed by reference with the current values of the given DateTime variable.
+
+Int day, month, year;
+DateTime date = 36526;
+DateTime.getDMY(day, month, year);
+Scripting API | DateTime Methods
+getHMS
+getHMS(Int & aHour, Int & aMinute, Int & aSecond) : Void
+Updates the specified hour, minute and second variables passed by reference with the current values of the given DateTime variable.
+
+Int hours, minutes, seconds;
+DateTime date = 36526.5;
+DateTime.getHMS(hours, minutes, seconds);
+Scripting API | DateTime Methods
+Hour
+Hour : Int
+getHour() : Int
+setHour(Int aHour) : Void
+Returns or sets an integer value that represents the hour of the given DateTime variable.
+
+DateTime date = 36526.5;
+Int hour = date.Hour;
+// hour = 12
+Scripting API | DateTime Methods
+less
+less(DateTime aP1) : Bool
+Returns the Boolean value true if the given DateTime variable is lower than the specified value. The same result can be achieved using the less than operator <.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+Bool isLess = date.less(DateTime.Now);
+// isLess = true
+Scripting API | DateTime Methods
+Millisecond
+Millisecond : Int
+getMillisecond() : Int
+setMillisecond(Int aMillisecond) : Void
+Returns or sets an integer value that represents the fraction of a second of the given DateTime variable expressed in milliseconds.
+
+DateTime date = 36526.123;
+Int millisecond = date.Millisecond;
+// millisecond = 200
+Scripting API | DateTime Methods
+MillisecondOfDay
+MillisecondOfDay : Int
+getMillisecondOfDay() : Int
+setMillisecondOfDay(Int aMillisecondOfDay) : Void
+Returns or sets an integer value that represents the number of milliseconds that passed from the beginning of the given day.
+
+DateTime date = 36526.123;
+Int millisecondOfDay = date.MillisecondOfDay;
+// millisecondOfDay = 10627200
+Scripting API | DateTime Methods
+minus
+minus() : DateTime
+minus(DateTime aP1) : Void
+Returns the negative value of the given DateTime variable when no parameter is specified.
+
+Subtracts the specified value from the given DateTime variable and when necessary, converts the result into a valid date.
+
+DateTime date = DateTime.Now;
+DateTime initDate = DateTime.fromDate(1, 1, 2000);
+date.minus(initDate);
+Int elapsedDays = date.Days;
+Scripting API | DateTime Methods
+Minute
+Minute : Int
+getMinute() : Int
+setMinute(Int aMinute) : Void
+Returns or sets an integer value that represents the minute number of the given DateTime variable.
+
+DateTime date = 36526.123;
+Int minute = date.Minute;
+// minute = 57
+Scripting API | DateTime Methods
+Month
+Month : Int
+getMonth() : Int
+setMonth(Int aMonth) : Void
+Returns or sets an integer value that represents the month number of the given DateTime variable.
+
+DateTime date = DateTime.fromDate(28, 2, DateTime.Now.Year);
+date.Day++;
+Bool isLeapYear = (date.Month == 2);
+Scripting API | DateTime Methods
+Now
+Now : DateTime
+getNow() : DateTime
+Returns the current local date and time.
+
+DateTime.Now methods can be used for various purposes, for example:
+
+To deduct the current date and time from specifically chosen date and time. The result is displayed in number of days, hours, minutes and seconds:
+
+DateTime dt;
+dt=DateTime.Now-DateTime(2,2,1976,0,0,0);
+logMessage("Days:"+dt.Days.toString()+" "+dt.toString("HH:mm:ss","EN"));
+To get the last day of next month (0 means the day before first day in month):
+
+DateTime dt;
+dt=DateTime.Now;
+//Last day of next month
+dt=DateTime(0,dt.Month+2,dt.Year,0,0,0);
+logMessage(dt.toString());
+To get the next day (add 1 to the current day):
+
+DateTime dt;
+dt=DateTime.Now;
+//Next day
+dt.Day++;
+logMessage(dt.toString());
+To get next Monday:
+
+DateTime dt;
+dt=DateTime.Now;
+//Next Monday
+dt.Day+=7-(dt.DayOfWeek+6)%7;
+logMessage(dt.toString());
+Or to get next regularly repeated event:
+
+DateTime dt;
+dt=DateTime.Now;
+//Next paycheck (it is everytime 15th day in month at noon)
+if (dt.Day<15 or dt.Day==15 and dt.Hour<12)
+   {
+   dt.Day=15;
+   }
+else
+   {
+   dt.Day=15;
+   dt.Month++;
+   }
+dt.Hour=12;
+dt.Minute=0;
+dt.Second=0;
+//Number of hours to next paycheck
+Double hours=Double(dt-DateTime.Now)*24;
+logMessage(hours.toString());
+Note  It is recommended to use GMT time (Greenwich Mean Time) instead if possible, see NowGMT method.
+Scripting API | DateTime Methods
+NowGMT
+NowGMT : DateTime
+getNowGMT() : DateTime
+Returns the current GMT date and time.
+
+GMT (Greenwich Mean Time) is the ideal base for date and time manipulations as it is independent from any local time shifts (e. g. the daylight saving time in many countries).
+
+Note  Greenwich Mean Time (GMT) is commonly used to refer to Coordinated Universal Time (UTC), although strictly UTC is an atomic time scale which only approximates GMT with a tolerance of 0.9 second.
+DateTime date = DateTime.NowGMT;
+Scripting API | DateTime Methods
+plus
+plus() : DateTime
+plus(DateTime aP1) : Void
+Returns the positive value of the given DateTime variable if no parameter is specified.
+
+Adds the specified value to the given DateTime variable and if necessary, converts the result into a valid date.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+DateTime difference = 1;
+date.plus(difference);
+String strDate = date.toString("yyyy-MM-dd", "en");
+// strDate = "2000-01-02"
+Scripting API | DateTime Methods
+Second
+Second : Int
+getSecond() : Int
+setSecond(Int aSecond) : Void
+Returns or sets an integer value that represents the number of seconds of the given DateTime variable.
+
+DateTime time = DateTime.fromTime(1, 2, 3);
+Int seconds = time.Second;
+// seconds = 3
+Scripting API | DateTime Methods
+SecondOfDay
+SecondOfDay : Int
+getSecondOfDay() : Int
+setSecondOfDay(Int aSecondOfDay) : Void
+Returns or sets an integer value that represents the number of seconds that passed from the beginning of the given day.
+
+DateTime time = DateTime.fromTime(1, 2, 3);
+Int seconds = time.SecondOfDay;
+// seconds = 3723
+Scripting API | DateTime Methods
+toDouble
+toDouble() : Double
+Returns a double-precision floating-point number representation of the given DateTime variable. Moreover, the method can be used to return number of days which pass from the certain date.
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+Double dateDifference = DateTime.Now.toDouble() - date.toDouble();
+Scripting API | DateTime Methods
+toLocalTime
+toLocalTime()
+Converts the GMT time to your local time, i.e. to the time zone set on your computer.
+
+Scripting API | DateTime Methods
+toUniversalTime
+toUniversalTime()
+Converts the value of the current DateTime object to Greenwich Mean Time (GMT) / Coordinated Universal Time (UTC).
+
+Scripting API | DateTime Methods
+toString
+toString() : String
+toString(String aPattern, String aLocale) : String
+Returns a string representation of the given DateTime variable, optionally formatted according to the specified pattern and using the specified language code.
+
+For details about using patterns see the format method.
+
+DateTime date = 36526.123;
+String strRawDate = date.toString();
+// strRawDate = "1.1.2000  2:57:07.200"
+String strFullDate = date.toString("FullDate", "en");
+// strFullDate = "Saturday, January 1, 2000"
+String strCustomDate = date.toString("yyyy-MM-dd", "en");
+// strCustomDate = "2000-01-01"
+String strShortTime = date.toString("ShortTime", "en");
+// strShortTime = "2:57 AM"
+Scripting API | DateTime Methods
+Year
+Year: Int
+getYear() : Int
+Returns or sets an integer value that represents the year of the given DateTime variable.
+
+To get the year of the given DateTime variable:
+
+DateTime date = DateTime.fromDate(1, 1, 2000);
+date.Day--;
+Int year = date.Year;
+// year = 1999
+To get the age in years:
+
+DateTime from = DateTime(1,2,2005,0,0,0);
+DateTime to = DateTime(1,3,2006,0,0,0);
+ 
+var age = to.Year-from.Year;
+to.Year=from.Year;
+if (to<from) age--;
+ 
+logMessage(age.toString());
+// age = 1 
+Note  The year 2034 is the last one recognized. Thus, if you use 01-Jul-45 string, the result will be 1945 instead of 2045. For correct results, write the year in full.

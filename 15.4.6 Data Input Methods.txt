@@ -1,0 +1,94 @@
+Data Input Methods
+In this section:
+
+Read Methods
+isEOF
+rewind
+ungetChar
+See also:
+
+Script Data Input Module
+XML Reader Methods
+The methods are for reading characters from a data file or creating records in the Script Data Input module. Using them, you are able to parse the content of the input text file.
+
+Read Methods
+Reading always starts at the pointer position. The pointer identifies the location for the next read operation. It moves automatically when you read from the file. If you read a character e.g. from position 3456, the pointer automatically moves to position 3457.
+
+Warning  If the 'read' methods, except for readLine, reach the end of the file (i.e. no further character or string can be read), an error occurs when running the script.
+Scripting API | DataInput Methods | DataInput Methods
+readChar
+readChar () : Char
+
+Reads the next character from the current input file, starting at the current pointer position.
+
+If you want to test the value of a certain character using readChar() method and use another read method afterwards depending on the tested value, you can move the pointer one position backwards using the ungetChar method. You can also set the pointer to zero (which indicates that the next operation will be on the first character) using the rewind method.
+
+For an example see the readLine method description below.
+
+Scripting API | DataInput Methods | DataInput Methods
+readLine
+readLine () : String
+readLine (Char aP1) : String
+Reads the characters up to the line break from the current input file, starting at the current pointer position. Or, when used with the parameter (Char aP1), it reads the characters until the specified character is reached.
+
+The line break is any one of a line feed (0x0A), a carriage return (0x0D), or a carriage return followed immediately by a line feed. If the line break is not detected, it reads the rest of the string value from the given file, starting at the current pointer position.
+
+Example  
+String MyLine;
+MyLine = readLine('\x3B');
+Note  When a file with UTF-8 text encoding is used, the BOM (byte order mark), if present at the beginning of the data file, will be kept in the data when using this method. This is a different behavior than when using the Data Input module, where it is removed automatically. To skip it also in script data input, use the following line at the beginning of the script and after that the readLine method to read the file:
+//skip BOM if it is the first character; if not, rewind
+if (readChar()!=Char(0xfeff)) rewind();
+When a file with UTF-16 text encoding is used, the BOM character used for indicating the endianness (byte order) is not present in the read data. To keep it, the file would have to have UTF-16BE or UTF-16LE text encoding.
+
+Scripting API | DataInput Methods | DataInput Methods
+readString
+readString (Int aP1) : String
+Reads the number of characters specified by the parameter from the current input file, starting at the current pointer position.
+
+Scripting API | DataInput Methods | DataInput Methods
+readStringBM
+readStringBM (Int aP1) : String
+Reads the specified number of characters (specified by the parameter) in byte mode. Single-byte characters are read as one character, double-byte characters are read as two characters.
+
+Scripting API | DataInput Methods | DataInput Methods
+readStringS
+readStringS (Int aP1) : String
+Reads the specified number of characters specified by the parameter from the current input file, starting at the current pointer position. In addition to the readString functionality, readStringS reads a surrogate pair (consisting of two characters) as one character, if it occurs in the input file.
+
+Scripting API | DataInput Methods
+commit
+commit () : Void
+Commits a set of values to a repetition of an array, i.e. to determine that 'this is the end' of this single record and any further fields belong to the next record.
+
+The commit is ignored if there are no fields in the defined array.
+
+Example  
+Accounts.Id="12356956";
+Acoounts.FirstName="Lars";
+Accounts.LastName="Mykland";
+Accounts.Balance=132.31;
+Accounts.commit();
+In addition, commit() is called on all arrays after script is finished even if it is not scripted, i.e. the last record is committed automatically. Also commit itself does something only in case you written anything to at least one field in that array. That’s make it useful because you can choose if you want to call commit before o rafter writing all fields, making it perfect mainly for nested array scenarios.
+
+Scripting API | DataInput Methods
+isEOF
+isEOF () : Bool
+The isEOF function returns true only when the end of the input file is reached.
+
+Example  
+while( not isEOF())     // cycles until EndOfFile
+   {
+   MyLine = readLine(); //Reading line
+   ...
+   ...
+   }
+Scripting API | DataInput Methods
+rewind
+rewind () : Void
+Resets the position of the pointer to zero (beginning of the input file).
+
+Scripting API | DataInput Methods
+ungetChar
+ungetChar (Char aP1) : Void
+Stores the previously read character (specified as the parameter) back and moves the pointer one position backwards. The next usage of a 'read' method will return the character.

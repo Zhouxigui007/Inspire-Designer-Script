@@ -1,0 +1,192 @@
+15.3.3  Control Statements
+Inspire Designer scripting syntax uses a set of control statements that are common to C++. They execute a method either conditionally or repetitively.
+
+The simplest constructs:
+
+while – which tests at the top of the loop
+
+do – convenient for simple sequential operations on arrays
+
+for – the most general repetitive construct
+
+Conditional constructs:
+
+if
+
+if...else
+
+is
+
+Repetitive constructs:
+
+for
+
+while
+
+do while
+
+Branching:
+
+Three statements are provided to interrupt the flow of control through one of the repetitive constructs.
+
+break
+
+continue
+
+goto
+
+15.3.3.1  If and If...else Statements
+The if and if else constructs are shown below.
+
+The expression part may be any boolean expression. The statement(s) will be executed if the expression resolves to true. Otherwise, it will fall through to the next block consisting of an else or else if.
+
+
+    if (expression1)
+     {
+      statement1
+     } 
+     else if (expression2)
+     {
+      statement2
+     } 
+     else
+     {
+      statement3
+     }
+
+The control flow constructs may be nested indefinitely.
+
+There may be an if clause without an else or else if. There is no end if.
+
+Example  
+Int n=300;
+		if (n > 0)   // IF construction WITHOUT else
+													//condition: n has to be greater or equal than 0
+  {    
+   logWarning("Value of n has to be greater than 0."); 
+   return n.toString();
+  }
+Example  
+Int n=300;
+if (n > 0)         // IF construction WITH else;
+   //condition: n has to be greater or equal than 0
+   {    
+   logWarning("Value of n has to be greater than 0."); 
+   return n.toString();
+   }
+else
+   {
+   logMessage("Value of n is in the correct range."); 
+   }
+15.3.3.2  Switch-like Statement – "is" Keyword
+If you want to select an appropriate action depending on a variable value, you can use the sequence of if/else statements or the construct is.
+
+Syntax
+
+
+Int variable;
+is(variable)
+   {
+   1 : action1();
+   2, 3 : action23();
+   4::8 : action45678();
+   9::* : action9orGreater();
+   else
+      someOtherAction();
+   }
+
+Conditions are separated by a comma. A condition can be:
+
+Simple expression. This is then checked for equality.
+
+Range. The range is written as "::". The range can be marked as open by adding the asterisk “*”.
+
+Example  The range 8*::* is valid for 9, 10, 11, 12, etc. In this example the end of the range is missing, so it must be marked as open.
+For values that do not match any condition the optional else branch can be used. The is keyword can be used for all types for which the operators assign, equal, less are defined (almost all types).
+
+Example  
+Char abcdefg;
+abcdefg = 'e';
+is (abcdefg)
+   {
+   'a'::*'c', 'e' : logMessage("a,b or e");
+   'f'::* : logMessage("f or greater char");
+   else  logMessage("other character");
+   }
+15.3.3.3  For Statement
+The for construct consists of:
+
+Initialization part  Initialization part consists of a statement which is executed once before entering the loop.
+Test part  Test part is a boolean expression, which is tested before each iteration of the loop.
+Loop control part.  The loop control statement is executed after the last statement in the body of the for, before branching to the test at the beginning of the loop.
+Statement part  Statement to be executed
+When used in a for statement, continue causes a branch to the loop control statement.
+
+for (init; test; control)
+{
+    statement
+}
+Example  
+Int n=300;                   // summary in FOR cycle
+Int f=0;
+for (Int i=1;i<=n;i++)
+			// i is name of the variable that depends on "number of passes" in the current for-loop
+   // i=1 determines its start value
+   // i<=n means: continue with incrementing of i until i reaches value of n
+   // i++ incrementation of i of value of 1
+   {
+   f=f+i;                     //variable f is incremented 
+   }
+return "Summary in FOR cycle is: "+ f.toString();
+15.3.3.4  While Statement
+The while statement repetitively executes a statement or a block of statements as long as the specified condition expression is true. The condition is tested at the beginning of the loop, so it is possible for the statement not to be executed at all (see also a do while statement for comparison).
+
+
+while (expression)
+{          
+statement
+}
+or
+while (expression)
+{          
+statement1
+}
+else
+{          
+statement2
+}
+
+Example  
+Int n=300;          //summary in WHILE cycle
+Int i=1;
+Int f=0;
+while (i<=n)
+{
+   f=f+i;          //variable f is incremented 
+     i++;          // i++ means incrementation of i of value of 1
+}
+15.3.3.5  Do...while Statement
+The do while statement is similar to while but the condition is tested at the end of the loop, so the statement is to be executed at least once.
+
+
+do
+{
+   statement
+}
+   while (expression);
+
+15.3.3.6  Break Statement
+The break statement causes an immediate exit from the loop, by jumping to the statement following the loop.
+
+15.3.3.7  Continue Statement
+The continue statement shifts control to the next iteration of a loop without executing remainder of the current loop.
+
+15.3.3.8  Goto Statement
+The goto statement unconditionally branches to another point in a procedure. The target statement is specified by a label followed by a colon:
+
+
+goto label
+label:
+
+15.3.3.9  Return Statement
+The return statement assigns a value to a function or returns control to the calling procedure. This value is passed back to the calling procedure as the function value. The returned value is an expression which resolves to the declared data type of the function.

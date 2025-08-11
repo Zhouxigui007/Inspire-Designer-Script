@@ -1,0 +1,71 @@
+15.3.8  Reflection at Runtime
+Reflection is a process by which a program can read its own metadata. In Inspire Designer, reflection is made available to script through the do.typeof () method and the TypeKeeper object. Through reflection, a script can examine data structures and even the scripting language itself enabling it to adapt to requirements that will only be known at run time.
+
+Example  
+
+The following data structure is defined in the Script Data Input module.
+
+The following structure is defined for Data output in the Imposition Script module:
+
+
+The following script is used in the Imposition Script module to read the data input from the Script Data Input module and feed it to the Data output structure:
+
+function isArray(TypeKeeper tk):Bool
+   {
+   return tk.MemberCount>1 and tk.MemberName[0]=="get" and tk.MemberParameterCount[0]==1;
+   }
+
+function isOptional(TypeKeeper tk):Bool
+   {
+   return tk.MemberCount>1 and tk.MemberName[0]=="getExists" and tk.MemberName[1]=="assign";
+   }
+
+function describe(String kind,Int indent,TypeKeeper type)
+   {
+   Int skip=0;
+   is(kind)
+      {
+      "SubTree":skip=1;
+      "Optional":skip=2;
+      "Array":skip=1;
+      }
+   for(Int i=skip;i<type.MemberCount;i++)
+      {
+      Output_0.Fields.commit();
+      String typeName;
+      TypeKeeper tk=type.MemberReturnType[i];
+      is(tk)
+         {
+         do.typeof(String),do.typeof(Int),do.typeof(Int64),do.typeof(Currency),do.typeof(Double),do.typeof(DateTime),do.typeof(Bool),do.typeof(Binary):
+            {
+            typeName=type.MemberReturnType[i].toString();
+            tk=TypeKeeper();
+            }
+         else
+            {
+            if (isArray(tk))
+               {
+               typeName="Array";
+               tk = tk.MemberReturnType[0];
+               }
+            else if (isOptional(tk))
+               {
+               typeName="Optional";
+               }
+            else 
+               {
+               typeName="SubTree";
+               }
+            }
+         }
+      Output_0.Fields.Name=type.MemberName[i].mid(3);
+      Output_0.Fields.Indent=indent;
+      Output_0.Fields.Type=typeName;
+      if (tk != TypeKeeper())
+         {
+         describe(typeName,indent+1,tk);
+         }
+      }
+   }
+
+describe("Root",0,do.typeof(Input_0));

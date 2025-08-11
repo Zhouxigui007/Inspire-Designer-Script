@@ -1,0 +1,98 @@
+Layout Object Methods
+Layout Object methods are used on the Content tab of Scripted Areas in order to define the design of the content of that area on a page by manipulating different Layout objects.
+
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to millimeters.
+Scripting API | LayoutObject Methods
+BarcodeSize
+BarcodeSize [Barcode aP1] : RVector
+getBarcodeSize (Barcode aP1) : RVector
+Returns the size of barcode.
+
+Scripting API | LayoutObject Methods
+draw
+drawBarcode (Transformation aP1, Barcode aP2) : Bool
+drawFlow(Transformation aP1, RVector aP2, Flow aP3) : Bool
+drawFlowOnPath (Transformation aP1, Path aP2, Flow aP3) : Bool
+drawImage (Transformation aP1, Image aP2) : Bool
+drawPathObject (Transformation aP1, PathObject aP2) : Bool
+Draws the specified barcode, fill style, flow, flow on path (text on curve), image or path object (shape) at the given position Transformation aP1. Returns True if drawing was successful, for drawFlow this means the flow sucessfully fitted the area described by RVector aP2.
+
+Example  Defines a position vector and scale as a single transformation and draws an image after applying the transformation:
+Transformation tr;
+RVector ims = getRealImageSize(Logo);
+RVector rs = RVector(frommm(30),frommm(30));
+RVector ss = RVector(rs.X/ims.X,rs.Y/ims.Y);
+tr.scale(ss);
+drawImage(tr,Logo);
+Defines a 30 degree rotation of a shape (path object):
+
+Transformation tr;
+tr.rotate(30);
+drawPathObject(tr,MyShape);
+Scripting API | LayoutObject Methods
+FlowAreaDim
+FlowAreaDim [FlowArea aP1] : RVector
+getFlowAreaDim (FlowArea aP1) : RVector
+Gets the real size of the specified flow area.
+
+Scripting API | LayoutObject Methods
+fromin / frommm / frompt
+fromin (Double aP1) : Double
+frommm (Double aP1) : Double
+frompt (Double aP1) : Double
+Converts measurement units from inches/millimeters/points to meters.
+
+Scripting API | LayoutObject Methods
+formatFlowTo
+formatFlowTo (Path aP1, Flow aP2) : Bool
+formatFlowTo (RVector aP1, Flow aP2) : RVector
+formatFlowTo (RVector aP1, Flow aP2, Double & aFirstBaseLine) : RVector
+Formats a flow into the scripted area. Returns Boolean value True (if flow formatting was successful); RVector size of flow; or RVector (baseline position of the first line of the text inside the formatted flow).
+
+Example  This script places the first line 5cm from the baseline.
+Double baseLine;
+formatFlowTo(RVector(0.15,0.1), Flow_1, baseLine);
+drawFlow(Transformation(RVector(0,0.05-baseLine)),RVector(0.15,0.1),Flow_1);
+Scripting API | LayoutObject Methods
+ImageSize
+ImageSize [Image aP1] : RVector
+getImageSize (Image aP1) : RVector
+Returns the size of the image in points.
+
+Scripting API | LayoutObject Methods
+RealImageSize
+RealImageSize [Image aP1] : RVector
+getRealImageSize (Image aP1) : RVector
+Returns the size of the image according to DPI.
+
+Scripting API | LayoutObject Methods
+SupplementaryCharSupport
+SupplementaryCharSupport : Bool
+setSupplementaryCharSupport (Bool value) : Void
+Enables support of the supplementary characters. See the Workflow/Layout General Options section of the Workflow Options dialog for more details.
+
+Scripting API | LayoutObject Methods
+toin / tomm / topt
+toin (Double aP1) : Double
+tomm (Double aP1) : Double
+topt (Double aP1) : Double
+Converts measurement units from meters to inches/millimeters/points.
+
+Scripting API | LayoutObject Methods
+wasError
+wasError () : Bool
+Returns True after calling formatFlowTo method and an error occurred.
+
+Scripting API | LayoutObject Methods
+wasHorizontalOverflow / wasVerticalOverflow
+wasHorizontalOverflow () : Bool
+wasVerticalOverflow () : Bool
+Returns True after calling formatFlowTo method if a horizontal / vertical overflow occurred.
+
+Scripting API | LayoutObject Methods
+WorldWideSupport
+WorldWideSupport : Bool
+setWorldWideSupport (Bool value) : Void
+Enables right-to-left reading order (for the langauges Arabic, Hebrew, Indic etc.).
+
+See the section Worldwide Language Support for details.

@@ -1,0 +1,2519 @@
+Util Methods
+Util methods cover miscellaneous areas useful for scripting.
+
+BinaryList Methods
+BinaryList methods can be used for storing, manipulating and retrieving binary values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | BinaryList Methods
+add
+add(Binary aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromStringWithCodec("Hello World!", "UTF-8"));
+Scripting API | Util Methods | BinaryList Methods
+assign
+assign(BinaryList aP1) : Void
+Assigns a BinaryList object to the given list. The same result can be achieved using the = assignment statement.
+
+Util.BinaryList originalList, clonedList;
+originalList.add(Binary.fromHex("FF0000"));
+clonedList.assign(originalList);
+Scripting API | Util Methods | BinaryList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromBase64("SGVsbG8gV29ybGQh"));
+binaryList.add(Binary.fromHex("48656C6C6F20576F726C6421"));
+binaryList.clear();
+Scripting API | Util Methods | BinaryList Methods
+get
+get(Int aP1) : Binary
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromBase64("SGVsbG8gV29ybGQh"));
+binaryList.add(Binary.fromHex("48656C6C6F20576F726C6421"));
+for (Int i=0;i<binaryList.Size;i++) {
+   logMessage(binaryList.get(i).toStringWithCodec("UTF-8"));
+   // alternative syntax:
+   logMessage(binaryList[i].toStringWithCodec("UTF-8"));   
+}
+Scripting API | Util Methods | BinaryList Methods
+insert
+insert(Int aP1, Binary aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromHex("48656C6C6F20576F726C6421"));
+binaryList.insert(0, Binary.fromBase64("SGVsbG8gV29ybGQh"));
+Scripting API | Util Methods | BinaryList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromBase64("SGVsbG8gV29ybGQh"));
+binaryList.remove(0);
+Scripting API | Util Methods | BinaryList Methods
+resize
+resize(Int aP1, Binary aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromHex("A0"));
+binaryList.resize(3, Binary.fromHex("20"));
+Scripting API | Util Methods | BinaryList Methods
+set
+set(Int aP1, Binary aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BinaryList binaryList;
+binaryList.resize(2, Binary.fromHex("20"));
+binaryList.set(0, Binary.fromHex("A0"));
+// alternative syntax:
+stringList[0] = Binary.fromHex("A0");
+Scripting API | Util Methods | BinaryList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.BinaryList binaryList;
+binaryList.resize(2, Binary.fromHex("20"));
+Int listSize = binaryList.Size;
+Scripting API | Util Methods | BinaryList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+The value of true (1) is greater than the value of false (0).
+
+Util.BinaryList binaryList;
+binaryList.add(Binary.fromHex("FF"));
+binaryList.add(Binary.fromHex("20"));
+binaryList.sort();
+for (Int i=0;i<binaryList.Size;i++) {
+   logMessage(binaryList[i].toHex());
+}
+BoolList Methods
+BoolList methods can be used for storing, manipulating and retrieving Boolean values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | BoolList Methods
+add
+add(Bool aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.BoolList boolList;
+boolList.add(true);
+Scripting API | Util Methods | BoolList Methods
+assign
+assign(BoolList aP1) : Void
+Assigns a BoolList object to the given list. The same result can be achieved using the equal sign =.
+
+Util.BoolList originalList, clonedList;
+originalList.add(true);
+clonedList.assign(originalList);
+Scripting API | Util Methods | BoolList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.add(false);
+boolList.clear();
+Scripting API | Util Methods | BoolList Methods
+get
+get(Int aP1) : Bool
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.add(false);
+for (Int i=0;i<boolList.Size;i++) {
+   logMessage(boolList.get(i).toString());
+   // alternative syntax:
+   logMessage(boolList[i].toString());   
+}
+Scripting API | Util Methods | BoolList Methods
+insert
+insert(Int aP1, Bool aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.insert(0, false);
+Scripting API | Util Methods | BoolList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.remove(0);
+Scripting API | Util Methods | BoolList Methods
+resize
+resize(Int aP1, Bool aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.resize(3, false);
+Scripting API | Util Methods | BoolList Methods
+set
+set(Int aP1, Bool aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.BoolList boolList;
+boolList.resize(2, false);
+boolList.set(0, true);
+// alternative syntax:
+stringList[0] = true;
+Scripting API | Util Methods | BoolList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.BoolList boolList;
+boolList.resize(2, false);
+Int listSize = boolList.Size;
+Scripting API | Util Methods | BoolList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+The value of true (1) is greater than the value of false (0).
+
+Util.BoolList boolList;
+boolList.add(true);
+boolList.add(false);
+boolList.add(true);
+boolList.sort();
+for (Int i=0;i<boolList.Size;i++) {
+   logMessage(boolList[i].toString());
+}
+CharList Methods
+CharList methods can be used for storing, manipulating and retrieving char values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | CharList Methods
+add
+add(Char aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.CharList charList;
+charList.add("A");
+Scripting API | Util Methods | CharList Methods
+assign
+assign(CharList aP1) : Void
+Assigns a CharList object to the given list. The same result can be achieved using the = assignment statement.
+
+Util.CharList originalList, clonedList;
+originalList.add("A");
+clonedList.assign(originalList);
+Scripting API | Util Methods | CharList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.CharList charList;
+charList.add("A");
+charList.add("α");
+charList.clear();
+Scripting API | Util Methods | CharList Methods
+get
+get(Int aP1) : Char
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CharList charList;
+charList.add("A");
+charList.add("α");
+for (Int i=0;i<charList.Size;i++) {
+   logMessage(charList.get(i));
+   // alternative syntax:
+   logMessage(charList[i]);   
+}
+Scripting API | Util Methods | CharList Methods
+insert
+insert(Int aP1, Char aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CharList charList;
+charList.add("A");
+charList.insert(0, "α");
+Scripting API | Util Methods | CharList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CharList charList;
+charList.add("A");
+charList.remove(0);
+Scripting API | Util Methods | CharList Methods
+resize
+resize(Int aP1, Char aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.CharList charList;
+charList.add("A");
+charList.resize(3, "");
+Scripting API | Util Methods | CharList Methods
+set
+set(Int aP1, Char aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CharList charList;
+charList.resize(2, "");
+charList.set(0, "A");
+// alternative syntax:
+charList[0] = "A";
+Scripting API | Util Methods | CharList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.CharList charList;
+charList.resize(2, "");
+Int listSize = charList.Size;
+Scripting API | Util Methods | CharList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Individual characters are compared using their Unicode code points.
+
+Util.CharList charList;
+charList.add("a");
+charList.add("A");
+charList.add("α");
+charList.sort();
+for (Int i=0;i<charList.Size;i++) {
+   logMessage(charList[i]);
+}
+COM Methods
+Microsoft COM (Component Object Model), also called ActiveX, is a technology that enables software components to communicate.
+
+Warning  Using the COM technology produces platform dependent solutions as it is supported on the Windows platform only.
+Example  This sample script creates a new empty Word document.
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, doc;
+   app.createInstance("Word.Application");
+   app.Prop["Visible"] = true;
+   doc = app.Prop["Documents"];
+   doc.invoke("Add");
+}
+Scripting API | Util Methods | COM Methods
+isSupported
+isSupported() : Bool
+Returns a Boolean value true if the COM technology is supported.
+
+Variant Methods
+Variant methods can be used for manipulating COM instances.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in the Workflow Options Dialog is not checked.
+Scripting API | Util Methods | COM Methods | Variant Methods
+assign
+assign(Bool aP1) : Void
+assign(Currency aP1) : Void
+assign(DateTime aP1) : Void
+assign(Double aP1) : Void
+assign(Int aP1) : Void
+assign(Int64 aP1) : Void
+assign(String aP1) : Void
+assign(Variant aP1) : Void
+Assigns the specified value to the given Variant object. The same result can be achieved using the equal sign =.
+
+Util.COM.Variant app, docs;
+app.createInstance("Word.Application");
+docs.assign(app.Prop["Documents"]);
+Scripting API | Util Methods | COM Methods | Variant Methods
+createInstance
+createInstance(String aP1) : Void
+Creates an instance of an application that is registered in the system under the specified instance name.
+
+Util.COM.Variant app;
+app.Prop["Visible"] = true;
+app.createInstance("Excel.Application");
+Scripting API | Util Methods | COM Methods | Variant Methods
+invoke
+invoke(String aP1, ...) : Variant
+Returns a Variant object if invoking of the specified method together with all the specified comma separated parameters of the given Variant object has been finished successfully.
+
+// Opens the specified MS Word document
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, docs, doc;
+   app.createInstance("Word.Application");
+   app.Prop["Visible"] = true;
+   docs = app.Prop["Documents"];
+   doc = docs.invoke("Open", "C:\test.doc");
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+Null
+Null : Variant
+getNull() : Variant
+Returns a Variant object representing the null value.
+
+The null value can be used in place of the method's optional parameters.
+
+// Opens the specified document in the read-only mode
+Util.COM.Variant app, docs;
+app.createInstance("Word.Application");
+app.Prop["Visible"] = true;
+docs = app.Prop["Documents"];
+doc = docs.invoke("Open", "C:\test.doc", docs.Null, true);
+Scripting API | Util Methods | COM Methods | Variant Methods
+Prop
+Prop[String aP1, ...] : Any
+Prop[String aP1, ...] : Variant
+Prop[String aP1] : Variant
+getProp(String aP1) : Variant
+getProp(String aP1, ...) : Variant
+setProp(String aP1, ...) : Void
+Returns or sets the specified property of the given Variant object.
+
+// Returns the version of the MS Word instance
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app;
+   app.createInstance("Word.Application");
+   app.Prop["Visible"] = true;
+   String appVersion = app.Prop["Version"].toString();
+   app.invoke("Quit");
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toBool
+toBool() : Bool
+Converts the given Variant object to a Boolean value.
+
+// Tests the visibility of the MS Word instance
+Util.COM.Variant app;
+app.createInstance("Word.Application");
+Bool isVisible = app.Prop["Visible"].toBool();
+app.invoke("Quit");
+Scripting API | Util Methods | COM Methods | Variant Methods
+toCurrency
+toCurrency() : Currency
+Converts the given Variant object to a currency value.
+
+// Returns the currency value of the specified cell in a MS Excel file
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, workbooks, workbook, worksheets, worksheet;
+   // Opens a MS Excel instance
+   app.createInstance("Excel.Application");
+   app.Prop["Visible"] = true;
+   // Retrieve the collection of opened files
+   workbooks = app.Prop["Workbooks"];
+   // Adds a new file to that collection
+   workbook = workbooks.invoke("Open", "C:\test.xls");
+   // Retrieves the collection of sheets in the active file
+   worksheets = workbook.Prop["Worksheets"];
+   // Selects the first sheet
+   worksheet = worksheets.Prop["Item", 1];
+   // Returns the cell value in the second column of the first row
+   Currency price = worksheet.Prop["Cells", 1 , 2].toCurrency();
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toDateTime
+toDateTime() : DateTime
+Converts the given Variant object to a date-time value.
+
+// Reads the date value from the specified cell in a MS Excel sheet
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, workbooks, workbook, worksheets, worksheet;
+   app.createInstance("Excel.Application");
+   app.Prop["Visible"] = true;
+   workbooks = app.Prop["Workbooks"];
+   workbook = workbooks.invoke("Open", "C:\test.xls");
+   worksheets = workbook.Prop["Worksheets"];
+   worksheet = worksheets.Prop["Item", 1];
+   DateTime myDate = worksheet.Prop["Cells", 1 , 1].toDateTime();
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toDouble
+toDouble() : Double
+Converts the given Variant object to a double value.
+
+// Reads the floating-point number from the specified cell in a MS Excel sheet
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, workbooks, workbook, worksheets, worksheet;
+   app.createInstance("Excel.Application");
+   app.Prop["Visible"] = true;
+   workbooks = app.Prop["Workbooks"];
+   workbook = workbooks.invoke("Open", "C:\test.xls");
+   worksheets = workbook.Prop["Worksheets"];
+   worksheet = worksheets.Prop["Item", 1];
+   Double average = worksheet.Prop["Cells", 1 , 3].toDouble();
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toInt
+toInt() : Int
+Converts the given Variant object to an integer value.
+
+// Returns the number of paragraphs in a MS Word document
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, docs, doc, paragraphs, firstParagraph;
+   app.createInstance("Word.Application");
+   app.Prop["Visible"] = true;
+   docs = app.Prop["Documents"];
+   doc = docs.invoke("Open", "C:\test.doc");
+   paragraphs = doc.Prop["Paragraphs"];
+   Int paragraphsCount = paragraphs.Prop["Count"].toInt();
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toInt64
+toInt64() : Int64
+Converts the given Variant object to a 64bit integer value.
+
+// Reads the 64-bit integer from the specified cell in a MS Excel sheet
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, workbooks, workbook, worksheets, worksheet;
+   app.createInstance("Excel.Application");
+   app.Prop["Visible"] = true;
+   workbooks = app.Prop["Workbooks"];
+   workbook = workbooks.invoke("Open", "C:\test.xls");
+   worksheets = workbook.Prop["Worksheets"];
+   worksheet = worksheets.Prop["Item", 1];
+   Int64 fileSize = worksheet.Prop["Cells", 1 , 4].toInt64();
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+toString
+toString() : String
+Converts the given Variant object to a string value.
+
+// Reads the content of the first paragraph in a MS Word document
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app, docs, doc, paragraphs, firstParagraph;
+   app.createInstance("Word.Application");
+   app.Prop["Visible"] = true;
+   docs = app.Prop["Documents"];
+   doc = docs.invoke("Open", "C:\test.doc");
+   paragraphs = doc.Prop["Paragraphs"];
+   firstParagraph = paragraphs.invoke("Item", 1);
+   String firstParagraphContent = paragraph.Prop["Range"].toString());
+}
+Scripting API | Util Methods | COM Methods | Variant Methods
+TypeInfo
+TypeInfo : String
+getTypeInfo() : String
+Returns a string value representing the lists of all the methods and parameters available for the given Variant object.
+
+// Lists all of the methods available for the given object
+if (Util.COM.isSupported()) {
+   Util.COM.Variant app;
+   Util.StringList methodList;
+   app.createInstance("Word.Application");
+   app.TypeInfo.parseLine('\x0A', "", methodList);
+   app.invoke("Quit");
+   for (Int i=0;i<methodList.Size;i++) {
+      logMessage(methodList[i]);
+   }
+}
+CurrencyList Methods
+CurrencyList methods can be used for storing, manipulating and retrieving currency values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | CurrencyList Methods
+add
+add(Currency aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+Scripting API | Util Methods | CurrencyList Methods
+assign
+assign(CurrencyList aP1) : Void
+Assigns a CurrencyList object to the given list. The same result can be achieved using the equal sign =.
+
+Util.CurrencyList originalList, clonedList;
+originalList.add(12.1234);
+clonedList.assign(originalList);
+Scripting API | Util Methods | CurrencyList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+currencyList.add(23.1234);
+currencyList.clear();
+Scripting API | Util Methods | CurrencyList Methods
+get
+get(Int aP1) : Currency
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+currencyList.add(23.1234);
+for (Int i=0;i<currencyList.Size;i++) {
+   logMessage(currencyList.get(i).toString());
+   // alternative syntax:
+   logMessage(currencyList[i].toString());   
+}
+Scripting API | Util Methods | CurrencyList Methods
+insert
+insert(Int aP1, Currency aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CurrencyList currencyList;
+currencyList.add(23.1234);
+currencyList.insert(0, 12.1234);
+Scripting API | Util Methods | CurrencyList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+currencyList.remove(0);
+Scripting API | Util Methods | CurrencyList Methods
+resize
+resize(Int aP1, Currency aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+currencyList.resize(3, 0);
+Scripting API | Util Methods | CurrencyList Methods
+set
+set(Int aP1, Currency aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.CurrencyList currencyList;
+currencyList.resize(2, 0);
+currencyList.set(0, 12.1234);
+// alternative syntax:
+stringList[0] = 12.1234;
+Scripting API | Util Methods | CurrencyList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.CurrencyList currencyList;
+currencyList.resize(2, 0);
+Int listSize = currencyList.Size;
+Scripting API | Util Methods | CurrencyList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Util.CurrencyList currencyList;
+currencyList.add(12.1234);
+currencyList.add(23.1234);
+currencyList.add(-12.1234);
+currencyList.sort();
+for (Int i=0;i<currencyList.Size;i++) {
+   logMessage(currencyList[i].toString());
+}
+DateTimeList Methods
+DateTimeList methods can be used for storing, manipulating and retrieving date and time values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | DateTimeList Methods
+add
+add(DateTime aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.fromDate(31, 12, 1999));
+Scripting API | Util Methods | DateTimeList Methods
+assign
+assign(DateTimeList aP1) : Void
+Assigns a DateTimeList object to the given list. The same result can be achieved using the equal sign =.
+
+Util.DateTimeList originalList, clonedList;
+originalList.add(DateTime.Now);
+clonedList.assign(originalList);
+Scripting API | Util Methods | DateTimeList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.fromDate(31, 12, 1999));
+dateTimeList.add(DateTime.fromDate(1, 1, 2000));
+dateTimeList.clear();
+Scripting API | Util Methods | DateTimeList Methods
+get
+get(Int aP1) : DateTime
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.fromDate(31, 12, 1999));
+dateTimeList.add(DateTime.fromDate(1, 1, 2000));
+for (Int i=0;i<dateTimeList.Size;i++) {
+   logMessage(dateTimeList.get(i).toString());
+   // alternative syntax:
+   logMessage(dateTimeList[i].toString());   
+}
+Scripting API | Util Methods | DateTimeList Methods
+insert
+insert(Int aP1, DateTime aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.fromDate(31, 12, 1999));
+dateTimeList.insert(0, DateTime.Now);
+Scripting API | Util Methods | DateTimeList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.Now);
+dateTimeList.remove(0);
+Scripting API | Util Methods | DateTimeList Methods
+resize
+resize(Int aP1, DateTime aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.Now);
+dateTimeList.resize(3, DateTime(0));
+Scripting API | Util Methods | DateTimeList Methods
+set
+set(Int aP1, DateTime aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.resize(2, DateTime(0));
+dateTimeList.set(0, DateTime.Now);
+// alternative syntax:
+stringList[0] = DateTime.Now;
+Scripting API | Util Methods | DateTimeList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.resize(2, DateTime(0));
+Int listSize = dateTimeList.Size;
+Scripting API | Util Methods | DateTimeList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Util.DateTimeList dateTimeList;
+dateTimeList.add(DateTime.Now);
+dateTimeList.add(DateTime.fromDate(31, 12, 1999));
+dateTimeList.add(DateTime.fromDate(31, 12, 2009));
+dateTimeList.sort();
+for (Int i=0;i<dateTimeList.Size;i++) {
+   logMessage(dateTimeList[i].toString());
+}
+DoubleList Methods
+DoubleList methods can be used for storing, manipulating and retrieving double values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | DoubleList Methods
+add
+add(Double aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+Scripting API | Util Methods | DoubleList Methods
+assign
+assign(DoubleList aP1) : Void
+Assigns a DoubleList object to the given list. The same result can be achieved using the equal sign =.
+
+Util.DoubleList originalList, clonedList;
+originalList.add(12.1234567);
+clonedList.assign(originalList);
+Scripting API | Util Methods | DoubleList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+doubleList.add(23.1234567);
+doubleList.clear();
+Scripting API | Util Methods | DoubleList Methods
+get
+get(Int aP1) : Double
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+doubleList.add(23.1234567);
+for (Int i=0;i<doubleList.Size;i++) {
+   logMessage(doubleList.get(i).toString());
+   // alternative syntax:
+   logMessage(doubleList[i].toString());   
+}
+Scripting API | Util Methods | DoubleList Methods
+insert
+insert(Int aP1, Double aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DoubleList doubleList;
+doubleList.add(23.1234567);
+doubleList.insert(0, 12.1234567);
+Scripting API | Util Methods | DoubleList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+doubleList.remove(0);
+Scripting API | Util Methods | DoubleList Methods
+resize
+resize(Int aP1, Double aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+doubleList.resize(3, 0);
+Scripting API | Util Methods | DoubleList Methods
+set
+set(Int aP1, Double aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.DoubleList doubleList;
+doubleList.resize(2, 0);
+doubleList.set(0, 12.1234567);
+// alternative syntax:
+stringList[0] = 12.1234567;
+Scripting API | Util Methods | DoubleList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.DoubleList doubleList;
+doubleList.resize(2, 0);
+Int listSize = doubleList.Size;
+Scripting API | Util Methods | DoubleList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Util.DoubleList doubleList;
+doubleList.add(12.1234567);
+doubleList.add(23.1234567);
+doubleList.add(-12.1234567);
+doubleList.sort();
+for (Int i=0;i<doubleList.Size;i++) {
+   logMessage(doubleList[i].toString());
+}
+Scripting API | Util Methods
+Environment
+Environment[String aP1]
+getEnvironment(String aP1) : String
+Returns a value of the specified environment variable.
+
+String environmentPath = Util.Environment["path"];
+Int64List Methods
+Int64List methods can be used for storing, manipulating and retrieving 64-bit integer values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | Int64List Methods
+add
+add(Int64 aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.Int64List int64List;
+int64List.add(12345);
+Scripting API | Util Methods | Int64List Methods
+assign
+assign(Int64List aP1) : Void
+Assigns a Int64List object to the given list. The same result can be achieved using the equal sign =.
+
+Util.Int64List originalList, clonedList;
+originalList.add(12345);
+clonedList.assign(originalList);
+Scripting API | Util Methods | Int64List Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.Int64List int64List;
+int64List.add(12345);
+int64List.add(67890);
+int64List.clear();
+Scripting API | Util Methods | Int64List Methods
+get
+get(Int aP1) : Int64
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.Int64List int64List;
+int64List.add(12345);
+int64List.add(67890);
+for (Int i=0;i<int64List.Size;i++) {
+   logMessage(int64List.get(i).toString());
+   // alternative syntax:
+   logMessage(int64List[i].toString());   
+}
+Scripting API | Util Methods | Int64List Methods
+insert
+insert(Int aP1, Int64 aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.Int64List int64List;
+int64List.add(67890);
+int64List.insert(0, 12345);
+Scripting API | Util Methods | Int64List Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.Int64List int64List;
+int64List.add(12345);
+int64List.remove(0);
+Scripting API | Util Methods | Int64List Methods
+resize
+resize(Int aP1, Int64 aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.Int64List int64List;
+int64List.add(12345);
+int64List.resize(3, 0);
+Scripting API | Util Methods | Int64List Methods
+set
+set(Int aP1, Int64 aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.Int64List int64List;
+int64List.resize(2, 0);
+int64List.set(0, 12345);
+// alternative syntax:
+stringList[0] = 12345;
+Scripting API | Util Methods | Int64List Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.Int64List int64List;
+int64List.resize(2, 0);
+Int listSize = int64List.Size;
+Scripting API | Util Methods | Int64List Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Util.Int64List int64List;
+int64List.add(12345);
+int64List.add(67890);
+int64List.add(-12345);
+int64List.sort();
+for (Int i=0;i<int64List.Size;i++) {
+   logMessage(int64List[i].toString());
+}
+IntIntMap Methods
+IntIntMap methods can be used for storing, manipulating and retrieving integer values mapped by integer keys.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | IntIntMap Methods
+assign
+assign(IntIntMap aP1) : Void
+Assigns a IntIntMap object to the given map. The same result can be achieved using the equal sign =.
+
+Util.IntIntMap originalMap, clonedMap;
+originalMap.set(0, 12345);
+clonedMap.assign(originalMap);
+Scripting API | Util Methods | IntIntMap Methods
+clear
+clear() : Void
+Removes all the map items from the given map.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+intIntMap.set(20, 67890);
+intIntMap.clear();
+Scripting API | Util Methods | IntIntMap Methods
+contains
+contains(Int aP1) : Bool
+Returns the Boolean value when the specified key has been found in the given map.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+intIntMap.set(20, 67890);
+Bool isZeroKeyPresent = (intIntMap.contains(0));
+// isZeroKeyPresent = false
+Scripting API | Util Methods | IntIntMap Methods
+get
+get(Int aP1) : Int
+Returns a map item value that corresponds with the specified key of the given map.
+
+If the specified key does not exist, an error will be shown when processing.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+intIntMap.set(20, 67890);
+Int result = intIntMap.get(10);  // result = 12345
+// alternative syntax:
+// Int result = intIntMap[10];
+Scripting API | Util Methods | IntIntMap Methods
+increment
+increment(Int aP1) : Void
+increment(Int aP1, Int aP2) : Void
+Increments the map item value that corresponds with the specified key of the given map.
+
+The value is incremented either by one or by the integer value passed as the second parameter.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+intIntMap.increment(10, 5);
+Int result = intIntMap[10];  // result = 12350
+Scripting API | Util Methods | IntIntMap Methods
+Key
+Key[Int aP1] : Int
+getKey(Int aP1) : Int
+Returns the map item key at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.IntIntMap intIntMap;
+intIntMap.set(20, 12345);
+intIntMap.set(10, 67890);
+Int result = intIntMap.Key[0];  // result = 10
+Scripting API | Util Methods | IntIntMap Methods
+remove
+remove(Int aP1) : Void
+Removes the map item that corresponds with the specified key of the given map.
+
+If the specified key does not exist, this method has no effect.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+if (intIntMap.contains(10)) {
+   intIntMap.remove(10);
+}
+Int result = intIntMap.Size;  // result = 0
+Scripting API | Util Methods | IntIntMap Methods
+set
+set(Int aP1, Int aP2) : Void
+Sets the map item value that corresponds with the specified key in the given map to the specified value.
+
+If that key does not exist, a new map item is created automatically.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+Scripting API | Util Methods | IntIntMap Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of map items in the given map.
+
+Util.IntIntMap intIntMap;
+intIntMap.set(10, 12345);
+Int result = intIntMap.Size;  // result = 1
+Scripting API | Util Methods | IntIntMap Methods
+Value
+Value[Int aP1] : Int
+getValue(Int aP1) : Int
+setValue(Int aP1, Int aP2) : Void
+Returns or sets the map item value at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.IntIntMap intIntMap;
+intIntMap.set(20, 12345);
+intIntMap.set(10, 67890);
+Int result = intIntMap.Value[0];  // result = 67890
+IntList Methods
+IntList methods can be used for storing, manipulating and retrieving integer values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | IntList Methods
+add
+add(Int aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.IntList intList;
+intList.add(12345);
+Scripting API | Util Methods | IntList Methods
+assign
+assign(IntList aP1) : Void
+Assigns a IntList object to the given list. The same result can be achieved using the equal sign =.
+
+Util.IntList originalList, clonedList;
+originalList.add(12345);
+clonedList.assign(originalList);
+Scripting API | Util Methods | IntList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.IntList intList;
+intList.add(12345);
+intList.add(67890);
+intList.clear();
+Scripting API | Util Methods | IntList Methods
+get
+get(Int aP1) : Int
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.IntList intList;
+intList.add(12345);
+intList.add(67890);
+for (Int i=0;i<intList.Size;i++) {
+   logMessage(intList.get(i).toString());
+   // alternative syntax:
+   logMessage(intList[i].toString());   
+}
+Scripting API | Util Methods | IntList Methods
+insert
+insert(Int aP1, Int aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.IntList intList;
+intList.add(67890);
+intList.insert(0, 12345);
+Scripting API | Util Methods | IntList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.IntList intList;
+intList.add(12345);
+intList.remove(0);
+Scripting API | Util Methods | IntList Methods
+resize
+resize(Int aP1, Int aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.IntList intList;
+intList.add(12345);
+intList.resize(3, 0);
+Scripting API | Util Methods | IntList Methods
+set
+set(Int aP1, Int aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.IntList intList;
+intList.resize(2, 0);
+intList.set(0, 12345);
+// alternative syntax:
+stringList[0] = 12345;
+Scripting API | Util Methods | IntList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.IntList intList;
+intList.resize(2, 0);
+Int listSize = intList.Size;
+Scripting API | Util Methods | IntList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Util.IntList intList;
+intList.add(12345);
+intList.add(67890);
+intList.add(-12345);
+intList.sort();
+for (Int i=0;i<intList.Size;i++) {
+   logMessage(intList[i].toString());
+}
+IntStringMap Methods
+IntStringMap methods can be used for storing, manipulating and retrieving string values mapped by integer keys.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | IntStringMap Methods
+assign
+assign(IntStringMap aP1) : Void
+Assigns a IntStringMap object to the given map. The same result can be achieved using the equal sign =.
+
+Util.IntStringMap originalMap, clonedMap;
+originalMap.set(0, "Hello World!");
+clonedMap.assign(originalMap);
+Scripting API | Util Methods | IntStringMap Methods
+clear
+clear() : Void
+Removes all the map items from the given map.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+intStringMap.set(20, "Καλημέρα κόσμε");
+intStringMap.clear();
+Scripting API | Util Methods | IntStringMap Methods
+contains
+contains(Int aP1) : Bool
+Returns the Boolean value true when the specified key has been found in the given map.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+intStringMap.set(20, "Καλημέρα κόσμε");
+Bool isZeroKeyPresent = (intStringMap.contains(0));
+// isZeroKeyPresent = false
+Scripting API | Util Methods | IntStringMap Methods
+get
+get(Int aP1) : String
+Returns a map item value that corresponds with the specified key of the given map.
+
+If the specified key does not exist, an error will be shown when processing.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+intStringMap.set(20, "Καλημέρα κόσμε");
+String result = intStringMap.get(10);  // result = "Hello World!"
+// alternative syntax:
+// String result = intStringMap[10];
+Scripting API | Util Methods | IntStringMap Methods
+Key
+Key[Int aP1] : Int
+getKey(Int aP1) : Int
+Returns the map item key at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.IntStringMap intStringMap;
+intStringMap.set(20, "Hello World!");
+intStringMap.set(10, "Καλημέρα κόσμε");
+Int result = intStringMap.Key[0];  // result = 10
+Scripting API | Util Methods | IntStringMap Methods
+remove
+remove(Int aP1) : Void
+Removes the map item that corresponds with the specified key of the given map.
+
+If the specified key does not exist, this method has no effect.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+if (intStringMap.contains(10)) {
+   intStringMap.remove(10);
+}
+Int result = intStringMap.Size;  // result = 0
+Scripting API | Util Methods | IntStringMap Methods
+set
+set(Int aP1, String aP2) : Void
+Sets the map item value that corresponds with the specified key in the given map to the specified value.
+
+If that key does not exist, a new map item is created automatically.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+Scripting API | Util Methods | IntStringMap Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of map items in the given map.
+
+Util.IntStringMap intStringMap;
+intStringMap.set(10, "Hello World!");
+Int result = intStringMap.Size;  // result = 1
+Scripting API | Util Methods | IntStringMap Methods
+Value
+Value[Int aP1] : String
+getValue(Int aP1) : String
+setValue(Int aP1, String aP2) : Void
+Returns or sets the map item value at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.IntStringMap intStringMap;
+intStringMap.set(20, "Hello World!");
+intStringMap.set(10, "Καλημέρα κόσμε");
+String result = intStringMap.Value[0];  // result = "Καλημέρα κόσμε"
+IntTable Methods
+IntTable methods can be used for storing, manipulating and retrieving two-dimensional data of the type Int.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | IntTable Methods
+addRow
+addRow() : Void
+Adds a new row to the given table.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.addRow();
+IntTable[0, 0] = 1;
+IntTable[0, 1] = 5;
+Scripting API | Util Methods | IntTable Methods
+assign
+assign(IntTable aP1) : Void
+Assigns a IntTable object to the given table. The same result can be achieved using the equal sign =.
+
+Util.IntTable originalTable, clonedTable;
+originalTable.ColumnCount = 2;
+originalTable.addRow();
+originalTable[0, 0] = 26;
+originalTable[0, 1] = 180;
+clonedTable.assign(originalTable);
+Scripting API | Util Methods | IntTable Methods
+clear
+clear() : Void
+Removes all the rows from the given table.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.addRow();
+IntTable[0, 0] = 71;
+IntTable[0, 1] = 12;
+IntTable.clear();
+Scripting API | Util Methods | IntTable Methods
+ColumnCount
+ColumnCount : Int
+getColumnCount() : Int
+setColumnCount(Int aP1) : Void
+Returns or sets the number of columns in the given table.
+
+This value must be set before any filling of the table with appropriate values and must not be changed later, otherwise an error will be shown when processing.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.RowCount = 1;
+IntTable[0, 0] = 500;
+IntTable[0, 1] = 550;
+Scripting API | Util Methods | IntTable Methods
+get
+get(Int aRow, Int aColumn) : Int
+Returns a table cell value that corresponds with the specified row and column of the given table.
+
+If either the specified row or column is out of the available range, an error will be shown when processing.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+Int row = IntTable.RowCount;
+IntTable.addRow();
+IntTable[row, 0] = 4001;
+IntTable[row, 1] = 3333;
+Int result = IntTable.get(0, 0);  // result = 4001
+// alternative syntax:
+// Int result = IntTable[0, 0];
+Scripting API | Util Methods | IntTable Methods
+insertRow
+insertRow(Int aRow) : Void
+Inserts a new row to the specified position of the given table.
+
+If the specified row index is out of the available range, an error will be shown when processing.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.addRow();
+IntTable[0, 0] = 888;
+IntTable[0, 1] = 999;
+IntTable.insertRow(0);
+IntTable[0, 0] = 777;
+IntTable[0, 1] = 686;
+Int result = IntTable[1, 1];  // result = 999
+Scripting API | Util Methods | IntTable Methods
+removeRow
+removeRow(Int aRow) : Void
+Removes the row from the specified position of the given table.
+
+If the specified row index is out of the available range, an error will be shown when processing.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.addRow();
+IntTable[0, 0] = 888;
+IntTable[0, 1] = 999;
+IntTable.removeRow(0);
+Int result = IntTable.RowCount;  // result = 0
+Scripting API | Util Methods | IntTable Methods
+RowCount
+RowCount : Int
+getRowCount() : Int
+setRowCount(Int aP1) : Void
+Returns or sets the number of rows in the given table.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.RowCount = 1;
+IntTable[0, 0] = 123;
+IntTable[0, 1] = 546;
+Scripting API | Util Methods | IntTable Methods
+set
+set(Int aRow, Int aColumn, Int aP3) : Void
+Sets the value Int aP3 at the specified row Int aRow and column Int aColumn of the given table.
+
+If either the specified row or column is out of the available range, an error will be shown when processing.
+
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.addRow();
+IntTable.set(0, 0, 35);
+IntTable.set(0, 1, 36);
+Scripting API | Util Methods | IntTable Methods
+sortRows
+sortRows(Int aColumn) : Void
+Sorts the table rows in the ascending order according to the values of the specified column.
+
+If the specified column index is out of the available range, an error will be shown when processing.
+
+Int result;
+Util.IntTable IntTable;
+IntTable.ColumnCount = 2;
+IntTable.RowCount = 2;
+IntTable[0, 0] = 10;
+IntTable[0, 1] = 8;
+IntTable[1, 0] = 76;
+IntTable[1, 1] = 34;
+IntTable.sortRows(0);
+result = IntTable[0, 0];  // result = 10
+IntTable.sortRows(1);
+result = IntTable[0, 0];  // result = 76
+Mail Methods
+Mail methods can be used for creating email messages.
+
+Scripting API | Util Methods | Mail Methods
+addAttachment
+addAttachment(Binary Binary, String AttachmentName) : Mail
+addAttachment(Binary Binary, String AttachmentName, String MIMEType) : Void
+addAttachment(String FileName) : Void
+addAttachment(String FileName, String AttachmentName) : Void
+addAttachment(String FileName, String AttachmentName, String MIMEType) : Void
+Adds an attachment to the given email. The attachment can be passed in the form of binary data or specified as an absolute path to the file. The displayed file name can be overridden by the specified title. The file content can be tagged with the specified MIME Type, an Internet Media Type file format identifier for internet protocols.
+
+Util.Mail mail;
+mail.addAttachment("C:\\jones09032152.pdf", "Statement_March09.pdf");
+Binary binaryData = Binary.fromBase64("SGVsbG8gV29ybGQh");
+mail.addAttachment(binaryData, "message.txt", "text/plain");
+Scripting API | Util Methods | Mail Methods
+addBccTo
+addBccTo (String EmailAddress): Void
+addBccTo (String Email Address, String FriendlyName): Void
+Adds the specified email address to the list of Bcc (blind carbon copy) recipients. Only the recipient's own address will appear in To field.
+
+If FriendlyName is also defined, the email address will be given this name for display purposes.
+
+Util.Mail newMail;
+newMail.addTo("j.smith@gfbank.com");
+newMail.addBccTo ("l.johnson@gfbank.com", "Lucy Johnson");
+newMail.setFrom("j.novak@gfbank.com");
+
+Scripting API | Util Methods | Mail Methods
+addCopyTo
+addCopyTo(String EmailAddress) : Void
+addCopyTo(String EmailAddress, String FriendlyName) : Void
+Adds the specified email address to the list of copie(s) recipient(s). This email address will appear in the CC field.
+
+If FriendlyName is also defined, the email address will be given this name for display purposes.
+
+Util.Mail mail;
+mail.addTo("j.smith@gfbank.com", "John Smith");
+mail.addCopyTo("l.johnson@gfbank.com", "Lucy Johnson");
+Scripting API | Util Methods | Mail Methods
+addMimeHeader
+addMimeHeader(String MimeHeader, String Value) : Void
+Adds a MIME header to the given email. The MIME headers can contain various identifiers and their values, e.g. Message-Id or Batch-Id.
+
+Util.Mail Id;
+Id.addMimeHeader("Message-Id", "12345");
+Note  Use this to specify X-xsMessageId and X-xsMailingId if you are using SocketLabs email delivery service.
+Scripting API | Util Methods | Mail Methods
+addReplyTo
+addReplyTo (String EmailAddress): Void
+addReplyTo (String EmailAddress, String FriendlyName): Void
+Adds the specified email address as the addressee of a reply if other than the sender.
+
+If FriendlyName is also defined, the email address will be given this name for display purposes.
+
+Util.Mail mail;
+mail.setFrom("customer.service@gfbank.com");
+mail.addReplyTo("j.smith@gfbank.com", "John Smith");
+mail.addTo("l.johnson@gfbank.com", "Lucy Johnson");
+Scripting API | Util Methods | Mail Methods
+addTo
+addTo(String EmailAddress) : Void
+addTo(String EmailAddress, String FriendlyName) : Void
+Adds the specified email address to the list of original recipients. This email address will appear in the TO field.
+
+If FriendlyName is also defined, the email address will be given this name for display purposes.
+
+Util.Mail mail;
+mail.addTo("j.smith@gfbank.com", "John Smith");
+Scripting API | Util Methods | Mail Methods
+assign
+assign(Mail mail) : Void
+Assigns the specified Mail object to the given mail. The same result can be achieved using the equal sign =.
+
+Util.Mail originalMail, clonedMail;
+originalMail.addTo("j.smith@gfbank.com");
+originalMail.setSubject("Hello World!");
+clonedMail.assign(originalMail);
+Scripting API | Util Methods | Mail Methods
+clearAttachments
+clearAttachments (): Void
+Clears attachments.
+
+Scripting API | Util Methods | Mail Methods
+clearBcc
+clearBcc (): Void
+Clears Bcc (blind carbon copy) recipients.
+
+Scripting API | Util Methods | Mail Methods
+clearCopyTo
+clearCopyTo (): Void
+Clears copy recipients.
+
+Scripting API | Util Methods | Mail Methods
+clearReplyTo
+clearReplyTo (): Void
+Clears reply recipients.
+
+Scripting API | Util Methods | Mail Methods
+clearTo
+clearTo (): Void
+Clears the recipient(s) email adddress(es).
+
+Scripting API | Util Methods | Mail Methods
+getBccCount
+getBccCount (): Int
+Returns the number of Bcc (blind carbon copy) recipients.
+
+for (Int i=0; i<CurrentRecord.getBccCount();i++)
+      {
+      //String name = CurrentRecord.getToMail(i);
+      }
+Scripting API | Util Methods | Mail Methods
+getBccMail
+getBccMail (Int Index)
+Returns the email address of a Bcc recipient's specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getBccName
+getBccName (Int Index)
+Returns the name of a Bcc recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getCopyToCount
+getCopyToCount (): Int
+Returns the number of the copy recipients.
+
+Scripting API | Util Methods | Mail Methods
+getCopyToMail
+getCopyToMail (Int Index)
+Returns the email addresses of a copy recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getCopyToName
+getCopyToName (Int Index)
+Returns the name of a copy recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getDeliveryConfirmationTo
+getDeliveryConfirmationTo (): String
+Returns the delivery confirmation target address.
+
+Scripting API | Util Methods | Mail Methods
+getFromMail
+getFromMail (): String
+Returns the sender's address.
+
+Scripting API | Util Methods | Mail Methods
+getFromName
+getFromName (): String
+Return the sender's name.
+
+Scripting API | Util Methods | Mail Methods
+getReadConfirmationTo
+getReadConfirmationTo (): String
+Returns the read confirmation message target address.
+
+Scripting API | Util Methods | Mail Methods
+getReplyToCount
+getReplyToCount (): Int
+Returns the number of the reply recipients.
+
+Scripting API | Util Methods | Mail Methods
+getReplyToMail
+getReplyToMail (Int Index)
+Returns the address of the reply recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getReplyToName
+getReplyToName (Int index)
+Returns the name of the reply recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getReturnPathMail
+getReturnPathMail (): String
+Returns the address used for returning of undeliverable messages.
+
+Scripting API | Util Methods | Mail Methods
+getReturnPathName
+getReturnPathName (): String
+Returns the names used as the addressee for returning undeliverable messages.
+
+Scripting API | Util Methods | Mail Methods
+getSubject
+getSubject (): String
+Returns the message's subject.
+
+Scripting API | Util Methods | Mail Methods
+getToCount
+getToCount (): Int
+Returns the number of the email recipients.
+
+Scripting API | Util Methods | Mail Methods
+getToMail
+getToMail (Int Index)
+Returns the email address of the recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+getToName
+getToName (Int Index)
+Returns the name of the recipient specified by index.
+
+Scripting API | Util Methods | Mail Methods
+loadHTMLBodyFromFile
+loadHTMLBodyFromFile (String FileName): Void
+Loads the HTML body from a file according to the specified path.
+
+Util.Mail mail;
+mail.setSubject("Your Account Statement");
+mail.loadHTMLBodyFromFile("C:\DOCUMENTS\AccountStatement01.html");
+Scripting API | Util Methods | Mail Methods
+loadTextBodyFromFile
+loadTextBodyFromFile (String FileName): Void
+Loads the TXT body from a file according to the specified path.
+
+Util.Mail mail;
+mail.setSubject("Your Account Statement");
+mail.loadTextBodyFromFile("C:\DOCUMENTS\AccountStatement01.txt");
+Scripting API | Util Methods | Mail Methods
+saveToEML
+saveToEML (Stream stream): Bool
+Saves the email to the EML format.
+
+  String fileName="result/"+String(recordID,0)+".eml";
+   File.Stream s = File.open(fileName,File.Mode.TruncateOrCreate);
+   if (not CurrentRecord.saveToEML(s))
+Note  The internal structure of an email sent by Inspire Designer (using the sendMail and saveToEML methods) has been changed. Due to this change, the text part of emails, that contain both text and HTML parts, might be displayed in email clients (after switching on the option ’Show plain text only’ in an email client) differently than in previous versions. The display is handled by the used mailing server and email client. See the influence of single server and clients after the internal change:
+Server
+
+Exchange Server replaces the text part with HTML and HTML part is displayed correctly.
+
+Clients
+
+Outlook shows the HTML part only. The text part is skipped
+
+Thunderbird shows both text part and HTML.
+
+Web mail (e.g. Hotmail.cz, YahooMail, Gmail.com, Seznam.cz, Volny.cz) and Apple Mail do not have the global option ’Show plain text only’ so the user is not influenced by this change.
+
+Thus, it is recommended to avoid having text parts together with HTML in an email because every mailing server and email client handle emails differently and the text part may increase the size of the email and cause slower sending.
+
+Scripting API | Util Methods | Mail Methods
+setDeliveryConfirmationTo
+setDeliveryConfirmationTo(String EmailAddress) : Void
+Sets up a delivery confirmation request, the result of which is sent to the specified email address.
+
+Util.Mail mail;
+mail.setFrom("j.smith@gfbank.com", "John Smith");
+mail.setDeliveryConfirmationTo("j.smith@gfbank.com");
+mail.addTo("l.johnson@gfbank.com", "Lucy Johnson");
+Scripting API | Util Methods | Mail Methods
+setEncoding
+setEncoding(String Encoding) : Void
+Overrides the default UTF-8 encoding of the given email message. The specified parameter is either a valid text encoding or a path to the custom codec.
+
+Util.Mail mail;
+mail.setEncoding("ISO-8859-2");
+Scripting API | Util Methods | Mail Methods
+setFrom
+setFrom(String EmailAddress) : Void
+setFrom(String EmailAddress, String FriendlyName) : Void
+Defines a sender using the specified email address. This email address will appear in the FROM field.
+
+If FriendlyName is also defined, the email address will be given this name for display purposes.
+
+Util.Mail mail;
+mail.setFrom("j.smith@gfbank.com", "John Smith");
+Scripting API | Util Methods | Mail Methods
+setHTMLBody
+setHTMLBody(String EmailText) : Void
+setHTMLBody(String EmailText, String Encoding) : Void
+Defines the HTML content of the email body that is encoded in the specified text encoding.
+
+Util.Mail mail;
+mail.setHTMLBody("<html><body><h1>Hello World!</h1></body></html>", "ISO-8859-1");
+Scripting API | Util Methods | Mail Methods
+setReadConfirmationTo
+setReadConfirmationTo(String EmailAddress) : Void
+Sets up a read receipt confirmation request, the result of which is sent to the specified email address.
+
+Util.Mail mail;
+mail.setFrom("j.smith@gfbank.com", "John Smith");
+mail.setReadConfirmationTo("j.smith@gfbank.com");
+mail.addTo("l.johnson@gfbank.com", "Lucy Johnson");
+Scripting API | Util Methods | Mail Methods
+setReturnPath
+setReturnPath (String EmailAddress): Void
+setReturnPath (String EmailAddress, String FriendlyName): Void
+Sets the address for returning undeliverable messages.
+
+FriendlyName can also be defined.
+
+Util.Mail mail;
+mail.setReturnPath ("undeliverable@example.com");
+Scripting API | Util Methods | Mail Methods
+setSubject
+setSubject(String Subject) : Void
+Sets the subject of the given email message.
+
+Util.Mail mail;
+mail.setSubject("Your Account Statement");
+Scripting API | Util Methods | Mail Methods
+setTextBody
+setTextBody(String EmailText) : Void
+setTextBody(String EmailText, String Encoding) : Void
+Defines the plain text content of the email body that is encoded in the specified text encoding.
+
+Util.Mail mail;
+mail.setTextBody("Hello World!", "ISO-8859-1");
+MailServer Methods
+MailServer methods can be used for configuring the connection to the SMTP server.
+
+Tip  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | MailServer Methods
+clearCommunicationLog
+clearCommunicationLog() : Void
+Clears the log of the communication between the server and the client.
+
+Util.Mail mailDefault, mailCustomized;
+Util.MailServer mailServer;
+mailServer.ServerName = "mail.gfbank.com";
+
+Util.StringList recipients;
+recipients.add("j.smith@gfbank.com");
+recipients.add("l.johnson@gfbank.com");
+
+mailDefault.setFrom("daemon@gfbank.com", "Mail Daemon");
+mailDefault.setSubject("Greetings");
+mailDefault.setTextBody("Hello World!");
+
+for (Int i=0;i<recipients.Size;i++) {
+
+   mailCustomized = mailDefault;
+   mailCustomized.addTo(recipients[i]);
+   mailServer.sendMail(mailCustomized);
+   logMessage(mailServer.CommunicationLog);
+   // clears the communication log with each iteration
+   mailServer.clearCommunicationLog();
+
+}
+Scripting API | Util Methods | MailServer Methods
+CommunicationLog
+CommunicationLog : String
+getCommunicationLog() : String
+Returns a log tracking the versioned communication between the client and the server.
+
+Util.Mail mail;
+Util.MailServer mailServer;
+mailServer.ServerName = "mail.gfbank.com";
+
+mail.setFrom("daemon@gfbank.com", "Mail Daemon");
+mail.addTo("j.smith@gfbank.com");
+mail.setSubject("Hello!");
+mailServer.sendMail(mail);
+
+// writes the communication log into the text file
+File.TextStream logStream;
+logStream = File.openText("C:\log.txt", File.Mode.TruncateOrCreate, "UTF-8");
+logStream.writeString(mailServer.CommunicationLog);
+logStream.close();
+Scripting API | Util Methods | MailServer Methods
+connect
+connect() : Bool
+Returns a Boolean value true if the connection to the server has been established.
+
+Using this method is not compulsory as the connection is always established automatically with the connection details provided.
+
+Util.MailServer mailServer;
+mailServer.ServerName = "mail.gfbank.com";
+mailServer.PortNumber = 25;
+mailServer.LoginName = "j.smith";
+mailServer.Password = "Yz8gFjk6wq2B";
+Bool isConnected = mailServer.connect();
+Scripting API | Util Methods | MailServer Methods
+disconnect
+disconnect() : Void
+Terminates the connection to the server.
+
+Util.MailServer mailserver;
+mailserver.disconnect();
+Scripting API | Util Methods | MailServer Methods
+LoginName
+LoginName : String
+getLoginName() : String
+setLoginName(String UserName) : Void
+Returns or sets the login name of the user.
+
+The connection details can also be retrieved automatically from the operating system if this is allowed by the settings of the mail server.
+
+Util.MailServer mailServer;
+mailServer.LoginName = "j.smith";
+Scripting API | Util Methods | MailServer Methods
+Password
+Password : String
+getPassword() : String
+setPassword(String Password) : String
+Returns or sets the password of the user.
+
+The connection details can also be retrieved automatically from the operating system if this is allowed by the settings of the mail server.
+
+Util.MailServer mailServer;
+mailServer.Password = "Yz8gFjk6wq2B";
+Scripting API | Util Methods | MailServer Methods
+PortNumber
+PortNumber : Int
+getPortNumber() : Int
+setPortNumber(Int aP1) : Void
+Returns or sets the number of the port on which the SMTP server listens.
+
+Util.MailServer mailServer;
+mailServer.PortNumber = 25;
+Scripting API | Util Methods | MailServer Methods
+SecureConnection
+SecureConnection() : Bool
+When set to True, a secure connection SSL/TLS is used for all SMTP servers.
+
+When set to False, STARTTLS connection is used if available. If not, unsecured connection is used.
+
+Util.MailServer mailserver;
+mailserver.SecureConnection = true;
+Scripting API | Util Methods | MailServer Methods
+sendMail
+sendMail(Mail & Mail) : Bool
+Returns a Boolean value true when the specified email has been sent successfully.
+
+Note  This method does not change the content of the Mail parameter.
+The internal structure of an email sent by Inspire Designer (using the sendMail and saveToEML methods) has been changed. Due to this change, the text part of emails, that contain both text and HTML parts, might be displayed in email clients (after switching on the option ’Show plain text only’ in an email client) differently than in previous versions. The display is handled by the used mailing server and email client. See the influence of single server and clients after the internal change:
+
+Server
+
+Exchange Server replaces the text part with HTML and HTML part is displayed correctly.
+
+Clients
+
+Outlook shows the HTML part only. The text part is skipped
+
+Thunderbird shows both text part and HTML.
+
+Web mail (e.g. Hotmail.cz, YahooMail, Gmail.com, Seznam.cz, Volny.cz) and Apple Mail do not have the global option ’Show plain text only’ so the user is not influenced by this change.
+
+Thus, it is recommended to avoid having text parts together with HTML in an email because every mailing server and email client handle emails differently and the text part may increase the size of the email and cause slower sending.
+
+Util.Mail mail;
+Util.MailServer mailServer;
+mailServer.ServerName = "mail.gfbank.com";
+mailServer.PortNumber = 25;
+
+mail.setFrom("daemon@gfbank.com", "Mail Daemon");
+mail.addTo("j.smith@gfbank.com");
+mail.setSubject("Hello!");
+mailServer.sendMail(mail);
+Scripting API | Util Methods | MailServer Methods
+ServerName
+ServerName : String
+getServerName() : String
+setServerName(String ServerName) : Void
+Returns or sets the name or IP address of the SMTP server.
+
+Util.MailServer mailServer;
+mailServer.ServerName = "mail.gfbank.com";
+Scripting API | Util Methods
+OSName
+OSName : String
+getOSName() : String
+Returns the name of the operating system.
+
+String osName = Util.OSName;
+Note  For Linux, the scripting method now returns: OS name + kernel version + machine hardware name + (Linux distribution name), e.g. Linux 5.3.18-59.19-default x86_64 (SUSE Linux Enterprise Server 15 SP3).
+For macOS, it now returns: OS name + machine hardware name + (macOS distribution name), e.g. Darwin 20.6.0 x86_64 (macOS 11.5.2).
+
+Scripting API | Util Methods
+OSUserName
+OSUserName : String
+getOSUserName() : String
+Returns the name of the user currently logged in the operating system.
+
+String userName = Util.OSUserName;
+Regex Methods
+Regex methods implement the regular expression (i.e. regex) functionality. Regular expressions search for specific sequences of characters based on the specified search patterns. Matches can also be saved to a variable with the RegexMatchResult data-type and further processed. Designer uses the PCRE2 library for pattern matching. For details about the library, expressions etc., see PCRE2 documentation.
+
+Scripting API | Util Methods | Regex Methods
+createMatchResult
+createMatchResult(String aPattern, String aInput) : RegexMatchResult
+createMatchResult(String aPattern, String aInput, RegexOptionFlags aOptions) : RegexMatchResult
+createMatchResult(String aPattern, String aInput, RegexOptionFlags aOptions, Int aStartPosition) : RegexMatchResult
+Searches the input for the specified pattern and saves the results to a RegexMatchResult type variable. Optionally, you can specify option flags and the starting position for the search (i.e. the position number of the first character to be searched in the input string).
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("abc","aaa abc bbb abc");
+      logMessage(mr.match().toString());  
+Tip  See the Regex Match Result Methods section for methods that can further process the match results.
+Scripting API | Util Methods | Regex Methods
+match
+match(String aPattern, String aInput) : Bool
+match(String aPattern, String aInput, RegexOptionFlags aOptions) : Bool
+match(String aPattern, String aInput, RegexOptionFlags aOptions, Int aStartPosition) : Bool
+Searches the input for the specified pattern and returns true if a match is found. Optionally, you can specify option flags and the starting position for the search, i.e. the position number of the first character to be searched in the input string.
+
+Bool Match = Util.Regex.match("ABC","ABC aaa abc bbb");
+   logMessage(Match.toString());
+Scripting API | Util Methods | Regex Methods
+replace
+replace(String aPattern, String aInput, String aReplaceWith) : String
+replace(String aPattern, String aInput, String aReplaceWith, RegexOptionFlags aOptions) : Bool
+replace(String aPattern, String aInput, String aReplaceWith, RegexOptionFlags aOptions, Int aStartPosition) : Bool
+Searches the input for the specified pattern and replaces matched strings with the specified replacement string. Optionally, you can specify option flags and the starting position for the search (i.e. the position number of the first character to be searched in the input string).
+
+String Replace = Util.Regex.replace("aaa","ABC aaa abc bbb","xyz");
+logMessage(Replace);
+RegexOptionFlags Methods
+RegexOptionFlags methods are used as parameters of regex match and replace methods to specify supplementary flags that further customize the regex matching conditions.
+
+Scripting API | Util Methods | RegexOptionFlags Methods
+Caseless
+Caseless : Void
+Specifies that the regex search ignores character casing, i.e. the search is case-insensitive.
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("ABC","ABC aaa abc bbb",Util.RegexOptionFlags.Caseless);
+   while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+            logMessage(mr.getSubMatch(idx));
+      }
+   }
+Scripting API | Util Methods | RegexOptionFlags Methods
+Default
+Default : Void
+Specifies that the regex search uses the default options for PCRE2. Find more details about the default PCRE2 options in the PCRE2 documentation.
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("ABC","ABC aaa abc bbb",Util.RegexOptionFlags.Default);
+   while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+            logMessage(mr.getSubMatch(idx));
+      }
+   }
+Scripting API | Util Methods | RegexOptionFlags Methods
+DotAll
+DotAll : Void
+Specifies that the . character also matches new lines as well (instead of matching all characters except new lines).
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("abc","aaa abc ab" +Char(10) +" bbb abc a ",Util.RegexOptionFlags.DotAll);
+   while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+            logMessage(mr.getSubMatch(idx));
+      }
+   }
+Scripting API | Util Methods | RegexOptionFlags Methods
+Multiline
+Multiline : Void
+Specifies that the searched input string can contain line break characters. The behavior of the ^ and $ characters change so that they match the beginning and ending of lines (instead of matching the beginning and ending of strings).
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("^bcd","a"+Char(13)+"bcdefgh",Util.RegexOptionFlags.Multiline);
+   while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+            logMessage(mr.getSubMatch(idx));
+      }
+   }
+StringIntMap Methods
+StringIntMap methods can be used for storing, manipulating and retrieving integer values mapped by string keys.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | StringIntMap Methods
+assign
+assign(StringIntMap aP1) : Void
+Assigns a StringIntMap object to the given map. The same result can be achieved using the equal sign =.
+
+Util.StringIntMap originalMap, clonedMap;
+originalMap.set("en", 1033);
+clonedMap.assign(originalMap);
+Scripting API | Util Methods | StringIntMap Methods
+clear
+clear() : Void
+Removes all the map items from the given map.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.set("de", 1031);
+stringIntMap.clear();
+Scripting API | Util Methods | StringIntMap Methods
+contains
+contains(String aP1) : Bool
+Returns the Boolean value true if the specified key has been found in the given map.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.set("de", 1031);
+Bool isCzechCodePresent = (stringIntMap.contains("cs"));
+// isCzechCodePresent = false
+See the SheetName section for an example of linking data and sheet information.
+
+Scripting API | Util Methods | StringIntMap Methods
+get
+get(String aP1) : Int
+Returns a map item value that corresponds with the specified key of the given map.
+
+If the specified key does not exist, an error will be shown when processing.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.set("de", 1031);
+Int result = stringIntMap.get("en");  // result = 1033
+// alternative syntax:
+// Int result = stringIntMap["en"];
+Scripting API | Util Methods | StringIntMap Methods
+increment
+increment(String aP1) : Void
+increment(String aP1, Int aP2) : Void
+Increments the map item value that corresponds with the specified key of the given map.
+
+The value is incremented either by one or by an integer value passed as the second parameter.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.increment("en", 7);
+Int result = stringIntMap["en"];  // result = 1040
+Scripting API | Util Methods | StringIntMap Methods
+Key
+Key[Int aP1] : String
+getKey(Int aP1) : String
+Returns the map item key at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.set("de", 1031);
+String result = stringIntMap.Key[0];  // result = "de"
+Scripting API | Util Methods | StringIntMap Methods
+remove
+remove(String aP1) : Void
+Removes the map item that corresponds with the specified key of the given map.
+
+If the specified key does not exist, this method has no effect.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+if (stringIntMap.contains("en")) {
+   stringIntMap.remove("en");
+}
+Int result = stringIntMap.Size;  // result = 0
+Scripting API | Util Methods | StringIntMap Methods
+set
+set(String aP1, Int aP2) : Void
+Sets the map item value that corresponds with the specified key in the given map to the specified value.
+
+If that key does not exist, a new map item is created automatically.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+Scripting API | Util Methods | StringIntMap Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of map items in the given map.
+
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+Int result = stringIntMap.Size;  // result = 1
+Scripting API | Util Methods | StringIntMap Methods
+Value
+Value[Int aP1] : Int
+getValue(Int aP1) : Int
+setValue(Int aP1, Int aP2) : Void
+Returns or sets the map item value at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.StringIntMap stringIntMap;
+stringIntMap.set("en", 1033);
+stringIntMap.set("de", 1031);
+String result = stringIntMap.Value[0];  // result = 1031
+StringList Methods
+StringList methods can be used for storing, manipulating and retrieving string values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | StringList Methods
+add
+add(String aP1) : Void
+Adds a list item with the specified value to the given list.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+Scripting API | Util Methods | StringList Methods
+assign
+assign(StringList aP1) : Void
+Assigns a StringList object to the given list. The same result can be achieved using the = assignment statement.
+
+Util.StringList originalList, clonedList;
+originalList.add("Hello World!");
+clonedList.assign(originalList);
+Scripting API | Util Methods | StringList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+stringList.add("Καλημέρα κόσμε");
+stringList.clear();
+Scripting API | Util Methods | StringList Methods
+get
+get(Int aP1) : String
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+stringList.add("Καλημέρα κόσμε");
+for (Int i=0;i<stringList.Size;i++) {
+   logMessage(stringList.get(i));
+   // alternative syntax:
+   logMessage(stringList[i]);   
+}
+Scripting API | Util Methods | StringList Methods
+insert
+insert(Int aP1, String aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+stringList.insert(0, "Καλημέρα κόσμε");
+Scripting API | Util Methods | StringList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+stringList.remove(0);
+Scripting API | Util Methods | StringList Methods
+resize
+resize(Int aP1, String aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+Util.StringList stringList;
+stringList.add("Hello World!");
+stringList.resize(3, "default value");
+Scripting API | Util Methods | StringList Methods
+set
+set(Int aP1, String aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Util.StringList stringList;
+stringList.resize(2, "");
+stringList.set(0, "Hello World!");
+// alternative syntax:
+stringList[0] = "Hello World!";
+Scripting API | Util Methods | StringList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+Util.StringList stringList;
+stringList.resize(2, "");
+Int listSize = stringList.Size;
+Scripting API | Util Methods | StringList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Individual characters are compared using their Unicode code points.
+
+Util.StringList stringList;
+stringList.add("Tokyo");
+stringList.add("Seoul");
+stringList.add("Mexico City");
+stringList.sort();
+for (Int i=0;i<stringList.Size;i++) {
+   logMessage(stringList[i]);
+}
+StringStringMap Methods
+StringStringMap methods can be used for storing, manipulating and retrieving string values mapped by string keys.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | StringStringMap Methods
+assign
+assign(StringStringMap aP1) : Void
+Assigns a StringStringMap object to the given map. The same result can be achieved using the equal sign =.
+
+Util.StringStringMap originalMap, clonedMap;
+originalMap.set("en", 1033);
+clonedMap.assign(originalMap);
+Scripting API | Util Methods | StringStringMap Methods
+clear
+clear() : Void
+Removes all the map items from the given map.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+stringStringMap.set("el", "Καλημέρα κόσμε");
+stringStringMap.clear();
+Scripting API | Util Methods | StringStringMap Methods
+contains
+contains(String aP1) : Bool
+Returns the Boolean value true if the specified key has been found in the given map.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+stringStringMap.set("el", "Καλημέρα κόσμε");
+Bool isCzechCodePresent = (stringStringMap.contains("cs"));
+// isCzechCodePresent = false
+Scripting API | Util Methods | StringStringMap Methods
+get
+get(String aP1) : String
+Returns a map item value that corresponds with the specified key of the given map.
+
+If the specified key does not exist, an error will be shown when processing.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+stringStringMap.set("el", "Καλημέρα κόσμε");
+String result = stringStringMap.get("en");  // result = "Hello World!"
+// alternative syntax:
+// String result = stringStringMap["en"];
+Scripting API | Util Methods | StringStringMap Methods
+Key
+Key[Int aP1] : String
+getKey(Int aP1) : String
+Returns the map item key at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+stringStringMap.set("el", "Καλημέρα κόσμε");
+String result = stringStringMap.Key[0];  // result = "el"
+Scripting API | Util Methods | StringStringMap Methods
+remove
+remove(String aP1) : Void
+Removes the map item that corresponds with the specified key of the given map.
+
+If the specified key does not exist, this method has no effect.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+if (stringStringMap.contains("en")) {
+   stringStringMap.remove("en");
+}
+Int result = stringStringMap.Size;  // result = 0
+Scripting API | Util Methods | StringStringMap Methods
+set
+set(String aP1, String aP2) : Void
+Sets the map item value that corresponds with the specified key in the given map to the specified value.
+
+If that key does not exist, a new map item is created automatically.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+Scripting API | Util Methods | StringStringMap Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of map items in the given map.
+
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+Int result = stringStringMap.Size;  // result = 1
+Scripting API | Util Methods | StringStringMap Methods
+Value
+Value[Int aP1] : String
+getValue(Int aP1) : String
+setValue(Int aP1, String aP2) : Void
+Returns or sets the map item value at the specified position of the given map.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+Note  Map items are internally sorted by their keys, so the final order does not necessarily correspond with the order in which individual items have been added to the map.
+Util.StringStringMap stringStringMap;
+stringStringMap.set("en", "Hello World!");
+stringStringMap.set("el", "Καλημέρα κόσμε");
+String result = stringStringMap.Value[0];  // result = "Καλημέρα κόσμε"
+StringTable Methods
+StringTable methods can be used for storing, manipulating and retrieving two-dimensional data of the type string.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Util Methods | StringTable Methods
+addRow
+addRow() : Void
+Adds a new row to the given table.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.addRow();
+stringTable[0, 0] = "John";
+stringTable[0, 1] = "Smith";
+Scripting API | Util Methods | StringTable Methods
+assign
+assign(StringTable aP1) : Void
+Assigns a StringTable object to the given table. The same result can be achieved using the equal sign =.
+
+Util.StringTable originalTable, clonedTable;
+originalTable.ColumnCount = 2;
+originalTable.addRow();
+originalTable[0, 0] = "John";
+originalTable[0, 1] = "Smith";
+clonedTable.assign(originalTable);
+Scripting API | Util Methods | StringTable Methods
+clear
+clear() : Void
+Removes all the rows from the given table.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.addRow();
+stringTable[0, 0] = "John";
+stringTable[0, 1] = "Smith";
+stringTable.clear();
+Scripting API | Util Methods | StringTable Methods
+ColumnCount
+ColumnCount : Int
+getColumnCount() : Int
+setColumnCount(Int aP1) : Void
+Returns or sets the number of columns in the given table.
+
+This value must be set before any filling of the table with appropriate values and must not be changed later, otherwise an error will be shown when processing.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.RowCount = 1;
+stringTable[0, 0] = "Japan";
+stringTable[0, 1] = "Tokyo";
+Scripting API | Util Methods | StringTable Methods
+get
+get(Int aRow, Int aColumn) : String
+Returns a table cell value that corresponds with the specified row and column of the given table.
+
+If either the specified row or column is out of the available range, an error will be shown when processing.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+Int row = stringTable.RowCount;
+stringTable.addRow();
+stringTable[row, 0] = "John";
+stringTable[row, 1] = "Smith";
+String result = stringTable.get(0, 0);  // result = "John"
+// alternative syntax:
+// String result = stringTable[0, 0];
+Scripting API | Util Methods | StringTable Methods
+insertRow
+insertRow(Int aRow) : Void
+Inserts a new row to the specified position of the given table.
+
+If the specified row index is out of the available range, an error will be shown when processing.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.addRow();
+stringTable[0, 0] = "John";
+stringTable[0, 1] = "Smith";
+stringTable.insertRow(0);
+stringTable[0, 0] = "Lucy";
+stringTable[0, 1] = "Johnson";
+String result = stringTable[1, 1];  // result = "Smith"
+Scripting API | Util Methods | StringTable Methods
+removeRow
+removeRow(Int aRow) : Void
+Removes the row from the specified position of the given table.
+
+If the specified row index is out of the available range, an error will be shown when processing.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.addRow();
+stringTable[0, 0] = "John";
+stringTable[0, 1] = "Smith";
+stringTable.removeRow(0);
+Int result = stringTable.RowCount;  // result = 0
+Scripting API | Util Methods | StringTable Methods
+RowCount
+RowCount : Int
+getRowCount() : Int
+setRowCount(Int aP1) : Void
+Returns or sets the number of rows in the given table.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.RowCount = 1;
+stringTable[0, 0] = "Japan";
+stringTable[0, 1] = "Tokyo";
+Scripting API | Util Methods | StringTable Methods
+set
+set(Int aRow, Int aColumn, String aP3) : Void
+Sets a value at the specified row and column of the given table to the specified value.
+
+If either the specified row or column is out of the available range, an error will be shown when processing.
+
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.addRow();
+stringTable.set(0, 0, "John");
+stringTable.set(0, 1, "Smith");
+Scripting API | Util Methods | StringTable Methods
+sortRows
+sortRows(Int aColumn) : Void
+Sorts the table rows in the ascending order according to the values of the specified column.
+
+If the specified column index is out of the available range, an error will be shown when processing.
+
+String result;
+Util.StringTable stringTable;
+stringTable.ColumnCount = 2;
+stringTable.RowCount = 2;
+stringTable[0, 0] = "at";
+stringTable[0, 1] = "Wien";
+stringTable[1, 0] = "sk";
+stringTable[1, 1] = "Bratislava";
+stringTable.sortRows(0);
+result = stringTable[0, 0];  // result = "at"
+stringTable.sortRows(1);
+result = stringTable[0, 0];  // result = "sk"
+URL Methods
+URL methods are used for manipulating URL addresses in links.
+
+The characters used in URL addresses should be encoded with US-ASCII everywhere in an HTML document that a URL is referenced to import an object, e.g. in links.
+
+Scripting API | Util Methods | URL Methods
+decodeURL
+decodeURL() : String
+Decodes previously encoded strings (URL address) from US-ASCII, i.e. reserved characters that were expressed in hexadecimal are decoded.
+
+Reserved characters are: $, @, +, ,, /, :, ;, =, ?, &
+
+String param="a%2Bc+%2F+d%2Be";
+String expression = Util.decodeUrl(param);
+return expression;
+//script returns: a+c / d+e
+Scripting API | Util Methods | URL Methods
+encodeURL
+encodeURL() : String
+Encodes strings (URL address) to US-ASCII, i.e. reserved characters are encoded.
+
+Reserved characters are: $, @, +, ,, /, :, ;, =, ?, &
+
+String param="a+c / d+e";
+String url="http://www.abc.cz/process expression a="+Util.encodeUrl(param);
+logMessage(url);
+//Script processing(message): http://www.abc.cz/process expression a=a%2Bc+%2F+d%2Be
+Scripting API | Util Methods | URL Methods
+escapeURL
+escapeURL() : String
+Escapes the use of unsafe characters in a URL address.
+
+Unsafe characters are: space, ", <, >, #, %, {, }, |, ^, ~, [, ], `
+
+String url="http://www.abc.cz/process expression a=a%2Bc+%2F+d%2Be";
+url = Util.escapeUrl(url);
+logMessage(url);
+//Script processing(message): http://www.abc.cz/process%20expression%20a=a%252Bc+%252F+d%252Be
+Scripting API | Util Methods | URL Methods
+unescapeURL
+unescapeURL() : String
+Reverses the function of escapeURL(), i.e. unsafe characters in a URL address are decoded from hexadecimal values.
+
+Unsafe characters are: space, ", <, >, #, %, {, }, |, ^, ~, [, ], `
+
+String url="http://www.abc.cz/process%20expression%20a=a%252Bc+%252F+d%252Be";
+url = Util.unescapeUrl(url);
+return url;
+//script returns: http://www.abc.cz/process expression a=a%2Bc+%2F+d%2Be
+Scripting API | Util Methods
+validateEmail
+validateEmail (String aEmail) : Bool
+Validates the email address specified via the aEmail parameter and returns whether it is valid (true) or invalid (false).
+
+Bool valid = Util.validateEmail(EmailAddress);
+if(valid) 
+   {
+   return "VALID";
+   }
+else
+   {
+   return "INVALID";
+   }
+  

@@ -1,0 +1,534 @@
+Imposition Methods
+Imposition methods are used in the Imposition Script module in order to manipulate the arrangement of the sheets.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in the Workflow Options dialog is not checked.
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to millimeters.
+InputSheeter Methods
+Input Sheeter methods select the sheeter for the input.
+
+Scripting API | Imposition Methods | InputSheeter Methods
+assign
+assign (Sheeter aP1) : Void
+Assigns the sheeter to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | InputSheeter Methods
+SheetCount
+SheetCount : Int
+getSheetCount : Int
+Returns the number of sheets in the respective input.
+
+Scripting API | Imposition Methods | InputSheeter Methods
+SheetInfo
+SheetInfo : Int
+getSheetInfo : Int
+Retrieves further information about input sheets. See the SheetInfo Methods section.
+
+LogPageInfo Methods
+Contains all the settings for a logical page (content, position etc.) in the input. The settings cannot be changed.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+assign
+assign (LogPage aP1) : Void
+Assigns the logical page to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Example  
+PPath p;
+p.addRect(RRect(0.03, 0.021, 0.21, 0.297));
+
+for(var i = 0; i < InputSheeter_0.SheetCount; i++)
+{
+OutputSheeter_0.addSheetInfo(InputSheeter_0.SheetInfo[i]);
+for(var j = 0; j < InputSheeter_0.SheetInfo[i].LogPageCount; j++)
+OutputSheeter_0.SheetInfo[i].LogPage[j].ClippingPath = p;
+}
+Scripting API | Imposition Methods | LogPageInfo Methods
+LayoutIndex
+LayoutIndex : Int
+getLayoutIndex () : Int
+Returns the index of the Layout module from which the logical page comes.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+LogPageIndex
+LogPageIndex : Int
+getLogPageIndex () : Int
+Returns the index of the logical page within the Layout module.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+PageIndex
+PageIndex : Int
+getPageIndex () : Int
+Returns the index of the sheet in the output.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+PageSize
+PageSize : RVector
+getPageSize () : RVector
+Returns the dimensions of the specified logical page (in meters).
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+PageWeight
+PageWeight : Double
+getPageWeight () : Double
+Returns the weight of the page as it is specified in the Layout Properties.
+
+Scripting API | Imposition Methods | LogPageInfo Methods
+Transformation
+Transformation : Transformation
+getTransformation : Transformation
+Returns the transformation that has been performed for the given logical page.
+
+LogPageInfoWithSet Methods
+Contains all the settings for a logical page (content, position etc.) in the output.
+
+Scripting API | Imposition Methods | LogPageInfoWithSet Methods
+setPageSize
+setPageSize (RVector aP1) : Void
+Sets the dimensions of the specified logical page (in meters).
+
+Scripting API | Imposition Methods | LogPageInfoWithSet Methods
+setPageWeight
+setPageWeight (Double aP1) : Void
+Sets the weight of the page. This setting overrides the value set in the Layout Properties.
+
+Scripting API | Imposition Methods | LogPageInfoWithSet Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets a transformation for the logical page for which the method is called.
+
+Scripting API | Imposition Methods | LogPageInfoWithSet Methods
+transform
+transform (Transformation aP1) : Void
+Applies the specified transformation to the logical page (allows multiplication of transformations).
+
+OutputSheeter Methods
+Selects the sheeter for the output.
+
+Scripting API | Imposition Methods | OutputSheeter Methods
+addEmptySheetInfo
+addEmptySheetInfo () : Int
+Adds an empty sheet to the output.
+
+Scripting API | Imposition Methods | OutputSheeter Methods
+addSheetInfo
+addSheetInfo () : Void
+addSheetInfo (SheetInfo aP1) : Void
+addSheetInfo (SheetInfo aP1, Transformation aP2) : Void
+addSheetInfo (SheetInfoWithSet aP1) : Void
+addSheetInfo (SheetInfoWithSet aP1, Transformation aP2) : Void
+Adds all logical pages from the defined SheetInfo into the SheetInfo, for which the method is called. These methods do not copy or change sheet names.
+
+The methods with the Transformation parameter also apply the defined transformation to all added logical pages.
+
+Example  
+Transformation MyTrans;
+MyTrans.scale(0.5);
+OutputSheeter_0.addSheetInfo(InputSheeter_0.SheetInfo[0],MyTrans);
+//adds the first sheet of the first input to the output with the specified transformation
+Scripting API | Imposition Methods | OutputSheeter Methods
+addSheetWithPageContent
+addSheetWithPageContent (PageContent aP1, String aP2) : Int
+Adds a new sheet created from page-level objects.
+
+The first parameter specifies the page-content and the second parameter specifies the sheet name.
+
+Scripting API | Imposition Methods | OutputSheeter Methods
+assign
+assign (OutputSheeter aP1) : Void
+Assigns the sheeter to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | OutputSheeter Methods
+LastSheet
+Contains all the settings for the last sheet (content, position etc.) in the output (settings can be changed).
+
+LastSheet : SheetInfoWithSet
+getLastSheet () : SheetInfoWithSet
+Scripting API | Imposition Methods | OutputSheeter Methods
+setSheetInfo
+Replaces the content of one sheet info with the content of another sheet info.
+
+setSheetInfo (Int aP1, SheetInfo aP2)
+setSheetInfo (Int aP1, SheetInfoWithSet aP2) : Void
+Scripting API | Imposition Methods | OutputSheeter Methods
+SheetCount
+Returns the number of sheets in the respective output.
+
+SheetCount : Int
+getSheetCount () : Int
+Scripting API | Imposition Methods | OutputSheeter Methods
+SheetInfo
+Contains all the settings for a sheet (content, position etc.) in the input (settings cannot be changed).
+
+SheetInfo [Int aP1] : SheetInfo
+SheetInfo [Int aP1] : SheetInfoWithSet : SheetInfo / SheetInfoWithSet
+getSheetInfo (Int aP1) : SheetInfoWithSet
+Sheeter Methods
+A sheet or group of sheets in the input. The settings cannot be changed.
+
+Scripting API | Imposition Methods | Sheeter Methods
+assign
+assign (Sheeter aP1) : Void
+Assigns the sheeter to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | Sheeter Methods
+SheetCount
+SheetCount : Int
+getSheetCount : Int
+Returns the number of sheets in the respective input.
+
+Scripting API | Imposition Methods | Sheeter Methods
+SheetInfo
+SheetInfo : Int
+getSheetInfo : Int
+Retrieves further information about input sheets. See the SheetInfo Methods section.
+
+SheeterWithSet Methods
+A sheet or group of sheets in the input. The settings can be changed.
+
+Scripting API | Imposition Methods | SheeterWithSet Methods
+addEmptySheetInfo
+addEmptySheetInfo () : Int
+Adds an empty sheet to the output.
+
+Scripting API | Imposition Methods | SheeterWithSet Methods
+addSheetInfo
+addSheetInfo ()
+addSheetInfo (SheetInfo aP1)
+addSheetInfo (SheetInfo aP1, Transformation aP2)
+addSheetInfo (SheetInfoWithSet aP1)
+addSheetInfo (SheetInfoWithSet aP1, Transformation aP2) : Int
+Adds all logical pages from the defined SheetInfo into the SheetInfo, for which the method is called. These methods do not copy or change sheet names.
+
+The methods with the Transformation parameter also apply the defined transformation to all added logical pages.
+
+Scripting API | Imposition Methods | SheeterWithSet Methods
+addSheetWithPageContent
+addSheetWithPageContent (PageContent aP1, String aP2) : Int
+Adds a new sheet created from page-level objects.
+
+The first parameter specifies the page-content and the second parameter specifies the sheet name.
+
+Scripting API | Imposition Methods | SheeterWithSet Methods
+assign
+assign (SheeterWithSet aP1) : Void
+Assigns the sheeter to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | SheeterWithSet Methods
+LastSheet
+Contains all the settings for the last sheet (content, position etc.) in the output (settings can be changed).
+
+LastSheet : SheetInfoWithSet
+getLastSheet () : SheetInfoWithSet
+Scripting API | Imposition Methods | SheeterWithSet Methods
+setSheetInfo
+Replaces the content of one sheet info with the content of another sheet info.
+
+setSheetInfo (Int aP1, SheetInfo aP2)
+setSheetInfo (Int aP1, SheetInfoWithSet aP2) : Void
+Scripting API | Imposition Methods | SheeterWithSet Methods
+SheetCount
+Returns the number of sheets in the respective output.
+
+SheetCount : Int
+getSheetCount () : Int
+Scripting API | Imposition Methods | SheeterWithSet Methods
+SheetInfo
+Contains all the settings for a sheet (content, position etc.) in the input (settings cannot be changed).
+
+SheetInfo [Int aP1] : SheetInfo
+SheetInfo [Int aP1] : SheetInfoWithSet : SheetInfo / SheetInfoWithSet
+getSheetInfo (Int aP1) : SheetInfoWithSet
+SheetInfo Methods
+Contains all the settings for a sheet (content, position etc.) in the input. The settings cannot be changed.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+assign
+assign (SheetInfo aP1) : Void
+Assigns the sheet info to a variable. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox : RRect
+Returns the bounding box comprising all printed content on the page.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+ColorSaturation
+ColorSaturation () : Int
+getColorSaturation () : Int
+Returns the color saturation value on the sheet. By using this function you can separate grayscale and black and white sheets from the color ones. You can send different sheets into different printers then and thus reduce the ink costs.
+
+The value is counted as the maximum difference between individual color components. The result is zero for grayscale and black and white images and up to 255 for color images. The function is very similar to Max Image Color Saturation field converter in Data Transformer module. However, this converter only calculates the difference for whole images and per individual pixels in RGB color space model. The ColorSaturation script enables you to calculate the color saturation per whole sheet. It also represents a faster and more flexible way of calculating the color saturation as it is performed for each object on the sheet individually and in a native color space model. There might be minor differences in results of these two methods due to a different way of calculation; however, they are not significant for separating the sheets.
+
+To decide which sheets are black and white and which sheets include colors a default limit has been set with a value of 20. Experience shows that all sheets with a color saturation value lower than this limit are black and white for a human eye. You can also set your own limit in the script (e.g. saturationLimit = 10).
+
+Scripting API | Imposition Methods | SheetInfo Methods
+dotsOnPage
+dotsOnPage (BoolList & aP1, Transformation aP2, Int aDPI)
+dotsOnPage (BoolList & aP1, Transformation aP2, Int aDPI, Int aColumnCount) : Void
+Read any pixel sequence from the position (and in the direction) defined by Transformation aP2.
+
+How many pixels will be read and the Boolean value ascribed to any single pixel is defined by BoolList aP1. By default, the pixel will return the Boolean value of true (1) if there is more than fifty percent black. The size of the pixels is defined by Int aDPI.
+
+The intention of these functions is for transcribing barcodes, in which case the size of a single pixel must be at least twice as wide as the thinnest bar in the barcode.
+
+Including the parameter Int aColumnCount defines how many columns of pixels should be read. This should be used for 2D barcodes. In this case, the size of the vector aP1 must be divisible by aColumnCount.
+
+The data received from the reading of the pixels (a sequence of 1s and 0s) can then be used by subsequent functions, e.g. to recognize the existence of barcodes, to decode barcodes or to redraw them elsewhere.
+
+Example  
+Util.BoolList bools;
+   Transformation tr;
+   tr.translate(0.1, 0);
+   bools.resize(500, false);
+   InputSheeter_0.SheetInfo[0].dotsOnPage(bools, tr, 200);
+  //reads 500 pixels (black = true, white = false) from position 0.1m with dpi 200
+Reading a 2D barcode (dots within a rectangle of 10*5cm):
+Util.BoolList points;
+for(Int i=0; i<InputSheeter_0.SheetCount; i++)
+   {
+   Int dpi=100;
+   Int columns=(Int)(10/2.54 * dpi);
+   Int rows=(Int)(5/2.54 * dpi);
+   points.resize(columns*rows, false);
+   InputSheeter_0.SheetInfo[i].dotsOnPage(points, Transformation(), dpi, columns);
+   }
+Scripting API | Imposition Methods | SheetInfo Methods
+GroupBegin
+GroupBegin : Bool
+getGroupBegin () : Bool
+Returns true if the sheet is the first sheet in a group.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+isEmpty
+isEmpty () : Bool
+Returns true if the input sheet is empty.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+LogPage
+LogPage [Int aP1] : LogPage
+getLogPage (Int aP1) : LogPage
+Returns the LogPage, further methods can be called. Refer to the section LogPageInfo Methods.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+LogPageCount
+LogPageCount () : Int
+getLogPageCount () : Int
+Returns the number of logical pages in the input.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+MaxDarkness
+MaxDarkness [Transformation aP1, Int aDPI, Double aWidth, Double aHeight] : Double
+getMaxDarkness (Transformation aP1, Int aDPI, Double aWidth, Double aHeight) : Double
+Returns a number in the range 0.0–1.0 that denotes the "darkness" level of the pixel with the lowest luminosity in the given area.
+
+A result value close to 1 means that the area contains almost-black pixels, while a value close to 0 means that the area contains only pixels that are white or nearly white. This method is useful to detect whether the specified area is "white enough", i.e. if other content can be safely placed inside, without the risk of being poorly visible.
+
+The area is basically a rectangle defined by aWidth and aHeight (in meters), positioned by the transformation aP1.
+
+Note  Strictly speaking, the transformation aP1 can also contain scale, rotation or skew information in addition to the translation (position), which means that the area is in fact a parallelogram. Its four vertices (corners) have the coordinates [0, 0], [aWidth, 0], [0, aHeight] and [aWidth, aHeight], transformed by aP1.
+The aDPI defines the pixel size. The higher the value, the more accurate the result is, in terms of the correctness of the result for thin line objects, but the calculation can take significantly longer.
+
+Example  
+Int dpi=100;
+Transformation tr;
+tr.translate(0.05, 0.04);
+Double darkness=InputSheeter_0.SheetInfo[0].MaxDarkness[tr, dpi, 0.1, 0.06];
+logMessage(darkness.toString());
+Scripting API | Imposition Methods | SheetInfo Methods
+PageContent
+PageContent : PageContent
+getPageContent () : PageContent
+Returns the PageContent, further methods can be called. Refer to the section PageContent Methods.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+PageContentWithClippingPaths
+PageContentWithClippingPaths : PageContent
+getPageContentWithClippingPaths () : PageContent
+Returns the PageContent with clipping paths. Further methods can be called. Refer to the PageContent Methods section.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+PageContentWithoutClippingPaths
+PageContentWithoutClippingPaths : PageContent
+getPageContentWithoutClippingPaths () : PageContent
+Returns the PageContent without clipping paths, further methods can be called. Refer to the section PageContent Methods.
+
+Scripting API | Imposition Methods | SheetInfo Methods
+meetsColorSaturation
+meetsColorSaturation ()
+meetsColorSaturation (Int aLimit) : Bool
+Returns true if the maximum difference between individual color components on the sheet (see ColorSaturation method) is smaller than or equal to the limit. The default limit has been set to 20. Experience shows that all sheets with a color saturation value lower than this limit are black and white for a human eye. You can also set your own limit in the script (e.g. saturationLimit = 10).
+
+Scripting API | Imposition Methods | SheetInfo Methods
+SheetName
+SheetName [Int aP1] : String
+getSheetName (Int aP1) : String
+Returns the sheet name according to the specified sheet name index.
+
+Example  
+The following example demonstrates the possibility of linking data and sheet information:
+
+Util.StringIntMap map;
+
+//map data to a hash array
+for (Int dataCtr =0; dataCtr<Input_0.Records.Count; dataCtr++){
+var recordInfo = Input_0.Records.get(dataCtr);
+map.increment(recordInfo.Number.toString());
+}
+
+//loop all sheets once
+for (Int sheets = 0; sheets<InputSheeter_0.SheetCount; sheets++){
+
+String id = InputSheeter_0.SheetInfo[sheets].SheetName[3];
+
+if(map.contains(id)){
+logMessage('Match');
+}
+}
+Scripting API | Imposition Methods | SheetInfo Methods
+SheetNamesCount
+SheetNamesCount : Int
+getSheetNamesCount () : Int
+Returns the total number of sheet names that are already used in a sheet, i.e. if the method returns sheet name index 10, then it means that sheet names with higher index numbers are still available.
+
+Example  
+Transformation tr;
+tr.translate(0.01,0.01);  //optionally define a transformation which will move/rotate,etc. a defined content (in this example a text object)
+
+
+PageContent pc = InputSheeter_0.SheetInfo[0].PageContent; //get the page content of the first page
+
+DrawTextObject dto;   //define a text object's font, text size, color, content, and transformation
+Font a = Font.createFromName("Arial",FontStyle.Bold);
+Color c = Color.createFromRGB(0,0,1);
+dto.FillColor = c;
+dto.SizeInPt = 20;
+dto.setText(RVector(0,0),a,'A text inserted using the \nPageContent functionality\nwhich can help you with \nthe manipulation of objects\nafter Layout or InspireNative'); // where \n is a special character that breaks the line and creates multiline text
+dto.Transformation = tr;            
+
+pc.addObject(dto);  //add a newly created object into the page content
+
+
+OutputSheeter_0.addSheetWithPageContent(pc,"Main");  //send a page to the output and add the newly defined text object to it
+
+for (Int j=0; j<InputSheeter_0.SheetInfo[0].SheetNamesCount; j++)
+   {
+   OutputSheeter_0.LastSheet.SheetName[j] = InputSheeter_0.SheetInfo[0].SheetName[j]; 
+   }
+Scripting API | Imposition Methods | SheetInfo Methods
+TextInRect
+TextInRect [RRect aP1]
+getTextInRect (RRect aP1)
+TextInRect[RRect aP1, Bool aSortGlyphs] : String
+getTextInRect(RRect aP1, Bool aSortGlyphs) : String
+Captures the text placed in a defined rectangle (RRect) and makes it a string variable. Available for all native inputs and Layout.
+
+Including the parameter Bool aSortGlyphs defines whether the glyphs will be sorted. Same as the GUI option Sort glyphs in Text in Rect.
+
+Example  
+String text;
+text=InputSheeter_0.SheetInfo[0].getTextInRect(Rect1);
+Scripting API | Imposition Methods | SheetInfo Methods
+TextInRectData
+TextInRectData : CharInfoList
+getTextInRectData () : CharInfoList
+Returns the list of characters on the page including their width and their position on the page.
+
+The methods for the CharInfoList are the same as for Util.IntList.
+
+For each CharInfo (out of the CharInfoList) there are three methods available: Character of the Char type, Position of the RVector type and Width of the Double type.
+
+Example  
+CharInfoList list;
+list=InputSheeter_0.SheetInfo[0].getTextInRectData();
+TextOnPage Methods
+TextOnPage : TextOnPage
+getTextOnPage () : TextOnPage
+TextOnPage returns data located inside multiple defined rectangles, eliminating the need to process the whole page repeatedly as is required with the TextInRect method. The individual rectangles can be processed using the TextInsideRectangle method.
+
+TextOnPage top = InputSheeter_0.SheetInfo[idx].TextOnPage;
+  String top.TextInsideRectangle[RRect(0,y,1,y+0.05)];
+Scripting API | Imposition Methods | SheetInfo Methods | TextOnPage Methods
+TextOnPageArea
+TextOnPageArea[RRect aArea, Bool aSort] : TextOnPage
+getTextOnPageArea (RRect aArea, Bool aSort) : TextOnPage
+Returns data located inside a selected area. It also performs sorting of glyphs if the Bool aSortGlyphs is set to true.
+
+var textOnPage = InputSheeter_0.SheetInfo[0].TextOnPageArea[RRect(0,0,1,1), false];
+var text = textOnPage.TextInsideRectangle[RRect(0.05,0.05,1,1)];
+Scripting API | Imposition Methods | SheetInfo Methods | TextOnPage Methods
+assign
+assign (TextOnPage) : Void
+Assigns another TextOnPage to the given TextOnPage object. Same as the = assignment statement.
+
+Scripting API | Imposition Methods | SheetInfo Methods | TextOnPage Methods
+TextInsideRectangle
+TextInsideRectangle [RRect aP1]: String
+getTextInsideRectangle(RRect aP1) : String
+Captures the text placed in a defined rectangle (RRect).
+
+Scripting API | Imposition Methods | SheetInfo Methods | TextOnPage Methods
+TextDataInsideRectangle
+TextDataInsideRectangle [RRect aP1]: CharInfoList
+getTextDataInsideRectangle(RRect aP1) : CharInfoList
+Returns information about the individual glyphs, size of space and index of the baseline's angle.
+
+This integration feature is used for the purposes of dynamic zones in OMS-200 and OMS-500, see those applications' documentation for more information.
+
+var textOnPage = InputSheeter_0.SheetInfo[0].TextOnPage;
+var tirData = textOnPage.TextDataInsideRectangle[RRect(0,0,1,1)];
+SheetInfoWithSet Methods
+Contains all the settings for a sheet (content, position etc.) in the output. The settings can be changed.
+
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+addLogPage
+Adds a logical page to the output.
+
+addLogPage (LogPage aP1) : Int
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+addSheetInfo
+addSheetInfo () : Void
+addSheetInfo (SheetInfo aP1) : Void
+addSheetInfo (SheetInfo aP1, Transformation aP2) : Void
+addSheetInfo (SheetInfoWithSet aP1) : Void
+addSheetInfo (SheetInfoWithSet aP1, Transformation aP2) : Void
+These methods add all logical pages from the defined SheetInfo (parameter aP1) into the SheetInfo, for which the method is called. These methods do not copy or change sheet names. The methods with the transformation parameter also apply the defined transformation to all added logical pages.
+
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+assign
+assign (SheetInfo aP1)
+assign (SheetInfoWithSet aP1) : Void
+Assigns the sheet info to a variable. The same result can be achieved using the = operator (preferable).
+
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+getLogPage
+getLogPage (Int aP1) : LogPage
+Returns the LogPageWithSet, further methods can be called. Refer to the section LogPageInfoWithSet Methods.
+
+Same as LogPage.
+
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+setGroupBegin
+setGroupBegin : Void
+If set to true, the sheet is set as the first sheet of a new group.
+
+Example  
+OutputSheeter_0.SheetInfo[0].setGroupBegin(true);
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+setLogPage
+setLogPage (Int aP1, LogPage aP2) : Void
+Replaces the content of one logical page with the content of another logical page.
+
+Scripting API | Imposition Methods | SheetInfoWithSet Methods
+setSheetName
+setSheetName (Int aP1, String aP2) : Void
+Sets a sheet name for the specified sheet.
+
+Example  
+OutputSheeter_0.SheetInfo[0].setSheetName(3,"MySheetName");
+//sets the sheet name with the index 3 of the first sheet 

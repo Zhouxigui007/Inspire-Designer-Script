@@ -1,0 +1,193 @@
+Int Methods
+Int methods can be used for manipulation with integer variables.
+
+Scripting API | Int Methods
+assign
+assign(Int aP1) : Void
+Assigns the specified value to the given integer variable. The same result can be achieved using the equal sign =.
+
+Int currentYear;
+currentYear.assign(DateTime.Now.Year);
+Scripting API | Int Methods
+binaryAnd
+binaryAnd(Int aP1) : Void
+Takes binary representations of the given number and the specified value and performs the logical AND operation on each pair of the corresponding bits.
+
+In each pair, the result is 1 if the first bit is 1 and the second bit is 1.
+
+Int number = 25;       // 11001
+number.binaryAnd(13);  // 01101
+// number = 9          // 01001
+Scripting API | Int Methods
+binaryNot
+binaryNot() : Int
+Takes the binary representation of the given number and performs logical negation on each bit.
+
+Digits which were 0 become 1, and vice versa.
+
+Int number = 25;               // 0...11001 (32 bits)
+number = number.binaryNot();   // 1...00110 = -11010
+// number = -26                //    -11010
+Scripting API | Int Methods
+binaryOr
+binaryOr(Int aP1) : Void
+Takes binary representations of the given number and the specified value and performs the logical OR operation on each pair of the corresponding bits.
+
+In each pair, the result is 1 if the first bit is 1 or the second bit is 1 or both bits are 1, and otherwise the result is 0.
+
+Int number = 25;       // 11001
+number.binaryOr(13);   // 01101
+// number = 29         // 11101
+Scripting API | Int Methods
+binaryXor
+binaryXor(Int aP1) : Void
+Takes binary representations of the given number and the specified value and performs the logical XOR operation on each pair of the corresponding bits.
+
+The result in each position is 1 if the two bits are different, and 0 if they are the same.
+
+Int number = 25;       // 11001
+number.binaryXor(13);  // 01101
+// number = 20         // 10100
+Scripting API | Int Methods
+divide
+divide(Int aP1) : Void
+Divides the given number by the specified value.
+
+If the zero value is specified, an error is shown when processing.
+
+Int number = 30;
+number.divide(20);
+// number = 1;
+Scripting API | Int Methods
+equal
+equal(Int aP1) : Bool
+Returns the Boolean value true if the specified value equals to the given number. The same result can be achieved using the equality operator ==.
+
+Int day = DateTime.Now.DayOfWeek;
+Bool isMonday = day.equal(1);
+Scripting API | Int Methods
+isEven
+isEven() : Bool
+Returns the Boolean value true if the given number is even.
+
+Int number = 4;
+Bool isNumberEven = number.isEven();
+// isNumberEven = true
+Scripting API | Int Methods
+less
+less(Int aP1) : Bool
+Returns the Boolean value true if the given number is lower than the specified value. The same result can be achieved using the less than operator <.
+
+Int day = DateTime.Now.DayOfWeek;
+Bool isSunday = day.less(1);
+Scripting API | Int Methods
+minus
+minus() : Int
+minus(Int aP1) : Void
+Returns the negative value of the given number if no parameter is specified.
+
+Subtracts the specified value from the given number.
+
+Int number = 10;
+number = number.minus();
+// number = -10
+number.minus(2);
+// number = -12
+Scripting API | Int Methods
+multiply
+multiply(Int aP1) : Void
+Multiplies the given number by the specified value.
+
+Int number = 3;
+number.multiply(3);
+// number = 9
+Scripting API | Int Methods
+plus
+plus() : Int
+plus(Int aP1) : Void
+Returns the value of the given variable if no parameter is specified.
+
+Adds the specified value to the given number.
+
+Int number = 3;
+number.plus(5);
+// number = 8
+Scripting API | Int Methods
+remainder
+remainder(Int aP1) : Void
+Updates the given variable with the remainder on division of the given number by the specified value.
+
+Int number = 26;
+number.remainder(8);
+// number = 2
+Scripting API | Int Methods
+toCurrency
+toCurrency() : Currency
+Returns a currency representation of the given number.
+
+Int number = 26;
+Currency price = number.toCurrency();
+// price = 26.0000
+Scripting API | Int Methods
+toDouble
+toDouble() : Double
+Returns a double-precision floating-point representation of the given number.
+
+Int number = 26;
+Double price = number.toDouble();
+// price = 26
+Scripting API | Int Methods
+toInt64
+toInt64() : Int64
+Returns a 64-bit integer representation of the given number.
+
+Int number32 = 26;
+Int64 number64 = number32.toInt64();
+// number64 = 26
+Scripting API | Int Methods
+toSpell
+toSpell(String aP1) : String
+Returns a lexical representation of the given integer value in the language specified by the corresponding language code.
+
+Int number = 150;
+String valueInWords = number.toSpell("en");
+// valueInWords = "one hundred and fifty"
+Scripting API | Int Methods
+toString
+toString(Int aLength, Bool aZeroFill) : String
+toString(Int aLength, Bool aZeroFill, Int aBase) : String
+toString(Int aLength, Bool aZeroFill, Int aBase, Bool aTruncate) : String
+toString(Int aLength, Bool aZeroFill, Int aBase, Bool aTruncate, Bool aLeftJustified) : String
+toString(Int aLength, Bool aZeroFill, Int aBase, Bool aTruncate, Bool aLeftJustified, Bool aBigLetters) : String
+Returns a string of the specified length that represents the given number and sets all the empty positions to the zero value when the specified aZeroFill parameter is set to the Boolean value true.
+
+Optionally converts the given number according to the specified base of the numeral system, truncates the resulting string if its length is greater than the specified length, aligns all the characters to the left or converts all alphabetic characters to their upper case equivalents.
+
+Int number = 1234567;
+String strNumber = number.toString(10, true);
+// strNumber = "0001234567"
+ 
+Int number = 5;
+String strNumber = number.toString(5, true, 2);
+// strNumber = "00101" 
+// binary representation of number 5
+
+Int number = 5;
+String strNumber = number.toString(5, true, 2, true);
+// strNumber = "101"
+// truncated binary representation of number 5
+
+Int number = 5;
+String strNumber = number.toString(5, false, 2, true, true);
+// strNumber = "101  "
+// truncated and left justified binary representation of number 5
+
+Int number = 1550;
+String strNumber = number.toString(5, false, 16, true, true, true);
+// strNumber = "60E  "
+// hexadecimal representation with upper case characters
+
+Int number = 1550;
+String strNumber = number.toString(5, false, 16, true, true, false);
+// strNumber = "60e  "
+// hexadecimal representation with lower case characters

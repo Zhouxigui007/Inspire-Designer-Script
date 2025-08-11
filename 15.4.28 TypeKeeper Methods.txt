@@ -1,0 +1,192 @@
+TypeKeeper Methods
+TypeKeeper methods allow scripts to inspect namespaces, objects and their members at runtime through a process known as reflection.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in the Workflow Options dialog is not checked.
+Scripting API | TypeKeeper Methods
+IsEnum
+IsEnum : Bool
+getIsEnum() : Bool
+Returns true if the type is an enumeration.
+
+TypeKeeper tk = do.typeof(File.ListParam);
+
+if(tk.IsEnum)
+   logMessage("File.ListParam is an Enum");
+else
+   logMessage("File.ListParam is not an Enum");
+Scripting API | TypeKeeper Methods
+IsGCReference
+IsGCReference : Bool
+getIsGCReference() : Bool
+Returns true for garbage collectable classes.
+
+Note  This method only serves for development purposes of Inspire Designer software.
+Scripting API | TypeKeeper Methods
+IsNamespace
+IsNamespace : Bool
+getIsNamespace() : Bool
+Returns true if the type is a namespace.
+
+TypeKeeper tk = do.typeof(File);
+
+if(tk.IsNamespace)
+   logMessage("File is a Namespace");
+else
+   logMessage("File is not a Namespace");
+Scripting API | TypeKeeper Methods
+IsReference
+IsReference : Bool
+getIsReference() : Bool
+Note  This method only serves for development purposes of Inspire Designer software.
+Scripting API | TypeKeeper Methods
+MemberCount
+MemberCount : Int
+getMemberCount() : Int
+Returns the total number of members for the type.
+
+TypeKeeper tk = do.typeof(File);
+
+logMessage("File has " + String(tk.MemberCount) + " members.");
+Scripting API | TypeKeeper Methods
+MemberEnumValue
+MemberEnumValue[Int aMemberIndex] : Int
+getMemberEnumValue(Int aMemberIndex) : Int
+Returns the value for the enumeration member.
+
+TypeKeeper tk = do.typeof(File.Mode);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   logMessage(tk.MemberName[i] + " has value " + String(tk.MemberEnumValue[i]));  
+Scripting API | TypeKeeper Methods
+MemberIsMethod
+MemberIsMethod[Int aMemberIndex] : Bool
+getMemberIsMethod(Int aMemberIndex) : Bool
+Returns true if the member is a method.
+
+TypeKeeper tk = do.typeof(WorkFlow);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   {
+   if(tk.MemberIsMethod[i])
+      logMessage(tk.MemberName[i] + " is a method");
+   else
+      logMessage(tk.MemberName[i] + " is not a method");
+   }
+Scripting API | TypeKeeper Methods
+MemberIsStaticMethod
+MemberIsStaticMethod[Int aMemberIndex] : Bool
+getMemberIsStaticMethod(Int aMemberIndex) : Bool
+Returns true if the member is a static method.
+
+TypeKeeper tk = do.typeof (WorkFlow);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   {
+   if(tk.MemberIsStaticMethod[i])
+      logMessage(tk.MemberName[i] + " is a static method");
+   else
+      logMessage(tk.MemberName[i] + " is not a static method");
+   }
+Scripting API | TypeKeeper Methods
+MemberName
+MemberName[Int aMemberIndex] : Bool
+getMemberName(Int aMemberIndex) : Bool
+Returns the name of the member.
+
+TypeKeeper tk = do.typeof(File);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   logMessage(tk.MemberName[i]);
+Scripting API | TypeKeeper Methods
+MemberParameterCount
+MemberParameterCount[Int aMemberIndex] : Int
+getMemberParameterCount(Int aMemberIndex) : Int
+Returns the total number of parameters for the member.
+
+TypeKeeper tk = do.typeof(WorkFlow);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   logMessage(tk.MemberName[i] + " has " + String(tk.MemberParameterCount[i]) + " parameters.");
+Scripting API | TypeKeeper Methods
+MemberParameterName
+MemberParameterName[Int aMemberIndex, Int aParameterIndex] : String
+getMemberParameterName(Int aMemberIndex, Int aParameterIndex) : String
+Returns the parameter name for a specified member parameter.
+
+TypeKeeper tk = do.typeof(WorkFlow);
+
+Int count = tk.MemberCount;
+
+Int parameters;
+
+for(Int i=0; i<count; i++)
+   {
+   
+   parameters = tk.MemberParameterCount[i];
+   
+   for(Int p=0; p<parameters; p++)
+      {
+         logMessage(tk.MemberName[i] + " has parameter " + String(tk.MemberParameterName[i,p]));
+      }
+   
+   }
+Scripting API | TypeKeeper Methods
+MemberParameterType
+MemberParameterType[Int aMemberIndex, Int aParameterIndex] : TypeKeeper
+getMemberParameterType(Int aMemberIndex, Int aParameterIndex) : TypeKeeper
+Returns the parameter type for a specified member parameter.
+
+TypeKeeper tk = do.typeof(WorkFlow);
+
+Int count = tk.MemberCount;
+
+Int parameters;
+
+for(Int i=0; i<count; i++)
+   {
+   
+   parameters = tk.MemberParameterCount[i];
+   
+   for(Int p=0; p<parameters; p++)
+      {
+         logMessage(tk.MemberName[i] + " parameter " + String(tk.MemberParameterName[i,p]) + " has type " + tk.MemberParameterType[i,p].toString());
+      }
+   
+   }
+Scripting API | TypeKeeper Methods
+MemberReturnType
+MemberReturnType[Int aMemberIndex] : TypeKeeper
+getMemberReturnType(Int aMemberIndex) : TypeKeeper
+Returns the type of the return value of the member.
+
+TypeKeeper tk = do.typeof(File);
+
+Int count = tk.MemberCount;
+
+for(Int i=0; i<count; i++)
+   logMessage(tk.MemberName[i] + " has return type " + tk.MemberReturnType[i].toString());
+Scripting API | TypeKeeper Methods
+ReferenceTo
+ReferenceTo : TypeKeeper
+getReferenceTo() : TypeKeeper
+Note  This method only serves for development purposes of Inspire Designer software.
+Scripting API | TypeKeeper Methods
+toString
+toString() : String
+Returns a string that represents the name for the type.
+
+TypeKeeper tk = do.typeof(File.ExecuteContext);
+
+logMessage(tk.toString());
+
+// Script processing(message): ExecuteContext"

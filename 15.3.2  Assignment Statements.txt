@@ -1,0 +1,31 @@
+15.3.2  Assignment Statements
+An assignment statement assigns the value of the general expression on the right side to the variable or array element given on the left side.
+
+
+Assignment Value	Description
+=	
+Assigns the value of the general expression on the right side to the variable or array element given on the left side, e.g. x = 5.
+
++=	
+Adds the value of the general expression on the right side to the variable or array element given on the left side, i.e. i=i+2 is the same as i+=2.
+
+-=	
+Subtracts the value of the general expression on the right side from the variable or array element given on the left side, i.e. i=i-2 is the same as i-=2.
+
+*=	
+Multiplies the value of the general expression on the right side with the value of the variable or array element given on the left side, i.e. r=r*2.5 is the same as r*=2.5.
+
+/=	
+Divides the value of the variable or array element given on the left side by value of the general expression on the right side, i.e. r=r/3.14 is the same as r/=3.14.
+
+%=	
+Calculates value of modulus of a number with respect to a base value. The modulus is the remainder from dividing the number by the base value, i.e. year=year%400 is the same as year%=400.
+
+|=	
+Performs OR operation. a=a|b is the same as a|=b.
+
+&=	
+Performs AND operation. a=a&b is the same as a&=b.
+
+^=	
+Performs XOR operation. a=a^b is the same as a^=b.

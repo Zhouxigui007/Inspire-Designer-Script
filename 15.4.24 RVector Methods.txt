@@ -1,0 +1,106 @@
+RVector Methods
+RVector methods are used on the Content tab of Scripted Areas to manipulate values for the position of Layout objects. They can also be used to position page-level objects via the Imposition Script module.
+
+RVector is defined in Double, Vector in Int coordinates.
+
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+Scripting API | RVector Methods
+AngleInDegrees / AngleInRadians
+AngleInDegrees : Double
+getAngleInDegrees () : Double
+AngleInRadians : Double
+getAngleInRadians () : Double
+Gets the vector angle in the degrees/radians measurement units.
+
+Scripting API | RVector Methods
+Area
+Area : Double
+Multiplies X and Y.
+
+Example  
+RVector r;
+r.assign(0.5,1.0);
+logMessage(r.Area.toString());
+Scripting API | RVector Methods
+assign
+assign (Double aP1, Double aP2) : Void
+assign (RVector aP1) : Void
+assign (Vector aP1) : Void
+Assigns values to a vector. Same as the = assignment statement.
+
+Scripting API | RVector Methods
+ceilToVector
+ceilToVector : Vector
+Rounds up to Int numbers (RVector changes to Vector).
+
+Example  
+RVector r;
+r.assign(0.6,1.4);
+r.ceilToVector(); //rounds to 1,2
+Scripting API | RVector Methods
+floorToVector
+floorToVector : Vector
+Rounds down to Int numbers (RVector changes to Vector).
+
+Example  
+RVector r;
+r.assign(0.6,1.4);
+r.floorToVector(); //rounds to 0,1
+Scripting API | RVector Methods
+isNull
+isNull () : Bool
+If True is returned, RVector is not initialized (does not overwrite memory).
+
+Scripting API | RVector Methods
+Length
+Length () : Double
+getLength () : Double
+Gets the length of RVector.
+
+Scripting API | RVector Methods
+ManhattanLength
+ManhattanLength : Double
+getManhattanLength () : Double
+Gets Manhattan length (X+Y).
+
+The "Manhattan Length" of a route between two points is the distance that the tracks would total if they run only in the x or y directions. So if we have two points, A(X1, Y1) and B(X2, Y2), the Manhattan length between the two points is the sum of the absolute values of (X2-X1) and (Y2-Y1).
+
+Scripting API | RVector Methods
+normalize
+normalize () : RVector
+Makes the vector length equal to 1.
+
+Scripting API | RVector Methods
+roundToVector
+roundToVector () : Vector
+Rounds to the nearest integer (RVector changes to Vector).
+
+Scripting API | RVector Methods
+setX / setY
+setX (Double aP1) : Void
+setY (Double aP1) : Void
+Sets X/Y value.
+
+Scripting API | RVector Methods
+SquareLength
+SquareLength (Double aP1) : Double
+getSquareLength () : Double
+Gets square length of RVector.
+
+Scripting API | RVector Methods
+toString
+toString () : String
+Converts RVector into a string representation.
+
+Scripting API | RVector Methods
+transform
+transform (Transformation aP1) : RVector
+Applies a transformation on RVector.
+
+Scripting API | RVector Methods
+X / Y
+X : Double
+getX () : Double
+Y : Double
+getY () : Double
+Gets X/Y value of RVector.

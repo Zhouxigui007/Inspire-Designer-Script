@@ -1,0 +1,1182 @@
+String Methods
+See also:
+
+Scripting notes
+String Characters
+A string represents a sequence of characters.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options dialog is not checked.
+Methods that deal with surrogate pairs or processes characters in byte mode must be enabled first using the option Suggest also byte mode and surrogate functions in Workflow Options Dialog.
+
+Scripting API | String Methods
+append
+append(String aString) : Void
+Appends the specified string to the end of the given string. The same result can be achieved using the addition operator +.
+
+String message = "Hello";
+message.append(" World!");
+// message = "Hello World!"
+Scripting API | String Methods
+appendPath
+appendPath(String aString) : String
+Appends the specified path fragment to the end of the given string that represents a path.
+
+String inputPath = "C:\Temp\input.txt";
+String outputPath = inputPath.Directory.appendPath("output.txt");
+// outputPath = "C:/Temp/output.txt"
+Scripting API | String Methods
+assign
+assign(String aString) : Void
+Assigns the specified string to the given string. The same result can be achieved using the equal sign =.
+
+String message;
+message.assign("Hello World!");
+// message = "Hello world!";
+Scripting API | String Methods
+beginWith
+beginWith(String aString) : Bool
+Returns the Boolean value true if the given string begins with the specified string. This function is case-sensitive.
+
+String message = "hello world!";
+Bool beginsWithHello = message.beginWith("Hello");
+// beginsWithHello = false
+Scripting API | String Methods
+beginWithCaseInsensitive
+beginWithCaseInsensitive(String aString) : Bool
+Returns the Boolean value true if the given string begins with the specified string. This function is case-insensitive.
+
+String message = "hello world!";
+Bool beginsWithHello = message.beginWithCaseInsensitive("Hello");
+// beginsWithHello = true
+Scripting API | String Methods
+compare
+compare(String aString) : Int
+Returns the value of zero when compared strings are equivalent.
+
+Returns the difference of the Unicode code points at the first position where characters do not match.
+
+This function is case-sensitive.
+
+String message = "Hello World!";
+Int difference = message.compare("Hello World!");
+// difference = 0
+
+String message = "Hello World!";
+Int difference = message.compare("Hello WORLD!");
+// difference = 32
+
+String message = "Hello World!";
+Int difference = ("Hello WORLD!").compare(message);
+// difference = -32
+Scripting API | String Methods
+compareCaseInsensitive
+compareCaseInsensitive(String aChar) : Int
+Returns the value of zero when compared strings are equivalent.
+
+Returns the difference of the Unicode code points at the first position where characters do not match.
+
+This function is case-insensitive.
+
+String message = "Hello World!";
+Int difference = message.compareCaseInsensitive("Hello WORLD!");
+// difference = 0
+
+String message = "Hello World!";
+Int difference = message.compareCaseInsensitive("Hello Europe!");
+// difference = 50
+Scripting API | String Methods
+contains
+contains(String aString) : Bool
+contains(Char aChar) : Bool
+Returns the Boolean value true if the given string contains the specified string or character. This function is case-sensitive.
+
+String message = "hello world!";
+Bool containsWorld = message.contains("World");
+// containsWorld = false
+Scripting API | String Methods
+containsCaseInsensitive
+containsCaseInsensitive(String aString) : Bool
+containsCaseInsensitive(Char aChar) : Bool
+Returns the Boolean value true if the given string contains the specified string or character. This function is case-insensitive.
+
+String message = "hello world!";
+Bool containsWorld = message.containsCaseInsensitive("World");
+// containsWorld = true
+Scripting API | String Methods
+convertIntelligentMailBarcode
+convertIntelligentMailBarcode(String aString) : String
+Returns a string that represents the four types of Intelligent Mail barcode’s bars (T, D, A, H) which corresponds to the specified input data.
+
+The result string can be used in layout for drawing a barcode, typically using a font containing just the four types of bars.
+
+String inputData = "5078965412301236545613827399801";
+String convertedData = String.convertIntelligentMailBarcode(inputData);
+// convertedData = "DFADTDTDTTDADFDTTFFDADFTTDADTTADTDDDDTDDDADTTTFATFFFADFAATFFFTATD"
+Scripting API | String Methods
+countOccurrences
+countOccurrences(Char aChar) : lnt
+countOccurrences(String aString) : lnt
+Returns the number of occurrences of the specified string or character in the given string. This function is case-sensitive.
+
+String message = "SINGLE ENVIRONMENT, all-in-one SOFTWARE";
+Int countOfLowerCaseE = s.countOccurrences("e");
+// countOfLowerCaseE = 1
+
+String message = "SINGLE ENVIRONMENT, all-in-one SOFTWARE";
+Int countOfLowerCaseIn = s.countOccurrences("in");
+// countOfLowerCaseIn = 1
+Scripting API | String Methods
+countOccurrencesCaseInsensitive
+countOccurrencesCaseInsensitive(Char aChar) : lnt
+countOccurrencesCaseInsensitive(String aString) : lnt
+Returns the number of occurrences of the specified string or character in the given string. This function is case-insensitive.
+
+String message = "SINGLE ENVIRONMENT, all-in-one SOFTWARE";
+Int countOfLowerCaseE = s.countOccurrencesCaseInsensitive("e");
+// countOfLowerCaseE = 5
+
+String message = "SINGLE ENVIRONMENT, all-in-one SOFTWARE";
+Int countOfLowerCaseIn = s.countOccurrencesCaseInsensitive("in");
+// countOfLowerCaseIn = 2
+Scripting API | String Methods
+Directory
+Directory : String
+getDirectory() : String
+Returns a string that represents the parent directory of the given path.
+
+String inputPath = "C:\Temp\input.txt";
+String inputDirectory = inputPath.Directory;
+// inputDirectory = "C:/Temp"
+Scripting API | String Methods
+endWith
+endWith(String aString) : Bool
+Returns the Boolean value true if the given string ends with the specified string. This function is case-sensitive.
+
+String message = "hello world!";
+Bool endsWithWorld = message.endWith("World!");
+// endsWithWorld = false
+Scripting API | String Methods
+endWithCaseInsensitive
+endWithCaseInsensitive(String aString) : Bool
+Returns the Boolean value true if the given string ends with the specified string. This function is case-insensitive.
+
+String message = "hello world!";
+Bool endsWithWorld = message.endWithCaseInsensitive("World!");
+// endsWithWorld = true
+Scripting API | String Methods
+equal
+equal(String aString) : Bool
+Returns the Boolean value true if the given string equals to the specified string. The same result can be achieved using the equality operator ==.
+
+String message = "Hello World!";
+Bool isEqual = message.equal("Hello World!");
+// isEqual = true
+Scripting API | String Methods
+FileExt
+FileExt : String
+getFileExt() : String
+Returns a string that represents the file extension of the given path.
+
+String inputPath = "C:\Temp\input.txt";
+String fileExtension = inputPath.FileExt;
+// fileExtension = "txt"
+Scripting API | String Methods
+FileName
+FileName : String
+getFileName() : String
+Returns a string that represents the base file name of the given path.
+
+String inputPath = "C:\Temp\input.txt";
+String baseName = inputPath.FileName;
+// baseName = "input"
+Scripting API | String Methods
+FileNameExt
+FileNameExt : String
+getFileNameExt() : String
+Returns a string that represents the complete file name of the given path.
+
+String inputPath = "C:\Temp\input.txt";
+String fileName = inputPath.FileNameExt;
+// fileName = "input.txt"
+Scripting API | String Methods
+fill
+fill(Char aChar) : Void
+fill(Char aChar, Int aNewLength) : Void
+Fills the given string with the specified character and optionally sets the new length of the string.
+
+String message = "Hello World!);
+message.fill("*", 15);
+// message = "***************"
+Scripting API | String Methods
+find
+find(String aString) : Int
+find(Char aChar) : Int
+find(String aString, Int aIndex ) : Int
+find(Char aChar, Int aIndex) : Int
+Returns the position of the first occurrence of the specified character or string in the given string, optionally starting from the specified position.
+
+Returns -1 when the specified string or character could not be found.
+
+This function is case-sensitive.
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.find("e");
+// firstOccurrence = 5
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.find("in");
+// firstOccurrence = 1
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.find("e", 10);
+// firstOccurrence = 15
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.find("in", 10);
+// firstOccurrence = 24
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.find("q");
+// firstOccurrence = -1
+Scripting API | String Methods
+findS
+findS(Char aChar) : Int
+findS(Char aChar, Int aIndex) : Int
+findS(String aString) : Int
+findS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the find method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+findBackwards
+findBackwards(String aString) : Int
+findBackwards(Char aChar) : Int
+findBackwards(String aString, Int aIndex) : Int
+findBackwards(Char aChar, Int aIndex ) : Int
+Returns the position of the last occurrence of the specified character or string in the given string, optionally starting in the reverse order from the specified position.
+
+Returns -1 when the specified string or character could not be found.
+
+This function is case-sensitive.
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.findBackwards("e");
+// firstOccurrence = 38
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.findBackwards("in");
+// firstOccurrence = 24
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.findBackwards("e", 10);
+// firstOccurrence = 7
+
+String message = "single environment, all-in-one software";
+Int firstOccurrence = message.findBackwards("in", 10);
+// firstOccurrence = 1
+Scripting API | String Methods
+findBackwardsCaseInsensitive
+findBackwardsCaseInsensitive(String aString) : Int
+findBackwardsCaseInsensitive(Char aChar) : Int
+findBackwardsCaseInsensitive(String aString, Int aIndex) : Int
+findBackwardsCaseInsensitive(Char aChar, Int aIndex) : Int
+Returns the position of the last occurrence of the specified character or string in the given string, optionally starting in the reverse order from the specified position.
+
+Returns -1 when the specified string or character could not be found.
+
+This function is case-insensitive.
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findBackwardsCaseInsensitive("E");
+// firstOccurrence = 38
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findBackwardsCaseInsensitive("on");
+// firstOccurrence = 27
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findBackwardsCaseInsensitive("e", 10);
+// firstOccurrence = 7
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findBackwardsCaseInsensitive("On", 15);
+// firstOccurrence = 12
+Scripting API | String Methods
+findBackwardsCaseInsensitiveS
+findBackwardsCaseInsensitiveS(Char aChar) : Int
+findBackwardsCaseInsensitiveS(Char aChar, Int aIndex) : Int
+findBackwardsCaseInsensitiveS(String aString) : Int
+findBackwardsCaseInsensitiveS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the findBackwardsCaseInsensitive method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+findBackwardsS
+findBackwardsS(Char aChar) : Int
+findBackwardsS(Char aChar, Int aIndex) : Int
+findBackwardsS(String aString) : Int
+findBackwardsS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the findBackwards method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+findCaseInsensitive
+findCaseInsensitive(String aString) : Int
+findCaseInsensitive(Char aChar) : Int
+findCaseInsensitive(String aString, Int aIndex) : Int
+findCaseInsensitive(Char aChar, Int aIndex) : Int
+Returns the position of the first occurrence of the specified character or string in the given string, optionally starting from the specified position.
+
+Returns -1 when the specified string or character could not be found.
+
+This function is case-insensitive.
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findCaseInsensitive("E");
+// firstOccurrence = 5
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findCaseInsensitive("on");
+// firstOccurrence = 12
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findCaseInsensitive("e", 10);
+// firstOccurrence = 15
+
+String message = "single ENVIRONMENT, all-in-one SOFTWARE";
+Int firstOccurrence = message.findCaseInsensitive("On", 15);
+// firstOccurrence = 27
+Scripting API | String Methods
+findCaseInsensitiveS
+findCaseInsensitiveS(Char aChar) : Int
+findCaseInsensitiveS(Char aChar, Int aIndex) : Int
+findCaseInsensitiveS(String aString) : Int
+findCaseInsensitiveS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the findCaseInsensitive method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+findNonWhiteSpace
+findNonWhiteSpace(Int & aFromIndex) : Bool
+Returns the Boolean value true if any non-white space character has been found in the given string starting from the specified position.
+
+The position is stored in variable passed by reference. If searching has been finished successfully, the position is updated with the position of the first occurrence of the non-white space character.
+
+String message = " Hello World! ";
+Int firstOccurrence = 0;
+Bool isNonWhiteSpaceFound = message.findNonWhiteSpace(firstOccurrence);  
+// isNonWhiteSpaceFound = true, firstOccurrence = 1
+Scripting API | String Methods
+findNonWhiteSpaceS
+findNonWhiteSpaceS(Char aChar) : Int
+findNonWhiteSpaceS(Char aChar, Int aIndex) : Int
+findNonWhiteSpaceS(String aString) : Int
+findNonWhiteSpaceS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the findNonWhiteSpace method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+findWhiteSpace
+findWhiteSpace(Int & aFromIndex) : Bool
+Returns the Boolean value true if any white space character has been found in the given string starting from the specified position.
+
+The position is stored in variable passed by reference. If searching has been finished successfully, the position is updated with the position of the first occurrence of the white space character.
+
+String message = " Hello World! ";
+Int firstOccurrence = 4;
+Bool isWhiteSpaceFound = message.findWhiteSpace(firstOccurrence);  
+// isWhiteSpaceFound = true, firstOccurrence = 6
+Scripting API | String Methods
+findWhiteSpaceS
+findWhiteSpaceS(Char aChar) : Int
+findWhiteSpaceS(Char aChar, Int aIndex) : Int
+findWhiteSpaceS(String aString) : Int
+findWhiteSpaceS(String aString, Int aIndex) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the findWhiteSpace method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+fromUTF32
+fromUTF32(Int aInt) : String
+Returns a string that represents the specified Unicode code point.
+
+String convertedFromUtf8 = String.fromUTF32(0x20AC);
+// convertedFromUtf8 = "€"
+Scripting API | String Methods
+get
+get(Int aInt) : Char
+Returns the character at the specified zero based position of the given string.
+
+String message = "Hello World!";
+Char secondCharacter = message.get(1);
+// secondCharacter = "e"
+Scripting API | String Methods
+insert
+insert(Int aIndex, String aString) : Void
+Inserts the specified string into the specified position of the given string.
+
+String message = "HelloWorld!";
+message.insert(5, " ");
+// message = "Hello World!"
+Scripting API | String Methods
+insertS
+insertS(Int aIndex, String aString)
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the insert method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+isEmpty
+isEmpty() : Bool
+Returns the Boolean value true if the given string is empty.
+
+String message = "Hello World!";
+Bool isMessageEmpty = message.isEmpty();
+// isMessageEmpty = false
+Scripting API | String Methods
+isNumeric
+isNumeric(Currency & aInt) : Bool
+isNumeric(Double & aInt) : Bool
+isNumeric(Int & aInt) : Bool
+isNumeric(Int64 & aInt) : Bool
+Returns the Boolean value true if the conversion of the given string to the specified variable of the given type, passed by reference, has been finished successfully.
+
+String strMonthAverage = "0.567";
+Double monthAverage;
+Double yearSum;
+if (strMonthAverage.isNumeric(monthAverage))
+   // if applicable, the given string is converted into Double
+   yearSum = 12 * monthAverage;
+else
+   // otherwise this message appears in the log file
+   logError("Invalid double format: " + strMonthAverage);
+Scripting API | String Methods
+left
+left(Int aLength) : String
+Returns a string that represents the specified number of characters from the beginning of the given string.
+
+If that number is greater than the number of characters in the given string, the entire string is returned.
+
+String strPrice = "€1234";
+String result = strPrice.left(1);  // result = "€"
+Scripting API | String Methods
+leftBM
+leftBM(Int aLength) : String
+Returns a string that represents the specified number of bytes from the beginning of the given string.
+
+If that number is greater than the number of bytes in the given string, the entire string is returned.
+
+If a Unicode code point of the given character is greater than 255, that character represents two bytes in the string.
+
+String strPrice = "€1234";
+String result = strPrice.leftBM(1);  // result = " "
+Scripting API | String Methods
+leftJustify
+leftJustify (Int aWidth, Char aFill, Bool aTruncate) : Void
+Sets the length of the given string to the specified value and if it is greater than the original length, justifies the current content to the left and fills the remaining space with the specified character. If the new length is smaller than the original length, the given string is truncated only if the specified parameter is set to the Boolean value true.
+
+String message = "Hello World!";
+message.leftJustify(15, "*", true);   // message = "Hello World!***"
+
+String message = "Hello World!";
+message.leftJustify(5, "*", true);    // message = "Hello"
+
+String message = "Hello World!";
+message.leftJustify(5, "*", false);   // message = "Hello World!"
+Scripting API | String Methods
+leftJustifyS
+leftJustifyS(Int aWidth, Char aFill, Bool aTruncate)
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the leftJustify method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+leftS
+left(Int aLength) : String
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the left method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+Length
+Length : Int
+getLength() : Int
+setLength(Int aNewLength) : Void
+Returns or sets the length of the given string. If the length is changed, the string is either truncated or appended with trailing spaces.
+
+For enhanced control, two additional methods leftJustify and rightJustify can be used.
+
+String strPrice = "€1234";
+Int result = strPrice.Length;  // result = 5
+
+String message = "Hello World!";
+message.Length = 5;  // message = "Hello"
+Scripting API | String Methods
+LengthBM
+LengthBM : Int
+getLengthBM() : Int
+Returns the number of bytes of the given string.
+
+If a Unicode code point of the given character is greater than 255, that character represents two bytes in the string.
+
+String strPrice = "€1234";
+Int result = strPrice.LengthBM; // result = 6
+Scripting API | String Methods
+LengthS
+LengthS : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the Length method which, however, if applied for these strings, would yield unexpected results.
+
+String testString = String.fromUTF32(0x10000);
+Int stringLength = testString.Length;     // stringLength  = 2
+Int stringLengthS = testString.LengthS;   // stringLengthS = 1
+Scripting API | String Methods
+less
+less(String aString) : Bool
+Returns the Boolean value true if the Unicode code point of the first different character of the given string is less than the Unicode code point of the character at the corresponding position of the specified string. The same result can be achieved using the less than operator <.
+
+String baseString = "Austria";
+String stringToCompare = "Belgium";
+Bool isLessThanBaseString = stringToCompare.less(baseString);
+// isLessThanBaseString = false
+Scripting API | String Methods
+makeEmpty
+makeEmpty() : Void
+Removes the content of the given string.
+
+String message = "Hello World!";
+message.makeEmpty();   // message = ""
+Scripting API | String Methods
+makeLowerCase
+makeLowerCase() : Void
+Converts all alphabetic characters of the given string to lowercase.
+
+String message = "Hello World!";
+message.makeLowerCase();   // message = "hello world!"
+Scripting API | String Methods
+makeTitleCase
+makeTitleCase() : Void
+Converts the first character of the given string to uppercase.
+
+String message = "Hello World!";
+message.makeTitleCase();   // message = "Hello world!"
+Scripting API | String Methods
+makeTitleCaseWords
+makeTitleCaseWords() : Void
+Converts the first character of each word in the given string to uppercase.
+
+String message = "hello world!";
+message.makeTitleCaseWords();   // message = "Hello World!"
+Scripting API | String Methods
+makeUpperCase
+makeUpperCase() : Void
+Converts all alphabetic characters of the given string to uppercase.
+
+String message = "Hello World!";
+message.makeUpperCase();   // message = "HELLO WORLD!"
+Scripting API | String Methods
+mid
+mid(Int aIndex) : String
+mid(Int aIndex, Int aLength) : String
+Returns a substring from the given string, starting at the zero based specified position. If that position is greater than the length of the given string, a zero-length string is returned.
+
+If the optional parameter that represents the length of the substring is not specified or it is greater than the available length of the given string, all characters from the specified start position to the end of the given string are returned.
+
+String message = "Hello World!";
+String result = message.mid(6);       // result = "World!"
+
+String message = "Hello World!";
+String result = message.mid(2, 5);    // result = "llo W"
+
+String message = "Hello World!";
+String result = message.mid(2, 20);   // result = "llo World!"
+
+String message = "Hello World!";
+String result = message.mid(15, 2);   // result = ""
+
+String strPrice = "€1234";
+String result = message.mid(0, 1);    // result = "€"
+Scripting API | String Methods
+midBM
+midBM(Int aIndex, Int aLength) : String
+midBM(Int aInt) : String
+Returns a substring from the given string, starting at the zero based specified byte number. If that number is greater than the total number of bytes in the given string, a zero-length string is returned.
+
+If the optional parameter that represents the number of bytes in the substring is not specified or it is greater than the available number of bytes in the given string, all characters from the specified start position to the end of the given string are returned.
+
+
+Note  If a Unicode code point of the given character is greater than 255, that character represents two bytes in the string.
+
+String strPrice = "€1234";
+String result1 = message.midBM(0, 1);   // result = " "
+String result2 = message.midBM(0, 2);   // result = "€"
+Scripting API | String Methods
+midS
+mid(Int aIndex) : String
+mid(Int aIndex, Int aLength) : String
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the mid method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseBoolS
+parseBoolS(Int & aFromIndex, Bool & aBool) : Int
+Sets the Boolean variable to the value of string from the specified position. Returns 0 if a permitted value is found: true, false, yes, no, 1, 0, t, f, y, n (case insensitive). In other cases -1 is returned.
+
+It is designed for dealing with strings that use surrogate pairs.
+
+Scripting API | String Methods
+parseChar
+parseChar(Int & aFromIndex, Char aChar) : Int
+Returns the value of zero if the character at the specified position in the given string matches the specified character. This function is case-sensitive.
+
+The position is stored in the variable passed by reference and incremented by one if parsing has been finished successfully.
+
+String message = "Hello World!";
+Char characterToSearch = "o";
+Int currentPosition = 4;
+Bool isFound = (message.parseChar(currentPosition, 
+                                  characterToSearch) == 0);
+// isFound = true, currentPosition = 5
+Scripting API | String Methods
+parseCharCaseInsensitive
+parseCharCaseInsensitive(Int & aFromIndex, Char aChar) : Int
+Returns the value of zero if the character at the specified position in the given string matches the specified character. This function is case-insensitive.
+
+The position is stored in the variable passed by reference and incremented by one if parsing has been finished successfully.
+
+String message = "Hello World!";
+Char characterToSearch = "L";
+Int currentPosition = 2;
+Bool isFound = (message.parseCharCaseInsensitive(currentPosition, 
+                                                 characterToSearch) == 0);
+// isFound = true, currentPosition = 3
+Scripting API | String Methods
+parseCharCaseInsensitiveS
+parseCharCaseInsensitiveS(Int & aFromIndex, Char aChar) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseCharCaseInsensitive method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseCharS
+parseCharS(Int & aFromIndex, Char aChar) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseChar method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseDouble
+parseDouble(Int & aFromIndex, Double & aDouble) : Int
+Returns the value of zero if the string that starts at the specified position of the given string represents a number of type double.
+
+The position and number are stored in variables passed by reference. If parsing has been finished successfully, the position is incremented by the length of the string that represents the parsed number and the number variable is updated with the parsed value.
+
+String strPrice = "$-238.50";
+Double price;
+Int currentPosition = 1;
+Bool isFound = (strPrice.parseDouble(currentPosition, price) == 0);
+// isFound = true, currentPosition = 8, price = -238.5
+Scripting API | String Methods
+parseDoubleS
+parseDoubleS(Int & aFromIndex, Double aDouble) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseDouble method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseInt64
+parseInt64(Int & aFromIndex, Int64 & aInt64, Int aBase) : Int
+Returns the value of zero if the string that starts at the specified position of the given string represents a number of type 64-bit integer.
+
+The position and number are stored in variables passed by reference. If parsing has been finished successfully, the position is incremented by the length of the string that represents the parsed number and the number variable is updated with the parsed value with regard to the specified base of the numeral system.
+
+String message = "decimal value -32 is -20 in hexadecimal";
+Int64 value;
+Int currentPosition = 21;
+Bool isFound = (message.parseInt64(currentPosition, value, 16) == 0);
+// isFound = true, currentPosition = 24, value = -32
+Scripting API | String Methods
+parseInt64S
+parseInt64S(Int & aFromIndex, Int64 & aInt64, Int aBase) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseInt64 method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseLine
+parseLine(String aSeparator, String aTextQualifier, StringList & aP3) : Bool
+Returns the Boolean value true if splitting of the given string using the specified delimiter and the specified text qualifier to the specified string list variable passed by reference has been finished successfully.
+
+A delimiter containing more than one character must be preceded with the double number sign.
+
+The text qualifier represents the character that encloses individual text values in the given string. All of the text that follows that character and precedes the next occurrence of that character is parsed as one value, even if the text contains the delimiter character.
+
+Note  When a string ending with a delimiter is being parsed, the empty field behind the delimiter is parsed as an individual empty value. For example, a following string with ";" delimiter: "a;b;" contains three individual values: "a", "b" and ""(empty value).
+String strCities = "Tokyo<br/>Seoul<br/>Mexico City";
+Util.StringList cities;
+strCities.parseLine("##<br/>", "", cities);
+// cities[0] = "Tokyo", cities[1] = "Seoul", ...
+String strCities = "'Tokyo,jp','Seoul,kr','Mexico City,mx'";
+Util.StringList cities;
+strCities.parseLine(",", "'", cities);
+// cities[0] = "Tokyo,jp", cities[1] = "Seoul,kr", ...
+Scripting API | String Methods
+parseString
+parseString(Int & aFromIndex, String aString) : Int
+Returns the value of zero if the string that starts at the specified position of the given string matches the specified string. This function is case-sensitive.
+
+The position is stored in the variable passed by reference and incremented by the length of the specified string if parsing has been finished successfully.
+
+String message = "Hello World!";
+String stringToSearch = "OR";
+Int currentPosition = 7;
+Bool isFound = (message.parseString(currentPosition, 
+                                    stringToSearch) == 0);
+// isFound = false, currentPosition = 7
+Scripting API | String Methods
+parseStringCaseInsensitive
+parseStringCaseInsensitive(Int & aFromIndex, String aString) : Int
+Returns the value of zero if the string that starts at the specified position of the given string matches the specified string. This function is case-insensitive.
+
+The position is stored in the variable passed by reference and incremented by the length of the specified string if parsing has been finished successfully.
+
+String message = "Hello World!";
+String stringToSearch = "OR";
+Int currentPosition = 7;
+Bool isFound = (message.parseStringCaseInsensitive(currentPosition, 
+                                                   stringToSearch) == 0);
+// isFound = true, currentPosition = 9
+Scripting API | String Methods
+parseStringCaseInsensitiveS
+parseStringCaseInsensitiveS(Int & aFromIndex, String aString) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseStringCaseInsensitive method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseStringS
+parseStringS(Int & aFromIndex, String aString) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseString method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseUInt64
+parseUInt64(Int & aFromIndex, Int64 & aInt64, Int aBase) : Int
+Returns the value of zero if the string that starts at the specified position of the given string represents a positive number of type 64-bit integer.
+
+The position and number are stored in variables passed by reference. If parsing has been finished successfully, the position is incremented by the length of the string that represents the parsed number and the number variable is updated with the parsed value with regard to the specified base of the numeral system.
+
+String message = "decimal value -32 is -20 in hexadecimal";
+Int64 value;
+Int currentPosition = 21;
+Bool isFound = (message.parseUInt64(currentPosition, value, 16) == 0);
+// isFound = false, currentPosition = 21, value = 0
+currentPosition++;
+Bool isFound = (message.parseUInt64(currentPosition, value, 16) == 0);
+// isFound = true, currentPosition = 24, value = 32
+Scripting API | String Methods
+parseUInt64S
+parseUInt64(Int & aFromIndex, Int64 & aInt64, Int aBase) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the parseUInt64 method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+parseUntilWhiteSpace
+parseUntilWhiteSpace(Int & aFromIndex, String & aString) : Void
+Searches for the white space character in the given string starting from the specified position and stores all the parsed text in the specified variable.
+
+The position and parsed text are stored in variables passed by reference. If parsing has been finished successfully, the position is updated with the position of the first occurrence of the white space character.
+
+String message = " Hello World! ";
+Int currentPosition = 1;
+String textFound;
+message.parseUntilWhiteSpace(currentPosition, textFound);
+// currentPosition = 6, textFound = "Hello"
+Scripting API | String Methods
+Part
+Part[Int apartIdx, Char aSeparator] : String
+Part[Int apartIdx, String aSeparator] : String
+getPart(Int aPartIdx, Char aSeparator) : String
+getPart(Int aPartIdx, String aSeparator) : String
+Returns a part of the given string at the specified zero based index. Parts are substrings, that have been split from the given string using the specified delimiter.
+
+If that index is greater than number of parts, the zero-length string is returned.
+
+If substrings are delimited by the space character, the Word function can be used instead.
+
+String strCities = "Tokyo<br/>Seoul<br/>Mexico City";
+String secondCity = strCities.Part[1, "<br/>"];
+// secondCity = "Seoul"
+Scripting API | String Methods
+plus
+plus(Char aChar) : Void
+plus(String aString) : Void
+Appends the specified character or string to the given string.
+
+String message = "Hello";
+message.plus(" World!");   // message = "Hello World!"
+Scripting API | String Methods
+prepend
+prepend (String aString) : Void
+Attaches the specified string to the beginning of the given string.
+
+String message = "World!";
+message.prepend("Hello ");   // message = "Hello World!"
+Scripting API | String Methods
+reduceDirectorySymbols
+reduceDirectorySymbols(Int aNotReduceBelow) : Void
+Reduces all the relative symbols of the given string that represents a relative path to the file or directory.
+
+The specified number determines how many characters from the beginning of the given string will be left intact.
+
+String strPath = "C:/Documents and Settings/./../My Virtual Machines";
+strPath.reduceDirectorySymbols(1);
+// strPath = "C:/My Virtual Machines"
+Scripting API | String Methods
+reduceWhiteSpace
+reduceWhiteSpace() : Void
+Reduces all white space characters of the given string to the first white space.
+
+String message = " Hello   World! ";
+message.reduceWhiteSpace();   // message = " Hello World! "
+Scripting API | String Methods
+remove
+remove(Int aIndex, Int aInt) : Void
+Removes a substring from the given string that starts at the specified zero based position and represents the specified number of characters.
+
+If that starting position is greater than the length of the string, no characters are deleted.
+
+If the specified number of characters is greater than remaining number of characters in the given string, only the rest of the string if removed.
+
+String message = "Hello World!";
+message.remove(9, 1);   // message = "Hello Word!"
+Scripting API | String Methods
+removeS
+remove(Int aIndex, Int aInt)
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the remove method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+replace
+replace(Char aToFind, Char aReplaceWith) : Void
+replace(String aToFind, String aReplaceWith) : Void
+replace(String aToFind, String aReplaceWith, Int aFromIndex) : Void
+replace(String aToFind, String aReplaceWith, Int aFromIndex, Int aTimes) : Void
+replace(Int aFromIndex, Int aCount, String aString) : Void
+Replaces the specified character or string in the given string with a character or string. Optionally, starts at the specified zero based position and executes up to the given number of matching occurrences, or replaces a set number of characters.
+
+String message = "single environment, all-in-one software";
+message.replace("e", "E");
+// message = "singlE EnvironmEnt, all-in-onE softwarE"
+
+String message = "single environment, all-in-one software";
+message.replace("e", "E", 15);
+// message = "single environmEnt, all-in-onE softwarE"
+
+String message = "single environment, all-in-one software";
+message.replace("e", "E", 15, 2);
+// message = "single environmEnt, all-in-onE software"
+
+String message = "single environment, all-in-one software";
+message.replace(7, 11, "system (resp. environment)");
+// message = "single system (resp. environment), all-in-one software"
+Scripting API | String Methods
+replaceBM
+replaceBM(Int aFromIndex, Int aLength, String aReplaceWith) : Void
+Replaces a substring in the given string. The substring, which starts at the specified zero based position and represents the specified number of bytes, is replaced with the specified string.
+
+If the length of the specified string does not fit the specified length, that string is either truncated or appended with space characters.
+
+If a Unicode code point of the given character is greater than 255, that character represents two bytes in the string.
+
+String strPrice = "€1234";
+// Euro sign is double-byte while dollar sign only single-byte
+strPrice.replaceBM(0, 1, "$$$");   // strPrice = "$ 1234"
+
+String strPrice = "€1234";
+strPrice.replaceBM(0, 2, "$$$");   // strPrice = "$$1234"
+Scripting API | String Methods
+replacePart
+replacePart(String aSeparator, Int aIndex, String aReplaceText, Bool aAddPartsIfNeeded)
+This method replaces parts of strings. The aIndex parameter (position) uses 0 based index.
+
+The fourth parameter (aAddPartsIfNeeded) is for cases, when the defined position does not exist in the string:
+
+If set to false, en error will be thrown,
+
+If set to true, the missing separators are inserted to create the field at the defined position and the replacement value is inserted.
+
+String test="JF2028;simplex;portrait;;0;0;0;0";
+test.replacePart(";",1,"duplex",false);
+Scripting API | String Methods
+replaceS
+replaceS(Int aFromIndex, Int aInt, String aString)
+replaceS(String aToFind, String aReplaceWith)
+replaceS(String aToFind, String aReplaceWith, Int aFromIndex)
+replaceS(String aToFind, String aReplaceWith, Int aFromIndex, Int aTimes)
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the replace method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+resemblesText
+resemblesText() : Bool
+Determines if a string contains decipherable glyphs.
+
+This method counts letters, digits, control characters and white spaces in strings. If the sum of the listed characters exceeds 85% of the total count of glyphs in strings, they are considered comprehensible text and the Boolean value true is returned.
+
+Scripting API | String Methods
+ReversePart
+ReversePart[Int apartIdx, Char aSeparator] : String
+getReversePart(Int aPartIdx, Char aSeparator) : String
+Returns a part of the given string at the specified reverse ordered zero based index. Parts are substrings, that have been split from the given string using the specified delimiter.
+
+If that index is greater than the number of parts, the zero-length string is returned.
+
+String strCities = "Tokyo<br/>Seoul<br/>Mexico City";
+String lastCity = strCities.ReversePart[0, "<br/>"];
+// lastCity = "Mexico City"
+Scripting API | String Methods
+right
+right(Int aLength) : String
+Returns a string that represents the specified number of characters from the right side of the given string.
+
+If that number is greater than the number of characters in the given string, the entire string is returned.
+
+String mesage = "Hello World!";
+String result = message.right(6);    // result = "World!"
+
+String strPrice = "4321€";
+String result = strPrice.right(1);   // result = "€"
+Scripting API | String Methods
+rightBM
+rightBM(Int aLength) : String
+Returns a string that represents the specified number of bytes from the right side of the given string.
+
+If that number is greater than the number of bytes in the given string, the entire string is returned.
+
+If a Unicode code point of the given character is greater than 255, that character represents two bytes in the string.
+
+String strPrice = "4321€";
+String result = strPrice.right(1);   // result = " "
+Scripting API | String Methods
+rightJustify
+rightJustify(Int aWidth, Char aFill, Bool aTruncate) : Void
+Sets the length of the given string to the specified value and if it is greater than the original length, justifies the current content to the right and fills the remaining space with the specified character. If the new length is lower than the original length, the given string is truncated only if the specified parameter is set to the Boolean value true.
+
+String message = "Hello World!";
+message.rightJustify(15, "*", true);   // message = "***Hello World!"
+
+String message = "Hello World!";
+message.rightJustify(5, "*", true);    // message = "Hello"
+
+String message = "Hello World!";
+message.rightJustify(5, "*", false);   // message = "Hello World!"
+Scripting API | String Methods
+rightJustifyS
+rightJustifyS(Int aWidth, Char aFill, Bool aTruncate)
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the rightJustify method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+rightS
+rightS(Int aLength) : Int
+This method is designed for dealing with strings that use surrogate pairs. It has the same functionality as the right method which, however, if applied for these strings, would yield unexpected results.
+
+Scripting API | String Methods
+S
+getS(Int aInt) : Char
+setS(Int aInt, Int aChar) : Void
+S[Int aInt] : Int
+Returns or sets the Unicode code point of the character on the specified zero based position in the given string.
+
+It is designed for dealing with strings that use surrogate pairs.
+
+String testString = String.fromUTF32(0x10000);
+String firstUnicodeCodePoint = testString[0].toInt().toString(0,false,16);
+// firstUnicodeCodePoint = "d800"
+String secondUnicodeCodePoint = testString[1].toInt().toString(0,false,16);
+// secondUnicodeCodePoint = "dc00"
+Scripting API | String Methods
+set
+set(Int aInt, Char aChar) : Void
+Sets the character at the specified zero based position of the given string to the specified character.
+
+String strRatio = "0,25";
+strRatio.set(1, ".");   // strRatio = "0.25"
+
+String strRatio = "0,25";
+strRatio[1] = ".";      // strRatio = "0.25"
+Scripting API | String Methods
+singleJapanToUni
+singleJapanToUni() : String
+Returns a string with all characters of the given string replaced with their alternatives of the uniform width, if these are available.
+
+Note  This functionality is implemented as mapping of two ranges of Unicode code points 0x21–0xAC and 0xFF61–0xFF9C into uniform width character alternatives in ranges 0xFF01–0xFFE2 and 0x3002-0x309C.
+To display these characters correctly in the final output they must be available in the used font.
+
+String message="Hello World!";
+String result = message.singleJapanToUni();   // result = "Hello World!"
+If both variables message and result are used in the layout and any suitable font is used, they can appear similarly like on the following image.
+
+
+Scripting API | String Methods
+toBool
+toBool() : Bool
+Returns a value that represents a Boolean value of the given string.
+
+String strResult = "false";
+Bool result = strResult.toBool();   // result = false
+Scripting API | String Methods
+toCurrency
+toCurrency() : Currency
+Returns a number that represents a currency value of the given string.
+
+String strMonthAverage = "0.1234";
+Currency yearSum = 12 * strMonthAverage.toCurrency();
+// yearSum = 1.4808
+Caution  If the string contains a non-numerical character, only the numbers before the character are parsed and the rest of the string is ignored. The error message is only displayed when the string starts with the non-numerical character. This behavior is kept for backward compatibility.
+To detect invalid strings, use the isNumeric method.
+
+Scripting API | String Methods
+toDouble
+toDouble() : Double
+Returns a number that represents a double value of the given string.
+
+String strMonthAverage = "0.123456";
+Double yearSum = 12 * strMonthAverage.toDouble();
+// yearSum = 1.481472
+Caution  If the string contains a non-numerical character, only the numbers before the character are parsed and the rest of the string is ignored. The error message is only displayed when the string starts with the non-numerical character. This behavior is kept for backward compatibility.
+To detect invalid strings, use the isNumeric method.
+
+Scripting API | String Methods
+toInt
+toInt() : Int
+Returns a number that represents an integer value of the given string.
+
+String strResult = "12345";
+Int result = strResult.toInt();   // result = 12345
+Caution  If the string contains a non-numerical character, only the numbers before the character are parsed and the rest of the string is ignored. The error message is only displayed when the string starts with the non-numerical character. This behavior is kept for backward compatibility.
+To detect invalid strings, use the isNumeric method.
+
+Scripting API | String Methods
+toInt64
+toInt64 () : Int64
+Returns a number that represents a 64bit integer value of the given string.
+
+String strResult = "12345";
+Int64 result = strResult.toInt64();   // result = 12345
+Caution  If the string contains a non-numerical character, only the numbers before the character are parsed and the rest of the string is ignored. The error message is only displayed when the string starts with the non-numerical character. This behavior is kept for backward compatibility.
+To detect invalid strings, use the isNumeric method.
+
+Scripting API | String Methods
+toLowerCase
+toLowerCase() : String
+Returns a string with all alphabetic characters of the given string converted to lowercase.
+
+String message = "Hello World!";
+String result = message.toLowerCase();   // result = "hello world!"
+Scripting API | String Methods
+toReplaced
+toReplaced(String aToFind, String aReplaceWith) : String
+Replaces all instances of a character or a string with another character or a string.
+
+String Input = "A123|B456|C789";
+return Input.toReplaced("|","_");   // result = "A123_B456_C789"
+Scripting API | String Methods
+toReversed
+toReversed() : String
+Returns a string with the reverted order of all characters in the given string.
+
+Tip  This scripting method is useful for reverting the sequence of binary data for OMR barcodes.
+String sequence = "A123 B456 C789";
+String result = sequence.toReversed();   // result = "987C 654B 321A"
+Scripting API | String Methods
+toTitleCase
+toTitleCase() : String
+Returns a string with the first character of the given string converted to uppercase and the remaining characters converted to lowercase.
+
+String message = "hello WORLD!";
+String result = message.toTitleCase();   // result = "Hello world!"
+Scripting API | String Methods
+toTitleCaseWords
+toTitleCaseWords() : String
+Returns a string with the first character of each word in the given string converted to uppercase.
+
+String message = "hello world!";
+String result = message.toTitleCaseWords();  // result = "Hello World!"
+Scripting API | String Methods
+toUpperCase
+toUpperCase() : String
+Returns a string with all alphabetic characters of the given string converted to uppercase.
+
+String message = "Hello World!";
+String result = message.toUpperCase();   // result = "HELLO WORLD!"
+Scripting API | String Methods
+toWhiteSpaceLeftTrimmed
+toWhiteSpaceLeftTrimmed() : String
+Returns a string with all leading white space characters removed from the given string.
+
+String message = " Hello   World! ";
+String result = message.toWhiteSpaceRighLeftTrimmed();
+// result = "Hello   World! "
+Scripting API | String Methods
+toWhiteSpaceReduced
+toWhiteSpaceReduced() : String
+Returns a string with all white space characters of the given string reduced to the first white space.
+
+String message = " Hello   World! ";
+String result = message.toWhiteSpaceReduced();
+// result = " Hello World! "
+Scripting API | String Methods
+toWhiteSpaceRightTrimmed
+toWhiteSpaceRightTrimmed() : String
+Returns a string with all trailing white space characters removed from the given string.
+
+String message = " Hello   World! ";
+String result = message.toWhiteSpaceRightTrimmed();
+// result = " Hello   World!"
+Scripting API | String Methods
+toWhiteSpaceTrimmed
+toWhiteSpaceTrimmed() : String
+Returns a string with all leading and trailing white space characters removed from the given string.
+
+String message = " Hello   World! ";
+String result = message.toWhiteSpaceTrimmed();
+// result = "Hello   World!"
+Scripting API | String Methods
+toWhiteSpaceTrimmedAndReduced
+toWhiteSpaceTrimmedAndReduced() : String
+Returns a string with all trailing white space characters removed from the given string and with all remaining white space characters reduced to the first white space (i.e. the first white space from the remaining ones is kept).
+
+String message = " Hello   World! ";
+String result = message.toWhiteSpaceTrimmedAndReduced();
+// result = "Hello World!"
+Scripting API | String Methods
+trimAndReduceWhiteSpace
+trimAndReduceWhiteSpace() : Void
+Removes all leading and trailing white space characters from the given string and reduces all remaining white space characters to the first white space (i.e. the first white space from the remaining ones is kept).
+
+String message = " Hello   World! ";
+message.trimAndReduceWhiteSpace();   // message = "Hello World!"
+Scripting API | String Methods
+trimLeftWhiteSpace
+trimLeftWhiteSpace() : Void
+Removes all leading white space characters from the given string.
+
+String message = " Hello World! ";
+message.trimLeftWhiteSpace();   // message = "Hello World! "
+Scripting API | String Methods
+trimRightWhiteSpace
+trimRightWhiteSpace() : Void
+Removes all trailing white space characters from the given string.
+
+String message = " Hello World! ";
+message.trimRightWhiteSpace();   // message = " Hello World!"
+Scripting API | String Methods
+trimWhiteSpace
+trimWhiteSpace() : Void
+Removes all leading and trailing white space characters from the given string.
+
+String message = " Hello World! ";
+message.trimWhiteSpace();   // message = "Hello World!"
+Scripting API | String Methods
+truncate
+truncate(Int aNewLength) : Void
+Reduces the length of the given string to the specified value.
+
+String message = "Hello World!";
+message.truncate(5);   // message = "Hello"
+Scripting API | String Methods
+uniToSingleJapan
+uniToSingleJapan() : String
+Returns a string with all uniform width characters of the given string replaced with their default alternatives.
+
+Note  This functionality is implemented as mapping of two ranges of Unicode code points 0xFF01–0xFFE2 and 0x3002-0x309C into non-uniform width character alternatives in ranges 0x21–0xAC and 0xFF61–0xFF9C.
+Further details can be found in the description of the singleJapanToUni method.
+
+Scripting API | String Methods
+Word
+Word[Int apartIdx] : String
+getWord(Int aPartIdx) : String
+Returns a word of the given string at the specified zero based index. Words are substrings, that have been split from the given string using the space character.
+
+If that index is greater than number of words, a zero-length string is returned.
+
+For substrings delimited by a different character the Part function can be used instead.
+
+String message = " Hello World! ";
+String firstWord = message.Word[0];   // firstWord = "Hello"
+
+String message = " Hello" + '\xA0' + "World! ";
+String firstWord = message.Word[0];   // firstWord = "Hello World!"

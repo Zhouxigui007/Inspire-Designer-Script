@@ -1,0 +1,234 @@
+Math Methods
+Math methods can be used for mathematical computation.
+
+Note  Note: If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | Math Methods
+abs
+abs(Double aP1) : Double
+abs(Int aP1) : Int
+Returns the absolute value of the given value.
+
+Double number = Math.abs(-10.2);
+// number = 10.2
+Scripting API | Math Methods
+acos
+acos(Double aP1) : Double
+Returns the inverse cosine of the specified value, expressed in radians.
+
+If the specified value is out of the valid interval between -1 and 1, an error is shown when processing.
+
+Double angle = Math.acos(-1);  
+// angle ≈ 3.142 (+ π)
+Scripting API | Math Methods
+asin
+asin(Double aP1) : Double
+Returns the inverse sine of the specified value, expressed in radians.
+
+If the specified value is out of the valid interval between -1 and 1, an error is shown when processing.
+
+Double angle = Math.asin(-1);
+// angle ≈ -1.571 (- π / 2)
+Scripting API | Math Methods
+atan
+atan(Double aP1) : Double
+Returns the inverse tangent of the specified value, expressed in radians.
+
+Double angle = Math.atan(1 / Math.sqrt(3));
+// angle ≈ 0.524  (+ π / 6)
+Scripting API | Math Methods
+atan2
+atan2(Double aP1, Double aP2) : Double
+Returns the inverse tangent of the specified y-axis and x-axis coordinates, expressed in radians in the interval between -π and +π.
+
+It takes into account the signs of both vector components, and places the angle in the correct quadrant.
+
+Double angle;
+angle = Math.atan2(2, 0);   // angle ≈  1.571 (+ π / 2)
+angle = Math.atan2(3, 3);   // angle ≈  0.785 (+ π / 4)
+angle = Math.atan2(0, 3);   // angle =  0
+angle = Math.atan2(-5, 5);  // angle ≈ -0.785 (- π / 4)
+angle = Math.atan2(0, 0);   // angle =  0
+Scripting API | Math Methods
+ceil
+ceil(Double aP1) : Double
+Returns a real number that represents the next largest integer of the specified real number.
+
+Double number;
+number = Math.ceil(-5.9);  // number = -5
+number = Math.ceil(-5);    // number = -5
+number = Math.ceil(5);     // number =  5
+number = Math.ceil(0);     // number =  0
+number = Math.ceil(0.2);   // number =  1
+Scripting API | Math Methods
+cos
+cos(Double aP1) : Double
+Returns the cosine of the specified angle.
+
+Double number;
+number = Math.cos(-2 * Math.PI);  // number =  1
+number = Math.cos(-Math.PI);      // number = -1
+number = Math.cos(0);             // number =  1
+number = Math.cos(Math.PI / 2);   // number =  0
+Scripting API | Math Methods
+E
+E : Double
+getE() : Double
+Returns the base of the natural logarithm.
+
+Double e = Math.E;
+// e ≈ 2.718
+Scripting API | Math Methods
+exp
+exp(Double aP1) : Double
+Returns e (the base of natural logarithm) raised to the specified power.
+
+Double number;
+number = Math.exp(0);   // number = 1
+number = Math.exp(-1);  // number ≈ 0.368
+number = Math.exp(1);   // number ≈ 2.718 (e)
+number = Math.exp(2);   // number = 7.389
+Scripting API | Math Methods
+floor
+floor(Double aP1) : Double
+Returns a real number that represents the next smallest integer of the specified real number.
+
+Double number;
+number = Math.floor(-5.9);  // number = -6
+number = Math.floor(-5);    // number = -5
+number = Math.floor(5);     // number =  5
+number = Math.floor(0);     // number =  0
+number = Math.floor(0.8);   // number =  0
+Scripting API | Math Methods
+fromin
+fromin(Double aP1) : Double
+Returns a real number that represents the specified value converted from inches to meters.
+
+Double result = Math.fromin(1);  // result = 0.0254
+Scripting API | Math Methods
+frommm
+frommm(Double aP1) : Double
+Returns a real number that represents the specified value converted from millimeters to meters.
+
+Double result = Math.frommm(1000);  // result = 1
+Scripting API | Math Methods
+frompt
+frompt(Double aP1) : Double
+Returns a real number that represents the specified value converted from typographical points to meters.
+
+Double result = Math.frompt(72);  // result = 0.0254 (72 pt = 1 inch)
+Scripting API | Math Methods
+log
+log(Double aP1) : Double
+Returns the natural logarithm of the specified number.
+
+If the specified number is less than or equal to the zero value, an error is shown when processing.
+
+Double result;
+result = Math.log(0.1);     // result ≈ -2.30
+result = Math.log(1);       // result = 0
+result = Math.exp(Math.E);  // result = 1
+
+Double meanLifetime = 200;
+Double halfLife = meanLifetime * Math.log(2);
+// halfLife ≈ 138.629
+Scripting API | Math Methods
+max
+max(Double aP1, Double aP2) : Double
+max(Int aP1, Int aP2) : Int
+Returns the greater of two values.
+
+Double maxValue = Math.max(-5, 3);  // maxValue = 3
+Scripting API | Math Methods
+min
+min(Double aP1, Double aP2) : Double
+min(Int aP1, Int aP2) : Int
+Returns the smaller of two values.
+
+Double minValue = Math.min(-5, 3);  // minValue = -5
+Scripting API | Math Methods
+PI
+PI : Double
+getPI() : Double
+Returns the mathematical constant π whose value is the ratio of a circle's circumference to its diameter.
+
+Double diameter = 10;
+Double area = Math.PI * Math.pow(diameter, 2) / 4;
+// area ≈ 78.540
+Scripting API | Math Methods
+pow
+pow(Double aP1, Double aP2) : Double
+Returns the value of the first argument raised to the power of the second argument.
+
+Double result = Math.pow(2, 3);   // result = 8
+Scripting API | Math Methods
+random
+random() : Double
+Returns a random real number less than 1 but greater than or equal to 0.
+
+Double randomDiceValue = Math.floor(6 * Math.random()) + 1;
+Scripting API | Math Methods
+round
+round (Double aP1) : Double
+round (Double aP1, Int aNrOfDecimalPlaces) : Double
+Returns a rounded variant of the specified number, optionally rounded to the specified number of decimal places.
+
+Double result;
+result = Math.round(1.2);         // result =  1
+result = Math.round(1.5);         // result =  2
+result = Math.round(-1.5);        // result = -2
+result = Math.round(-1.2);        // result = -1
+result = Math.round(Math.PI, 3);  // result =  3.142
+Scripting API | Math Methods
+sin
+sin(Double aP1) : Double
+Returns the sine of the specified angle.
+
+Double result;
+result = Math.sin(-Math.PI);   // result ≈ 0
+result = Math.sin(0);          // result = 0
+result = Math.sin(Math.PI/2);  // result = 1
+Scripting API | Math Methods
+sqrt
+sqrt(Double aP1) : Double
+Returns the square root of the specified number.
+
+Double result = Math.sqrt(9);  // result = 3
+Scripting API | Math Methods
+tan
+tan(Double aP1) : Double
+Returns the tangent of the specified angle.
+
+Double result;
+result = Math.tan(-Math.PI / 4);         // result = -1
+result = Math.tan(Math.toRadians(30));   // result ≈ 0.577
+Scripting API | Math Methods
+toDegrees
+toDegrees(Double aP1) : Double
+Returns a real number that represents the specified value converted from radians to degrees.
+
+Double result = Math.toDegrees(Math.PI);  // result = 180
+Scripting API | Math Methods
+toin
+toin(Double aP1) : Double
+Returns a real number that represents the specified value converted from meters to inches.
+
+Double result = Math.toin(0.0254);  // result = 1
+Scripting API | Math Methods
+tomm
+tomm(Double aP1) : Double
+Returns a real number that represents the specified value converted from meters to millimeters.
+
+Double result = Math.tomm(1);  // result = 1000
+Scripting API | Math Methods
+topt
+topt(Double aP1) : Double
+Returns a real number that represents the specified value converted from meters to typographical points.
+
+Double result = Math.topt(Math.fromin(1));  // result = 72
+Scripting API | Math Methods
+toRadians
+toRadians(Double aP1) : Double
+Returns a real number that represents the specified value converted from degrees to radians.
+
+Double result = Math.toRadians(-90);
+// result ≈ -1.571 (- π / 2)

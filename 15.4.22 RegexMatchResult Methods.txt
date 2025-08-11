@@ -1,0 +1,137 @@
+RegexMatchResult Methods
+A string represents a sequence of characters.
+
+Note  If you do not see the get methods during scripting in Designer, it is because the option Show getters in Workflow Options dialog is not checked.
+Methods that deal with surrogate pairs or processes characters in byte mode must be enabled first using the option Suggest also byte mode and surrogate functions in Workflow Options Dialog.
+
+Scripting API | RegexMatchResult Methods
+assign
+assign(String aString) : Void
+Assigns regex matching results to the specified RegexMatchResult variable. The same result can be achieved using the equal sign =.
+
+Util.RegexMatchResult mr = mr.assign(Util.Regex.createMatchResult("abc","aaa abc bbb abc"));
+Scripting API | RegexMatchResult Methods
+GroupMatch
+GroupMatch[String aGroupName] : String
+getGroupMatch(String aGroupName) : String
+Lists the regex search matches in the specified group.
+
+String Pattern = "(?<g1>abc\d)";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.StringList g1;
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   String Value = mr.GroupMatch["g1"]; 
+   g1.add(Value);
+   }
+
+for (Int i=0;i<g1.Size;i++) {
+      logMessage(g1[i]);   
+}
+Scripting API | RegexMatchResult Methods
+GroupMatchEndPosition
+GroupMatchEndPosition[String aGroupName] : Int
+getGroupMatchEndPosition(String aGroupName) : Int
+Lists the ending positions (i.e. the number of the last character) within the input string of the matches in the specified group.
+
+String Pattern = "(?<g1>abc\d)";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.IntList Endings;
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   Int End = mr.GroupMatchEndPosition["g1"];
+   Endings.add(End);
+   }
+
+for (Int i=0;i<Endings.Size;i++) {
+      logMessage(Endings[i].toString());   
+}
+Scripting API | RegexMatchResult Methods
+GroupMatchStartPosition
+GroupMatchStartPosition[String aGroupName] : Int
+getGroupMatchStartPosition(String aGroupName) : Int
+Lists the starting positions (i.e. the number of the first character) within the input string of the matches in the specified group.
+
+String Pattern = "(?<g1>abc\d)";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.IntList Starting;
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   Int Start = mr.GroupMatchStartPosition["g1"];
+   Starting.add(Start);
+   }
+
+for (Int i=0;i<Starting.Size;i++) {
+      logMessage(Starting[i].toString());   
+}
+Scripting API | RegexMatchResult Methods
+match
+match : Bool
+Returns true if there are any matches for the regex search.
+
+Util.RegexMatchResult mr = Util.Regex.createMatchResult("abc","aaa abc bbb abc");
+      logMessage(mr.match().toString());   
+Scripting API | RegexMatchResult Methods
+SubMatch
+SubMatch[Int aIndex] : String
+getSubMatch(Int aIndex) : String
+Lists all matches in the input string for the pattern specified for the regex search.
+
+String Pattern = "abc\d";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+
+      logMessage(mr.getSubMatch(idx));
+      }
+   }
+Scripting API | RegexMatchResult Methods
+SubMatchCount
+SubMatchCount : Int
+getSubMatchCount() : Int
+Returns the number of matches in the input string for the pattern specified for the regex search.
+
+String Pattern = "abc\d";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+      logMessage(mr.SubMatchCount.toString());
+Scripting API | RegexMatchResult Methods
+SubMatchEndPosition
+SubMatchEndPosition[Int aIndex] : Int
+getSubMatchEndPosition(Int aIndex) : Int
+Returns the ending position (i.e. the number of the last character) within the input string of the match with the specified index number. The index corresponds to the number of matches, i.e. the match with index number 2 is the second match in the input string.
+
+String Pattern = "abc\d";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+
+      logMessage(mr.getSubMatchEndPosition(idx).toString());
+      }
+   }
+Scripting API | RegexMatchResult Methods
+SubMatchStartPosition
+SubMatchStartPosition[Int aIndex] : Int
+getSubMatchStartPosition(Int aIndex) : Int
+Returns the starting position (i.e. the number of the first character) within the input string of the match with the specified index number. The index corresponds to the number of matches, i.e. the match with index number 2 is the second match in the input string.
+
+String Pattern = "abc\d";
+String Input = "abc1 abc2 abc3 abc4 abc5 abc6 xyz";
+Util.RegexMatchResult mr = Util.Regex.createMatchResult(Pattern,Input);
+while (mr.match())
+   {
+   for (Int idx=0;idx<mr.SubMatchCount;idx++)
+      {
+
+      logMessage(mr.getSubMatchStartPosition(idx).toString());
+      }
+   }

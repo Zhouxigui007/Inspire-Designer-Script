@@ -1,0 +1,103 @@
+Char Methods
+Char methods can be used for manipulation with characters.
+
+Scripting API | Char Methods
+assign
+assign(Char aP1) : Void
+assign(Int aP1) : Void
+Assigns the specified value to the char variable. The same result can be achieved using the equal sign =.
+
+
+String message = "Hello World!";
+Char character;
+character.assign(message[0]);
+// character = "H"
+
+character.assign(64);
+// character = "@"
+
+Scripting API | Char Methods
+equal
+equal(Char aP1) : Bool
+Returns the Boolean value true when the specified value equals to the given char variable. The same result can be achieved using the equality operator ==.
+
+String message = "***Hello World!";
+while (message[0].equal("*")) {
+   message.remove(0, 1);
+}
+// message = "Hello World!"
+Scripting API | Char Methods
+isControl
+isControl() : Bool
+Returns the Boolean value true when the given char is a control character.
+
+Char controlChar = Char(14);
+Bool result = controlChar.isControl();
+
+Char notControlChar = Char(32);
+Bool result = notControlChar.isControl();
+Scripting API | Char Methods
+isDigit
+isDigit() : Bool
+Returns the Boolean value true when the given char is a digit.
+
+Char digit = Char(49);
+Bool result = digit.isDigit();
+
+Char notDigit = Char(45);
+Bool result = notDigit.isDigit();
+Scripting API | Char Methods
+isLetter
+isLetter() : Bool
+Returns the Boolean value true when the given char is a letter.
+
+Char letter = Char(68);
+Bool result = letter.isLetter();
+
+Char notLetter = Char(60);
+Bool result = notLetter.isLetter();
+Scripting API | Char Methods
+isLetterOrDigit
+isLetterOrDigit() : Bool
+Returns the Boolean value true when the given char is a letter or digit.
+
+Char letterOrDigit = Char(68);
+Bool result = letterOrDigit.isLetterOrDigit();
+
+Char notLetterOrDigit = Char(60);
+Bool result = notLetterOrDigit.isLetterOrDigit();
+Scripting API | Char Methods
+isWhiteSpace
+isWhiteSpace() : Bool
+Returns the Boolean value true when the given char is a white space character.
+
+Char whiteSpace = Char(10);
+Bool result = whiteSpace.isWhiteSpace();
+
+Char notWhiteSpace = Char(68);
+Bool result = notWhiteSpace.isWhiteSpace();
+Scripting API | Char Methods
+less
+less(Char aP1) : Bool
+Returns the Boolean value true when the Unicode code point of the given char variable is lower than the Unicode code point of the specified value. The same result can be achieved using the less than operator <.
+
+Char A = "A";
+Char a = "a";
+Bool isLess = A.less(a);
+// isLess = true (65 < 97)
+Scripting API | Char Methods
+toInt
+toInt() : Int
+Returns an integer that represents an Unicode code point of the given char variable.
+
+Char one = "1";
+Int oneInUnicode = one.toInt();
+// oneInUnicode = 49
+Scripting API | Char Methods
+toString
+toString() : String
+Returns a string that represents the given char variable.
+
+Char character = 128;
+String strCharacter = character.toString();
+// strCharacter = "€"

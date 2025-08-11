@@ -1,0 +1,2256 @@
+Page-Level Object Methods
+Page-level object methods are used in the Imposition Script module in order to manipulate the content of sheets.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in the Workflow Options dialog is not checked.
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+CaptureSkipOverlays Methods
+Determines if overlays are processed when the SheetInfo methods TextInRect and dotsOnPage are evaluated.
+
+Scripting API | PageLevelObject Methods | Methods
+CaptureSkipOverlays
+CaptureSkipOverlays : Bool
+getCaptureSkipOverlays () : Bool
+Returns true if the overlays are not processed when the SheetInfo methods TextInRect and dotsOnPage are evaluated.
+
+Scripting API | PageLevelObject Methods | Methods
+setCaptureSkipOverlays
+setCaptureSkipOverlays (Bool aP1) : Void
+If set to true, overlays are not processed when the SheetInfo methods TextInRect and dotsOnPage are evaluated.
+
+ClippingPaths Methods
+Contains the methods for the DrawPath page-level objects.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+assign
+assign (ClippingPaths aP1) : Void
+Assigns either the specified ClippingPaths or Object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all of the clipping paths from the existing ClippingPaths.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the number of clipping paths defined for the ClippingPaths.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+clone
+clone () : Object
+Creates a new ClippingPaths based on the existing object.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice-path merging off / on.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the ClippingPaths stack and returns it. Reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+pushClippingPath
+pushClippingPath () : Path
+Pushes a new clipping path onto the ClippingPaths stack. Reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at a designated place on the stack.
+
+Scripting API | PageLevelObject Methods | ClippingPaths Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type for the ClippingPaths.
+
+Color and DeviceN Color Methods
+Contains all methods available for the Color and DeviceNColor objects.
+
+Colors can be created in Layout and a DeviceN color space can be assigned to a color by selecting Multiple colorants in the Color dialog. These methods can be used to manipulate such colors.
+
+Example  Here we read properties from either Colors or DeviceNColors into the following Data output:
+
+function CSName(Color aColor):String    // function CSNAme to identify color space
+   { 
+   is(aColor.ColorSpace)
+      {
+      ColorSpaceType.RGB:  return "RGB";
+      ColorSpaceType.CMYK:  return "CMYK";      
+      ColorSpaceType.HSB:  return "HSB";
+      ColorSpaceType.LAB:  return "LAB";
+      }
+   return "";
+   }
+ 
+function FillColor(Color aColor, Bool aInOverlay)      // funtion FillColor for single colors                          
+   {
+   Output_0.Colors.ColorSpaceType = CSName(aColor); 
+   Output_0.Colors.DeviceNCount = aColor.DeviceNCount;
+   for (Int k=0; k< aColor.DeviceNCount; k++)
+      {
+      if (aColor.DeviceNColor[k].isValid())
+         {
+         Output_0.Colors.DeviceN.DeviceNDensity = aColor.DeviceNDensity[k];
+         Color c = aColor.DeviceNColor[k];
+         FillDeviceNColor(aColor.DeviceNColor[k],aInOverlay);
+         }
+      }
+   Output_0.Colors.OverwriteSpotColor = aColor.OverwriteSpotColor;
+   Output_0.Colors.SeparationColorSpace = aColor.SeparationColorSpace;
+   Output_0.Colors.SpotColor = aColor.SpotColor;
+   Output_0.Colors.InOverlay = aInOverlay;
+   Output_0.Colors.commit();                           // commit the values to the Colors array                      
+   }
+
+function FillDeviceNColor(Color aColor, Bool aInOverlay)  // function for DeviceN colors which might be one of many in any single color 
+   {
+   Output_0.Colors.ColorSpaceType = CSName(aColor); 
+   Output_0.Colors.DeviceN.Colors.DeviceNCount = aColor.DeviceNCount;
+   Output_0.Colors.DeviceN.Colors.OverwriteSpotColor = aColor.OverwriteSpotColor;
+   Output_0.Colors.DeviceN.Colors.SeparationColorSpace = aColor.SeparationColorSpace;
+   Output_0.Colors.DeviceN.Colors.SpotColor = aColor.SpotColor;
+   Output_0.Colors.DeviceN.Colors.InOverlay = aInOverlay;
+   Output_0.Colors.DeviceN.commit();                    // commit the values in the DeviceN sub-array
+   }           
+
+PageContent pc = InputSheeter[0].SheetInfo[0].PageContent;  
+for (Int i=0; i<pc.ObjectCount; i++)                    // repeat for the many objects on each sheet from the single input
+   {
+   Object o = pc.Object[i];                             
+   if (o.Type == ObjectType.DrawOverlay)                // if object is an overlay
+      {
+      DrawOverlayObject oo = o;
+      PageContent oPc = oo.PageContent;
+      for (Int j=0; j<oPc.ObjectCount; j++)            // repeat to read each overlay
+         {
+         Object o1 = oPc.Object[j];
+         if (o1.Type == ObjectType.DrawPath)
+            {
+            DrawPathObject pO = o1;
+            FillColor(pO.FillColor, true);            // perform function FillColor for overlay objects 
+            }
+         }
+      }
+   else if (o.Type == ObjectType.DrawPath)           // perform function FillColor for non-overlay objects 
+      {
+      DrawPathObject pO = o;
+      FillColor(pO.FillColor, false);
+      }
+   }
+Alternatively, the create methods here can create colors directly in script.
+
+Scripting API | PageLevelObject Methods | Color Methods
+Alpha
+Alpha : Double
+getAlpha () : Double
+Returns the Alpha value from a CMYKA or RGBA color.
+
+Scripting API | PageLevelObject Methods | Color Methods
+assign
+assign(Color aP1): Double
+Assigns the specified color. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | Color Methods
+ColorSpace
+ColorSpace : ColorSpaceType
+getColorSpace () : ColorSpaceType
+Returns the ColorSpaceType which the color is using for its definition.
+
+Scripting API | PageLevelObject Methods | Color Methods
+createFromCMYK / createFromCMYKA
+createFromCMYK (Double Cyan, Double Magenta, Double Yellow, Double Black) : Color
+createFromCMYKA (Double Cyan, Double Magenta, Double Yellow, Double Black, Double Alpha) : Color
+Creates a color from Cyan, Magenta, Yellow, Black and/or Alpha values.
+
+Scripting API | PageLevelObject Methods | Color Methods
+createFromHSB
+createFromHSB (Double Hue, Double Saturation, Double Brightness) : Color
+Creates a color from Hue, Saturation and Brightness values.
+
+Scripting API | PageLevelObject Methods | Color Methods
+createFromLAB
+createFromLAB (Double Lightness, Double A, Double B) : Color
+Creates a color from Lightness, A and B values.
+
+Scripting API | PageLevelObject Methods | Color Methods
+createFromMultipleColorantsWithCMYK
+createFromMultipleColorantsWithCMYK (DoubleList & DensityList, ColorList & ColorList, Double Cyan, Double Magenta, Double Yellow, Double Black) : Color
+Creates a color from multiple colorants and default C,M,Y,K values.
+
+ColorList colorList;
+colorList.add(Color.createFromNameWithCMYK("PureBlack",0,0,0,1.0));
+colorList.insert(0,Color.createFromNameWithCMYK("PureCyan",1,0,0,0));
+colorList.insert(0,Color.createFromNameWithCMYK("PureMagenta",0,1,0,0));
+colorList.insert(0,Color.createFromNameWithCMYK("PureYellow",0,0,1,0));
+
+Util.DoubleList densities;
+densities.resize(4,75);
+PageContent pc;
+DrawPathObject dpo;
+Path p; p.addRect(RRect(0.0,0.0,0.1,0.1));
+dpo.Path = p;
+dpo.FillColor = Color.createFromMultipleColorantsWithCMYK(densities,colorList,0.25,0.25,0.25,0.25);
+pc.addObject(dpo);
+OutputSheeter_0.addSheetWithPageContent(pc,"Main");
+Scripting API | PageLevelObject Methods | Color Methods
+createFromNameWithCMYK
+createFromNameWithCMYK (String ColorName, Double Cyan, Double Magenta, Double Yellow, Double Black) : Color
+Creates a named color with C,M,Y and K values.
+
+var color = Color.createFromNameWithCMYK("PureBlack",0,0,0,1.0));
+Scripting API | PageLevelObject Methods | Color Methods
+createFromRGB / createFromRGBA
+createFromRGB (Double Red, Double Green, Double Blue) : Color
+createFromRGBA (Double Red, Double Green, Double Blue, Double Alpha) : Color
+Creates a color from Red, Green, Blue and/or Alpha values.
+
+Color black = Color.createFromRGB(0,0,0);
+Color red = Color.createFromRGB(1,0,0);
+Color green = Color.createFromRGB(0,1,0);
+Color blue = Color.createFromRGB(0,0,1);
+Color white = Color.createFromRGB(1,1,1);
+Scripting API | PageLevelObject Methods | Color Methods
+Cyan / Magenta / Yellow / Black
+Cyan : Double
+getCyan () : Double
+Magenta : Double
+getMagenta () : Double
+Yellow : Double
+getYellow () : Double
+Black : Double
+getBlack () : Double
+Returns the Cyan / Magenta / Yellow / Black value from a CMYK color.
+
+Scripting API | PageLevelObject Methods | Color Methods
+DeviceNColor
+DeviceNColor [Int aP1] : Color
+getDeviceNColor (Int aP1) : Color
+Returns the name of a color that is component to a DeviceN color space.
+
+A DeviceN color space can be assigned to a color in Layout by selecting Multiple colorants in the Color dialog.
+
+Scripting API | PageLevelObject Methods | Color Methods
+DeviceNCount
+DeviceNCount : Int
+getDeviceNCount () : Int
+Returns the number of colors that are component to a DeviceN color space.
+
+Example  To create an array which returns values for DeviceNColor and DeviceNDensity.
+Output_0.Colors.DeviceNCount = aColor.DeviceNCount;
+   for (Int k=0; k< aColor.DeviceNCount; k++)
+      {
+      if (aColor.DeviceNColor[k].isValid())
+         {
+         Output_0.Colors.DeviceN.DeviceNDensity = aColor.DeviceNDensity[k];
+         Output_0.Colors.DeviceN.DeviceNColor = aColor.DeviceNColor[k];
+         Output_0.Colors.DeviceN.commit();
+         }
+      }
+Scripting API | PageLevelObject Methods | Color Methods
+DeviceNDensity
+DeviceNDensity [Int aP1] : Double
+getDeviceNDensity (Int aP1) : Double
+Returns the density of a color that is component to a DeviceN color space.
+
+A DeviceN color space can be assigned to a color in Layout by selecting Multiple colorants in the Color dialog.
+
+Scripting API | PageLevelObject Methods | Color Methods
+equal
+equal (Color aP1) : Bool
+Returns true if Color aP1 is same as current color.
+
+if (black.equal(red) )
+   logError("Wrong color!");
+Note  Colors are compared by their color space properties.
+Scripting API | PageLevelObject Methods | Color Methods
+Hue / Saturation / Brightness
+Hue : Double
+getHue () : Double
+Saturation : Double
+getSaturation () : Double
+Brightness : Double
+getBrightness () : Double
+Returns the Hue/Saturation/Brightness value from a HSB color.
+
+Scripting API | PageLevelObject Methods | Color Methods
+isValid
+isValid () : Bool
+Returns true if a color has been set.
+
+This can be used to check if fill styles have a color set or for DeviceN color spaces to check that all component colors have been assigned. E.g., a color can exist but it does not have to have a DeviceN color space and if not DeviceNDensity or DeviceNColor would cause an error if they were employed. See the example for DeviceNCount.
+
+Scripting API | PageLevelObject Methods | Color Methods
+Lightness / A / B
+Lightness : Double
+getLightness () : Double
+A : Double
+getA () : Double
+B : Double
+getB () : Double
+Returns the Lightness/A/B value from an LAB color.
+
+Scripting API | PageLevelObject Methods | Color Methods
+MixedSpotColorWeight
+MixedSpotColorWeight [Int aP1] : Double
+getMixedSpotColorWeight (Int aP1) : Double
+Returns the weighting of an individual spot color if it is a component of a dithered spot color (as defined in the Color dialog). Dithered spot colors can contain up to 7 different spot colors with differing weights, therefore for each color there can be 7 of these values.
+
+Example  
+for (Int idxS=0;idxS<=6;idxS++)
+      {
+      Output_0.Colors.SpotcolorWeights.Weight = aColor.MixedSpotColorWeight[idxS];
+      Output_0.Colors.SpotcolorWeights.commit();
+      }
+Scripting API | PageLevelObject Methods | Color Methods
+OverwriteSpotColor
+OverwriteSpotColor : Bool
+getOverwriteSpotColor () : Bool
+Returns true if the color is a spot color which can be printed over another spot color for a mixed-color effect, i.e. has the option Mix spot color checked for its layout properties.
+
+Scripting API | PageLevelObject Methods | Color Methods
+Red / Green / Blue
+Red : Double
+getRed () : Double
+Green : Double
+getGreen () : Double
+Blue : Double
+getBlue () : Double
+Returns the Red/Green/Blue value of a RGB or RGBA color.
+
+Scripting API | PageLevelObject Methods | Color Methods
+Saturation
+Saturation : Double
+getSaturation () : Double
+Returns the saturation (values range from 0 to 1), which is one part of the HSB color space.
+
+Example  
+var c=Color.createFromRGB(0,0.5,1);
+logMessage(c.Saturation.toString()); // Prints 1
+Scripting API | PageLevelObject Methods | Color Methods
+SeparationColorSpace
+SeparationColorSpace : String
+getSeparationColorSpace () : String
+Returns the name of any colorant if one has been assigned, i.e. via the Color dialog.
+
+Separation color spaces are a variant of colorants which are employed with PDF and PostScript engines, however this method will return any value assigned to a colorant including Pantone colorant names.
+
+Scripting API | PageLevelObject Methods | Color Methods
+SpotColor
+SpotColor : Int
+getSpotColor () : Int
+Returns the spot color number if a spot color has been assigned, i.e. has something other than Not specified selected for Spot color in its Layout properties.
+
+ColorList Methods
+Scripting API | PageLevelObject Methods | ColorList Methods
+add
+add (Color aP1) : Void
+Adds a new color to the given color list.
+
+ColorList colorList;
+colorList.add(Color.createFromNameWithCMYK("PureBlack",0,0,0,1.0));
+Scripting API | PageLevelObject Methods | ColorList Methods
+assign
+assign(ColorList aP1): Void
+Assigns a ColorList object to the given list. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | ColorList Methods
+clear
+clear (): Void
+Removes all colors from the given color list.
+
+Scripting API | PageLevelObject Methods | ColorList Methods
+get
+get (Int aP1) : Color
+Returns a value of a color from the specified position of the given list.
+
+Scripting API | PageLevelObject Methods | ColorList Methods
+insert
+insert (Int aP1, Color aP2) : Void
+Inserts a color at the specified position in the given list and sets its value to the specified value.
+
+Scripting API | PageLevelObject Methods | ColorList Methods
+remove
+remove (Int aP1) : Void
+Removes a color from the specified position of the given list.
+
+DrawImageObject Methods
+Contains all the methods for the DrawImage page-level objects.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+assign
+assign (ClippingPaths aP1) : void
+assign (DrawImageObject aP1) : void
+assign (Object aP1) : void
+Assigns either the specified ClippingPaths, DrawImageObject or Object to the given page-level object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+BoundingBox
+BoundingBox() : RRect
+getBoundingBox() : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all the clipping paths from the existing object.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the number of clipping paths defined for the object.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+clone
+clone () : DrawImageObject
+Creates a new DrawImageObject based on the existing object.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+Image
+Image : Image
+getImage () : Image
+Returns the image for the DrawImageObject.
+
+DrawImageObject dim;
+Image im = Image.createFromFile("myImage.pdf");
+dim.Image = im;
+Transformation scaleTr; scaleTr.scale(0.5);
+dim.Transformation =  scaleTr;
+PageContent pc;
+Double curScaleConst = 0.9;
+Double curScale = curScaleConst;
+
+pc.addObject(dim);
+OutputSheeter_0.addSheetWithPageContent(pc,"Main");
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the DrawImageObject stack and returns it. Reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+pushClippingPath
+pushClippingPath () : Void
+Pushes a new clipping path onto the DrawImageObject stack. Reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at a designated place on the stack.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+setImage
+setImage(Image aP1) : Void
+Sets a new image for the DrawImageObject.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets a new transformation for the DrawImageObject.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+toObject
+toObject () : ObjectType
+Returns the type for this DrawImageObject.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+Transformation
+Transformation : Transformation
+getTransformation () : Transformation
+Returns the transformation set for the DrawImageObject.
+
+Scripting API | PageLevelObject Methods | DrawImageObject Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type for the DrawImageObject.
+
+DrawingProperties Methods
+Contains all the methods for the DrawingProperties page-level objects.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+assign
+assign (ClippingPaths aP1) : void
+assign (DrawingProperties aP1) : void
+assign (Object aP1) : void
+Assigns either the specified ClippingPaths, DrawingProperties or Object to the given page-level object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+BoundingBox
+BoundingBox() : RRect
+getBoundingBox() : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+BrushWidth
+BrushWidth() : Double
+getBrushWidth() : Double
+Returns the brush width for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+CapType
+CapType : CapType
+getCapType () : CapType
+Returns the CapType for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all the clipping paths from the existing DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the number of clipping paths defined for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+clone
+clone () : DrawImageObject
+Creates a new DrawingProperties based on the existing object.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+HandlingGroup
+DitheringGroup : Int
+getDitheringGroup () : Int
+Returns the handling group (1-8) for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillColor
+FillColor : Color
+getFillColor () : Color
+Returns the fill color for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillGradient
+FillGradient : Gradient
+getFillGradient () : Gradient
+Returns the fill gradient for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillImage
+FillImage : Image
+getFillImage () : Image
+Returns the image for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillOverprint
+FillOverprint : Bool
+Determines if overprint is applied to the inner part of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillTransformation
+FillTransformation : Transformation
+getFillTransformation () : Transformation
+Returns the transformation for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+FillType
+FillType : FillType
+getFillType () : FillType
+Returns the fill type for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+JoinType
+JoinType : JoinType
+getJoinType () : JoinType
+Returns the join type for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+MitterLimit
+MitterLimit : Double
+getMitterLimit () : Double
+Returns the miter limit for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+NonzeroOverprintMode
+NonzeroOverprintMode : Bool
+Determines if overprint mode is used for the given page-level object.
+
+Overprinting mode is used in accordance with its specification taken from the imported PDF file (for more information, see the Summary of Overprinting Behavior chapter of the Adobe specification).
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the DrawingProperties stack and returns it. Reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+pushClippingPath
+pushClippingPath () : Void
+Pushes a new clipping path onto the DrawingProperties stack. Reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setBrushWidth
+setBrushWidth (Double aP1) : Void
+Sets the brush width.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setCapType
+setCapType (CapType aP1) : Void
+Sets the CapType for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at a designated place on the stack.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setDitheringGroup
+setFillColor (Color aP1) : Void
+Sets the dithering group for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setFillGradient
+setFillGradient (Gradient aP1) : Void
+Sets the fill gradient for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setFillImage
+setFillImage (Image aP1) : Void
+Sets the image for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setFillTransformation
+setFillTransformation (Transformation aP1) : Void
+Sets the transformation for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setJoinType
+setJoinType (JoinType aP1) : Void
+Sets the join type for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setMitterLimit
+setMitterLimit (Double aP1) : Void
+Sets the miter limit for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setStrokeColor
+setStrokeColor (Color aP1) : Void
+Sets the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setStrokeGradient
+setStrokeGradient (Gradient aP1) : Void
+Sets the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setStrokeImage
+setStrokeImage (Image aP1) : Void
+Set the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setStrokeTiled
+setStrokeTiled (Bool aP1) : Void
+Sets if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setStrokeTransformation
+setStrokeTransformation (Transformation aP1) : Void
+Sets the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setTiled
+setTiled (Bool aP1) : Void
+Sets the DrawingProperties as tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets the transformation set for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeColor
+StrokeColor : Color
+getStrokeColor () : Color
+Returns the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeGradient
+StrokeGradient : Gradient
+getStrokeColor () : Gradient
+Returns the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeImage
+StrokeImage : Image
+getStrokeImage () : Image
+Returns the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeOverprint
+StrokeOverprint : Bool
+Determines if overprint is applied to the borders of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeTiled
+StrokeTiled : Bool
+getStrokeTiled () : Bool
+Determines if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeTransformation
+StrokeTransformation : Transformation
+getStrokeTransformation () : Transformation
+Returns the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+StrokeType
+StrokeType : FillType
+getStrokeType () : FillType
+Returns the fill type for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+Tiled
+Tiled : Bool
+getTiled () : Bool
+Determines if the DrawingProperties is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+Transformation
+Transformation : Transformation
+getTransformation () : Transformation
+Returns the transformation set for the DrawingProperties.
+
+Scripting API | PageLevelObject Methods | DrawingProperties Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type for the DrawingProperties.
+
+DrawOverlayObject Methods
+Contains all the methods for the DrawOverlay page-level objects.
+
+Example  This script splits the contents of a single page and outputs the overlays (that are created when processing) to separate sheets, i.e. static objects (images, shapes etc) will appear on consecutive sheets if they are in different overlays.
+PageContent pc = InputSheeter_0.SheetInfo[0].PageContent;
+for (Int objIndex=0;objIndex<pc.ObjectCount;objIndex++)
+   {
+   Object obj = pc.Object[objIndex];
+   if (obj.Type!=ObjectType.DrawOverlay) continue;
+   DrawOverlayObject ovl = obj;
+   PageContent pcO = ovl.PageContent;
+   OutputSheeter_0.addSheetWithPageContent(pcO,"Main");
+   }
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+assign
+assign (ClippingPaths aP1) : void
+assign (DrawOverlayObject aP1) : Void
+assign (Object aP1)
+Assigns the specified ClippingPaths, DrawOverlayObject, or Object objects to the given page-level object. This method is the same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+BoundingBox
+BoundingBox() : RRect
+getBoundingBox() : RRect
+Returns the bounding box of the page content.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all the clipping paths from the existing object.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the amount of clipping paths defined for the object.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+clone
+clone (): DrawOverlayObject
+Creates a new DrawOverlayObject based on the existing object.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+OverlayIndex
+OverlayIndex : Int
+getOverlayIndex () : Int
+Returns the image for the DrawOverlayObject.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+PageContent
+PageContent : PageContent
+getPageContent () : PageContent
+Returns the page-content object for the DrawOverlayObject.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods | DrawOverlayObject Methods
+Return Value
+PageContent
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the DrawImageObject stack and returns it. This is the reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+pushClippingPath
+pushClippingPath () : Void
+Pushes a new clipping path onto the DrawImageObject stack. This is the reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at the designated place on the stack.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+setTransformation
+Sets a new transformation for the DrawOverlayObject.
+
+setTransformation ()
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods | DrawOverlayObject Methods
+Return Value
+Void
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+toObject
+Returns the type for this DrawOverlayObject.
+
+toObject ()
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods | DrawOverlayObject Methods
+Return Value
+ObjectType
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+Transformation
+Transformation : Transformation
+getTransformation () : Transformation
+Returns the Transformation set for the DrawOverlayObject.
+
+Scripting API | PageLevelObject Methods | DrawOverlayObject Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type of the DrawOverlayObject object.
+
+DrawPathObject Methods
+Contains all the methods for the DrawPath page-level objects.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+assign
+assign (ClippingPaths aP1) : Void
+assign (DrawingProperties aP1) : Void
+assign (DrawPathObject aP1) : Void
+assign (Object aP1) : Void
+Assigns either the specified ClippingPaths, DrawingProperties, DrawPathObject or Object to the given page-level object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+BrushWidth
+BrushWidth : Double
+getBrushWidth () : Double
+Returns the brush width for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+CapType
+CapType : CapType
+getCapType () : CapType
+Returns the CapType for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all the clipping paths from the existing DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the number of clipping paths defined for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+clone
+clone () : DrawPathObject
+Creates a new DrawPathObject based on the existing object.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice-path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+DitheringGroup
+DitheringGroup : Int
+getDitheringGroup () : Int
+Returns the dithering group for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillColor
+FillColor : Color
+getFillColor () : Color
+Returns the fill color for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillGradient
+FillGradient : Gradient
+getFillGradient () : Gradient
+Returns the fill gradient for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillImage
+FillImage : Image
+getFillImage () : Image
+Returns the image for the DrawPathObject.
+
+Image im = dim.Image;
+DrawPathObject pob;
+pob.FillImage = im;
+Path p; p.addCircle(RVector(0.1,0.1),0.05);
+pob.Path = p;
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillOverprint
+FillOverprint : Bool
+Determines if overprint is applied to the inner part of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillTransformation
+FillTransformation : Transformation
+getFillTransformation () : Transformation
+Returns the transformation for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+FillType
+FillType : FillType
+getFillType () : FillType
+Returns the fill type for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+JoinType
+JoinType : JoinType
+getJoinType () : JoinType
+Returns the join type for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+MitterLimit
+MitterLimit : Double
+getMitterLimit () : Double
+Returns the mitter limit for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+NonzeroOverprintMode
+NonzeroOverprintMode : Bool
+Determines if overprint mode is used for the given page-level object.
+
+Overprinting mode is used in accordance with its specification taken from the imported PDF file (for more information, see the Summary of Overprinting Behavior chapter of the Adobe specification).
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+Path
+Path : Path
+getPath () : Path
+Returns the path for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the DrawPathObject stack and returns it. Reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+pushClippingPath
+pushClippingPath () : Void
+Pushes a new clipping path onto the DrawPathObject stack. Reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setBrushWidth
+setBrushWidth (Double aP1) : Void
+Sets the brush width.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setCapType
+setCapType (CapType aP1) : Void
+Sets the CapType for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at a designated place on the stack.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setDitheringGroup
+setDitheringGroup (Int aP1) : Void
+Sets the dithering group for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setFillColor
+setFillColor (Color aP1) : Void
+Sets the fill color for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setFillGradient
+setFillGradient (Gradient aP1) : Void
+Sets the fill gradient for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setFillImage
+setFillImage (Image aP1) : Void
+Sets the image for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setFillTransformation
+setFillTransformation (Transformation aP1) : Void
+Sets the transformation for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setJoinType
+setJoinType (JoinType aP1) : Void
+Sets the join type for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setMitterLimit
+setMitterLimit (Double aP1) : Void
+Sets the mitter limit for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setPath
+setPath (Path aP1) : Void
+Sets the path for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setStrokeColor
+setStrokeColor (Color aP1) : Void
+Sets the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setStrokeGradient
+setStrokeGradient (Gradient aP1) : Void
+Sets the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setStrokeImage
+setStrokeImage (Image aP1) : Void
+Set the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setStrokeTiled
+setStrokeTiled (Bool aP1) : Void
+Sets if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setStrokeTransformation
+setStrokeTransformation (Transformation aP1) : Void
+Sets the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setTiled
+setTiled (Bool aP1) : Void
+Determines that the DrawPathObject is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets the transformation set for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeColor
+StrokeColor : Color
+getStrokeColor () : Color
+Returns the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeGradient
+StrokeGradient : Gradient
+getStrokeGradient () : Gradient
+Returns the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeImage
+StrokeImage : Image
+getStrokeImage () : Image
+Returns the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeOverprint
+StrokeOverprint : Bool
+Determines if overprint is applied to the borders of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeTiled
+StrokeTiled : Bool
+getStrokeTiled () : Bool
+Determines if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeTransformation
+StrokeTransformation : Transformation
+getStrokeTransformation () : Transformation
+Returns the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+StrokeType
+StrokeType : FillType
+getStrokeType () : FillType
+Returns the fill type for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+Tiled
+Tiled : Bool
+getTiled () : Bool
+Determines if the DrawPathObject is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+toObject
+toObject () : ObjectType
+Returns the type for this DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+Transformation
+Transformation : Transformation
+getTransformation () : Transformation
+Returns the Transformation set for the DrawPathObject.
+
+Scripting API | PageLevelObject Methods | DrawPathObject Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type for the DrawPathObject.
+
+DrawTextObject Methods
+Contains all the methods for the DrawText page-level objects.
+
+Example  The following workflow alters the appearance text from a file which is streamed into the workflow:
+
+
+for(var si=0;si<InputSheeter_0.SheetCount;si++)
+   {
+   var pc=InputSheeter_0.SheetInfo[si].PageContent;
+   for(var oi=0;oi<pc.ObjectCount;oi++)
+      {
+      var obj=pc.Object[oi];
+      if (obj.Type==ObjectType.DrawOverlay)
+         {
+         var oobj=DrawOverlayObject(obj);
+         pc.removeObject(oi);
+         pc.insertPageContent(oi,oobj.PageContent);
+         oi--;
+         continue;
+         }
+      if (obj.Type!=ObjectType.DrawText) continue;
+      var tobj=DrawTextObject(obj);
+      tobj.clearClippingPaths();
+      var t1=tobj.Transformation;
+      var t2=-t1;
+      for(var i=0;i<tobj.GlyphCount;i++)
+         {
+         var pos=t1.apply(tobj.GlyphPosition[i]);
+         pos.Y+=pos.X*0.02*Math.sin(pos.X*200);
+         tobj.GlyphPosition[i]=t2.apply(pos);
+         }
+      }
+   OutputSheeter_0.addSheetWithPageContent(pc,"Main");
+   }
+
+The resulting output is that the input text is given a wavy look:
+
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+assign
+assign (ClippingPaths aP1) : Void
+assign (DrawingProperties aP1) : Void
+assign (DrawTextObject aP1) : Void
+assign (Object aP1) : Void
+Assigns either the specified ClippingPaths, DrawingProperties, DrawTextObject or Object to the given page-level object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+BrushWidth
+BrushWidth : Double
+getBrushWidth () : Double
+Returns the brush width for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+CapType
+CapType : CapType
+getCapType () : CapType
+Returns the CapType for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+clearClippingPaths
+clearClippingPaths () : Void
+Removes all the clipping paths from the existing DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+ClippingPath
+ClippingPath [Int aP1] : Path
+getClippingPath (Int aP1) : Path
+Returns the specified clipping path.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+ClippingPathCount
+ClippingPathCount : Int
+getClippingPathCount () : Int
+Returns the number of clipping paths defined for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+clone
+clone () : DrawTextObject
+Creates a new DrawTextObject based on the existing object.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice-path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+DitheringGroup
+DitheringGroup : Int
+getDitheringGroup () : Int
+Returns the dithering group for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillColor
+FillColor : Color
+getFillColor () : Color
+Returns the fill color for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillGradient
+FillGradient : Gradient
+getFillGradient () : Gradient
+Returns the fill gradient for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillImage
+FillImage : Image
+getFillImage () : Image
+Returns the image for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillOverprint
+FillOverprint : Bool
+Determines if overprint is applied to the inner part of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillTransformation
+FillTransformation : Transformation
+getFillTransformation () : Transformation
+Returns the transformation for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FillType
+FillType : FillType
+getFillType () : FillType
+Returns the fill type for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+FormattedText
+FormattedText : String
+getFormattedText () : String
+Returns the formatted text for the DrawTextObject. See also Text.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphAdvance
+GlyphAdvance [Int aGlyphIndex] : Double
+getGlyphAdvance (Int aGlyphIndex) : Double
+Returns the size of the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphChar
+GlyphChar [Int aGlyphIndex] : Char
+getGlyphChar (Int aGlyphIndex]) : Char
+Returns the Char value represented by the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphCount
+GlyphCount : Int
+getGlyphCount () : Int
+Returns the number of glyphs for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphFont
+GlyphFont [Int aGlyphIndex] : Font
+getGlyphFont (Int aGlyphIndex) : Font
+Returns the font for the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphFontName
+GlyphFontName [Int aGlyphIndex] : String
+getGlyphFontName (Int aGlyphIndex) : String
+Returns the name of the font for the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphIndexInFont
+GlyphIndexInFont [Int aGlyphIndex] : Int
+getGlyphIndexInFont (Int aGlyphIndex) : Int
+Returns the position of the character in the font represented by the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphPath
+GlyphPath [Int aGlyphIndex] : Path
+getGlyphPath (Int aGlyphIndex) : Path
+Returns the path for the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+GlyphPosition
+GlyphPosition [Int aGlyphIndex] : RVector
+getGlyphPosition (Int aGlyphIndex) : RVector
+Returns the position of the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+HorizontalScale
+HorizontalScale : Double
+getHorizontalScale () : Double
+Returns the horizontal scale for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+insertGlyph
+InsertGlyph (Int aCount, RVector aP2, Font aP3, Char aP4) : Void
+Inserts a new glyph into the DrawTextObject. Reverse operation to removeGlyphs.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+InterCharacterSpacing
+InterCharacterSpacing : Double
+Returns the spacing between characters for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+JoinType
+JoinType : JoinType
+getJoinType () : JoinType
+Returns the join type for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+MitterLimit
+MitterLimit : Double
+getMitterLimit () : Double
+Returns the mitter limit for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+NonzeroOverprintMode
+NonzeroOverprintMode : Bool
+Determines if overprint mode is used for the given page-level object.
+
+Overprinting mode is used in accordance with its specification taken from the imported PDF file (for more information, see the Summary of Overprinting Behavior chapter of the Adobe specification).
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+popClippingPath
+popClippingPath () : Path
+Pops a clipping path off the DrawTextObject stack and returns it. Reverse operation to pushClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+pushClippingPath
+pushClippingPath () : Void
+Pushes a new clipping path onto the DrawTextObject stack. Reverse operation to popClippingPath.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+removeGlyphs
+removeGlyphs (Int aGlyphIndex, Int aCount) : Void
+Removes the specified glyphs from the DrawTextObject. Reverse operation to insertGlyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setBrushWidth
+setBrushWidth (Double aP1) : Void
+Sets the brush width.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setCapType
+setCapType (CapType aP1) : Void
+Sets the CapType for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setClippingPath
+setClippingPath (Int aP1, Path aP2) : Void
+Sets a new clipping path at a designated place on the stack.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setDitheringGroup
+setDitheringGroup (Int aP1) : Void
+Sets the dithering group for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setFillColor
+setFillColor (Color aP1) : Void
+Sets the fill color for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setFillGradient
+setFillGradient (Gradient aP1) : Void
+Sets the fill gradient for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setFillImage
+setFillImage (Image aP1) : Void
+Sets the image for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setFillTransformation
+setFillTransformation (Transformation aP1) : Void
+Sets the transformation for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setFont
+setFont (Int aGlyphIndex, Int aCount, Font aP3) : Void
+Sets the font for the specified glyphs.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setGlyphPosition
+setGlyphPosition (Int aGlyphIndex, RVector aCount) : Void
+Sets the position of the specified glyph.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setHorizontalScale
+setHorizontalScale (Double aP1) : Void
+Sets the horizontal scale for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setInterCharacterSpacing
+setInterCharacterSpacing (Double aP1) : Void
+Sets the spacing between characters for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setJoinType
+setJoinType (JoinType aP1) : Void
+Sets the join type for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setMitterLimit
+setMitterLimit (Double aP1) : Void
+Sets the mitter limit for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setSize
+setSize (Double aP1) : Void
+Sets the size of the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setSizeInPt
+setSizeInPt (Double aP1) : Void
+Sets the size of the DrawTextObject in points.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setStrokeColor
+setStrokeColor (Color aP1) : Void
+Sets the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setStrokeGradient
+setStrokeGradient (Gradient aP1) : Void
+Sets the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setStrokeImage
+setStrokeImage (Image aP1) : Void
+Set the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setStrokeTiled
+setStrokeTiled (Bool aP1) : Void
+Sets if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setStrokeTransformation
+setStrokeTransformation (Transformation aP1) : Void
+Sets the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setText
+setText (RVector aP1, Font aP2, String aP3) : Void
+Sets the text for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setTextPlacingAccuracy
+setTextPlacingAccuracy (Double aP1) : Void
+Sets the text placing accuracy of individual characters during the output in metres. By default, it is set to 0.0002 m, thus 0.2 mm.
+
+Tip  You can this method to increase the accuracy when kerning or intercharacter spacing are used.
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setTiled
+setTiled (Bool aP1) : Void
+Determines if the DrawTextObject is tiled or not. Same as Tiled.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets the transformation set for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+Size
+Size : Double
+getSize () : Double
+Returns the size of the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+SizeInPt
+SizeInPt : Double
+getSizeInPt : Double
+Returns the size of the DrawTextObject in points.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeColor
+StrokeColor : Color
+getStrokeColor () : Color
+Returns the color for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeGradient
+StrokeGradient : Gradient
+getStrokeGradient () : Gradient
+Returns the gradient for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeImage
+StrokeImage : Image
+getStrokeImage () : Image
+Returns the image for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeOverprint
+StrokeOverprint : Bool
+Determines if overprint is applied to the borders of the given page-level object or not.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeTiled
+StrokeTiled : Bool
+getStrokeTiled () : Bool
+Determines if the stroke is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeTransformation
+StrokeTransformation : Transformation
+getStrokeTransformation () : Transformation
+Returns the transformation for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+StrokeType
+StrokeType : FillType
+getStrokeType () : FillType
+Returns the fill type for the stroke.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+Text
+Text : String
+getText () : String
+Returns the unformatted text for the DrawTextObject. See also FormattedText.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+TextPlacingAccuracy
+TextPlacingAccuracy : Double
+getTextPlacingAccuracy () : Double
+Returns the text placing accuracy.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+Tiled
+Tiled : Bool
+getTiled () : Bool
+Determines if the DrawTextObject is tiled or not.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+toObject
+toObject () : ObjectType
+Returns the type for this DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+Transformation
+Transformation : Transformation
+getTransformation (): Transformation
+Returns the Transformation set for the DrawTextObject.
+
+Scripting API | PageLevelObject Methods | DrawTextObject Methods
+Type
+Type : ObjectType
+getType(): ObjectType
+Returns the type for the DrawTextObject.
+
+DrawUrlLinkObject Methods
+Contains all the methods for the DrawUrlLinkMethods page-level objects.
+
+Example  To add a URL link to a page:
+for (Int idx = InputSheeter_0.SheetCount-1;idx>=0;idx--)
+   {
+   PageContent pc = InputSheeter_0.SheetInfo[idx].PageContent;
+   DrawUrlLinkObject urlo;
+   RRect r = RRect(0,0,0.1,0.1);
+   Path p; 
+   p.addRect(r);
+   urlo.Path = p;
+   urlo.Url = "http://mynewScriptUrl/";
+   pc.addObject(urlo);
+   OutputSheeter_0.addSheetWithPageContent(pc,"Main");
+   }
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+assign
+assign (DrawUrlLinkObject aP1) : Void
+assign (Object aP1) : Void
+Assigns either the specified DrawUrlLinkObject or Object to the given Url object. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice path merging off/on.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+Path
+Path : Path
+getPath () : Path
+Returns the path for the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+setPath
+setPath (Path aP1) : Void
+Sets the path for the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+setTransformation
+setTransformation (Transformation aP1) : Void
+Sets the transformation set for the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+setUrl
+setUrl (String): String
+Sets a URL to the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+toObject
+toObject () : ObjectType
+Returns the type for this DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+Transformation
+Transformation : Transformation
+getTransformation () : Transformation
+Returns the Transformation set for the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type for the DrawUrlLinkObject.
+
+Scripting API | PageLevelObject Methods | DrawURLLinkObject Methods
+Url
+Url : String
+getUrl () : String
+Returns the URL from the DrawUrlLinkObject.
+
+Font Methods
+Contains all the methods for the Font object.
+
+Example  To read the available glyphs of a font into the following data structure:
+
+
+Font fnt = Font.createFromName("Arial",FontStyle.Normal,false,false);
+Output_0.Arial.FontName = fnt.Name;
+Output_0.Arial.FullName = fnt.FullName;
+Output_0.Arial.PSName = fnt.PSName;
+Output_0.Arial.SubName = fnt.SubName;
+Output_0.Arial.GlyphCount = fnt.GlyphCount;
+Output_0.Arial.Style = Int(fnt.Style);
+Output_0.Arial.Ascender = fnt.AscenderPerPt;
+Output_0.Arial.Descender = fnt.DescenderPerPt;
+Output_0.Arial.Line = fnt.LinePerPt;
+for (Int fg=0;fg<fnt.GlyphCount;fg++)
+   {
+   Char ch = fnt.glyphtoChar(fg);
+   Output_0.Arial.Glyphs.Char = ch;
+   Output_0.Arial.Glyphs.Glyph = fnt.charToGlyph(ch);
+   
+   Output_0.Arial.Glyphs.commit();
+   }
+
+This creates a single record for the Arial font and a glyphs sub-array (returning a value for each of the glyphs).
+
+Scripting API | PageLevelObject Methods | Font Methods
+AscenderPerPt
+AscenderPerPt : Double
+getAscenderPerPt () : Double
+Returns the ascender value for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+assign
+assign (Font aP1) : Void
+Assigns the font. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | Font Methods
+charToGlyph
+charToGlyph (Char aP1) : Int
+Converts the char value to a glyph value for the font. Reverse operation to glyphIntoChar.
+
+Scripting API | PageLevelObject Methods | Font Methods
+createFromFile
+createFromFile (String aFontName) : Font
+Creates a font object from the specified font file.
+
+Scripting API | PageLevelObject Methods | Font Methods
+createFromName
+createFromName (String FontStyle, FontStyle aSearchNationalNames) : Font
+createFromName (String FontStyle, FontStyle aSearchNationalNames, Bool aSearchUsingCaseInsensitive, Bool aFontLocation) : Font
+Creates a font object from the specified font name.
+
+Example  For this example to work the font needs to be installed, e.g. exist in the C:\Windows\Fonts directory:
+Font fnt=Font.createFromName("Blue Highway",FontStyle.Bold,false,false);
+
+logMessage(fnt.FullName);
+
+// logs: Blue Highway Bold
+Scripting API | PageLevelObject Methods | Font Methods
+DescenderPerPt
+DescenderPerPt : Double
+getDescenderPerPt () : Double
+Returns the descender value for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+FullName
+FullName : String
+getFullName () : String
+Returns the full name of the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+GlyphCount
+GlyphCount : Int
+getGlyphCount () : Int
+Returns the total number of glyphs in the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+glyphIntoChar
+glyphIntoChar (Int aP1) : Char
+Converts the glyph value to a char value for the font. Reverse operation to charToGlyph.
+
+Scripting API | PageLevelObject Methods | Font Methods
+isValid
+isValid () : Bool
+Returns true if the font is valid.
+
+Scripting API | PageLevelObject Methods | Font Methods
+LinePerPt
+LinePerPt : Double
+getLinePerPt () : Double
+Returns the line value for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+Name
+Name : String
+getName () : String
+Returns the name value for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+PSName
+PSName : String
+getPSName () : String
+Returns the PS font name value for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+Style
+Style : FontStyle
+getStyle () : FontStyle
+Returns the font style for the font.
+
+Scripting API | PageLevelObject Methods | Font Methods
+Subname
+Subname : String
+getSubname () : String
+Returns the subfont name value for the font.
+
+Gradient Methods
+Contains all the methods to work with gradients from impositioning script.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+assign
+assign (Gradient aGradient) : Void
+Assigns the specified gradient. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+BackgroundColor
+BackgroundColor : Color
+Returns the color that appears in any remaining space, i.e. area not covered by the gradient.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+Degree
+Degree [Int aIntervalIndex] : Double
+Returns the gradient position where the color is equally blended with the next color.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+EndColor/ StartColor
+EndColor [Int aIntervalIndex] : Color
+StartColor [Int aIntervalIndex] : Color
+Returns the color for end 0 /end 1 of the gradient. At this position the color is pure, i.e. it is not blended with any other color.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+GradientType
+GradientType : GradientType
+Returns the type of gradient, i.e. Linear, Radial or Rectangle.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+IntervalCount
+IntervalCount : Int
+Returns the number of color intervals in the gradient.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+IntervalEnd/ IntervalStart
+IntervalEnd [Int aIntervalIndex] : Double
+IntervalStart [Int aIntervalIndex] : Double
+Returns the start (end 0) / end (end 1) position of the interval's gradient.
+
+Scripting API | PageLevelObject Methods | Gradient Methods
+LeftExtent / RightExtent
+LeftExtent : Color
+RightExtent : Color
+Returns the color that will appear outside the extents (end 0 / end 1) of the gradient if there is space remaining to fill, e.g. when the gradient has been reduced in size so that it does not fill the object completely.
+
+Image Methods
+Contains all the methods to work with images from impositioning script.
+
+Example  To transform the position, size and shape of an image:
+for (Int idx = InputSheeter_0.SheetCount-1;idx>=0;idx--)
+   {
+   PageContent pc = InputSheeter_0.SheetInfo[idx].PageContent;
+   PageContent newpc; 
+   for (Int objIdx=0;objIdx<pc.ObjectCount;objIdx++)
+        {
+        Object obj = pc.Object[objIdx];
+        if (obj.Type!=ObjectType.DrawImage) 
+           {
+           newpc.addObject(obj);
+           continue;
+           }
+        Output_0.PagesMod.Objects.TypeName = toString(obj.Type);
+        DrawImageObject dim =  obj;
+        
+        Transformation tr = dim.Transformation;
+        tr.translate(0.05,0);
+        dim.Transformation = tr;
+        
+        Path p;
+        p.addCircle(RVector(0.15,0.16),0.01);dim.pushClippingPath(p);
+        
+        newpc.addObject(dim.toObject());
+        Image im = dim.Image;
+        Output_0.PagesMod.Objects.Location = im.getImageLocation().ReversePart[0,'/'];
+        Output_0.PagesMod.Objects.Transformation = dim.Transformation.toString();
+        Output_0.PagesMod.Objects.commit();
+        }
+   OutputSheeter_0.addSheetWithPageContent(newpc,"Main");
+   Output_0.PagesMod.commit();
+   }
+Scripting API | PageLevelObject Methods | Image Methods
+assign
+assign (Image aP1) : Void
+Assigns the specified image. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | Image Methods
+CacheNumber
+CacheNumber : Int
+getCacheNumber () : Int
+Returns the cache number for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+ContainTransparency
+ContainTransparency () : Bool
+Returns the Boolean value true if the image contains transparency.
+
+Scripting API | PageLevelObject Methods | Image Methods
+ContentAsCMYK / ContentAsRGB / ContentAsRGBA
+ContentAsCMYK : Binary
+getContentAsCMYK () : Binary
+ContentAsRGB : Binary
+getContentAsRGB () : Binary
+ContentAsRGBA : Binary
+getContentAsRGBA () : Binary
+Retrieves all pixels of the image (in binary) as required for the CMYK/RGB/RGBA color spaces.
+
+Scripting API | PageLevelObject Methods | Image Methods
+createFromFile
+createFromFile (String aP1) : Void
+Creates a new image object from the specified image file.
+
+Example  
+Image pic;
+
+pic = Image.CreateFromFile("c:\Pict.png");
+Scripting API | PageLevelObject Methods | Image Methods
+Dim
+Dim : Vector
+getDim () : Vector
+Returns the dimensions of the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+DPI
+DPI : RVector
+getDPI () : RVector
+Returns the horizontal and vertical resolution for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+HandlingGroup
+HandlingGroup : Int
+getHandlingGroup () : Int
+Returns the handling group (1-8) of the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+IgnoreNativeAlpha
+IgnoreNativeAlpha : Bool
+Returns the Boolean value true if transparency is ignored when the image is loaded natively.
+
+Scripting API | PageLevelObject Methods | Image Methods
+ImageLocation
+ImageLocation : String
+getImageLocation () : String
+Returns the file path for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+isNaturallyCMYK
+isNaturallyCMYK () : Bool
+Returns the Boolean value true if the image color space is CMYK.
+
+Scripting API | PageLevelObject Methods | Image Methods
+IsValid
+IsValid : Bool
+getIsValid : Bool
+Returns if the image object is valid or not.
+
+Example  
+var image = Image.createFromFile("Invalid.jpg");
+if (not image.IsValid) logError("Cannot read image");
+Scripting API | PageLevelObject Methods | Image Methods
+LoadPDFAandEPSWithTransparency
+LoadPDFAandEPSWithTransparency : Bool
+Returns the Boolean value true if the PDF or EPS image contains transparency.
+
+Scripting API | PageLevelObject Methods | Image Methods
+LoadPDFNatively
+LoadPDFNatively : Bool
+Returns the Boolean value true if the PDF image is loaded natively, i.e. as a vector image with its own coding not as a bitmap (raster image).
+
+Scripting API | PageLevelObject Methods | Image Methods
+MakeTransparent
+MakeTransparent : Bool
+Returns the Boolean value true if the PDF image is transparent for the colors specified using the TransparencyBlue/Cyan/Green/Key/Magenta/Red/Yellow methods.
+
+Scripting API | PageLevelObject Methods | Image Methods
+OriginalDPI
+Returns the original horizontal and vertical resolution for the image.
+
+OriginalDPI : RVector
+getOriginalDPI () : RVector
+Scripting API | PageLevelObject Methods | Image Methods
+Page
+Page : Int
+getPage () : Int
+Returns the page number for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+PageCount
+PageCount : Int
+getPageCount () : Int
+Returns the count of pages for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+PaletteCount
+PaletteCount : Int
+Returns the number of modifications made to the palletized image. Only No Change or palette colors are detected and counted.
+
+Scripting API | PageLevelObject Methods | Image Methods
+PaletteOriginalColor
+PaletteOriginalColor [Int aP1] : Color
+Returns the original palette color listed under the specified index number in the current palette for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+PaletteOverrideColor
+PaletteOverrideColor [Int aP1] : Color
+Returns the modified color listed under the specified index number in the current palette for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+PaletteState
+PaletteState [Int aP1] : PaletteStateType
+Returns the given palette's state for the image, i.e. if the palette is original or modified state.
+
+Scripting API | PageLevelObject Methods | Image Methods
+saveImageAsPNG
+saveImageAsPNG(Stream) : Void
+Saves the image as the separate PNG file that has its path defined by File.Stream.
+
+Image img = Image.CreateFromFile("c:\Pict.jpg");
+File.Stream st = File.open("ConvertedImage.png", File.Mode.TruncateOrCreate);
+img.saveImageAsPNG(st);
+Scripting API | PageLevelObject Methods | Image Methods
+saveOriginalImage
+saveOriginalImage(Stream) : Void
+Saves the image in its original format to the path defined by a File.Stream.
+
+Scripting API | PageLevelObject Methods | Image Methods
+TransparencyBlue/Cyan/Green/Key/Magenta/Red/Yellow
+TransparencyBlue : RVector
+TransparencyCyan : RVector
+TransparencyGreen : RVector
+TransparencyKey : RVector
+TransparencyMagenta : RVector
+TransparencyRed : RVector
+TransparencyYellow : RVector
+Returns the transparency range of the specified color in the RGB or CMYK model for the image.
+
+Scripting API | PageLevelObject Methods | Image Methods
+Type
+Type : ImageType
+getType () : ImageType
+Returns the image type for the image.
+
+Object Methods
+Contains all the methods for page-level objects.
+
+Scripting API | PageLevelObject Methods | Object Methods
+assign
+assign (Object aP1) : Void
+Assigns the page-level object to a variable. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | Object Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+Scripting API | PageLevelObject Methods | Object Methods
+clone
+clone () : Object
+Creates a new object based on the existing object.
+
+Scripting API | PageLevelObject Methods | Object Methods
+createMergePathsOff / createMergePathsOn
+createMergePathsOff () : Object
+createMergePathsOn () : Object
+Creates a new object to set advice path merging off/on.
+
+Scripting API | PageLevelObject Methods | Object Methods
+Type
+Type : ObjectType
+getType () : ObjectType
+Returns the type of the page-level object.
+
+PageContent Methods
+Contains all the settings for the page content (page-level objects) of a logical page.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+addClippingPath
+addClippingPath (Path aP1) : Void
+Adds a new clipping path to the page content.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+addObject
+addObject (Object aP1) : Void
+Adds a new page-level object to the page content.
+
+Object obj = aContent.Object[idx];
+if (obj.Type==ObjectType.DrawText) 
+   {
+   pc.addObject(obj);
+   }
+Scripting API | PageLevelObject Methods | PageContent Methods
+addPageContent
+addPageContent (PageContent aP1) : Void
+Adds new page-level objects from the specified PageContent object.
+
+PageContent pcInput1 = InputSheeter_0.SheetInfo[0].PageContent;
+pcInput1.addPageContent(pcInput1);
+OutputSheeter_0.addSheetWithPageContent(pcInput1,"Main");
+Scripting API | PageLevelObject Methods | PageContent Methods
+assign
+assign (PageContent aP1) : Void
+Assigns the page content object to a variable. Same as the = assignment statement.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+BoundingBox
+BoundingBox : RRect
+getBoundingBox () : RRect
+Returns the bounding box for all the page content.
+
+function getBBObject(RRect aRect):Object
+   {
+   DrawPathObject pob;
+   Color black;
+   pob.StrokeColor = black;
+   Path p; p.addRect(aRect);
+   pob.Path = p;
+   return pob;
+   }
+
+function drawBBAroundObjects(PageContent aContent):PageContent 
+   {
+   Int idx=0;
+   PageContent pc;
+   while (idx<aContent.ObjectCount)
+         {
+         Object obj = aContent.Object[idx];
+         pc.addObject(obj);
+         RRect r = obj.BoundingBox;
+         idx++;
+         if (r.isEmpty()) continue;
+         pc.addObject(getBBObject(r));
+         }
+   return pc;
+   logError("No text here");
+   }
+PageContent pcInput1 = drawBBAroundObjects(InputSheeter_0.SheetInfo[0].PageContent);
+RRect r = pcInput1.getBoundingBox();
+if (not r.isEmpty()) 
+     {
+     pcInput1.addObject(getBBObject(r));
+     }
+OutputSheeter_0.addSheetWithPageContent(pcInput1,"Main");
+If the page contains Bézier curves, the bounding box converts the curves to straight line segments. You can define the preciseness of the conversion using the flatness parameter. If you set it to a lower value, the curve will be converted to more (and shorter) line segments. This creates more detailed conversions. However, it takes more time to process.
+
+RRect dieRect = drp.BoundingBox[1.0/1000];
+Scripting API | PageLevelObject Methods | PageContent Methods
+insertObject
+insertObject (Int aP1, Object aP2) : Void
+Inserts a page-level object at a specified Z-order position into the page content.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+insertPageContent
+insertPageContent (Int aP1, PageContent aP2) : Void
+Inserts page-level objects from the specified PageContent object at the specified Z-order position.
+
+var sheetInfo = InputSheeter_0.SheetInfo[0];
+var content = InputSheeter_0.SheetInfo[0].PageContent;
+
+PageContent newContent;
+DrawPathObject pob;
+Path p;
+p.addCircle(RVector (0, 0),(0.006));
+pob.Path = p;
+pob.FillColor = Color.createFromRGB(255,0,0);
+newContent.insertObject(0,pob);
+content.insertPageContent(1,content);
+OutputSheeter_0.addSheetWithPageContent(content, "Main");
+Scripting API | PageLevelObject Methods | PageContent Methods
+Object
+Object [Int aP1] : Object
+getObject (int aP1) : Object
+Returns the page-level object, further methods can be called depending on the object type. Same as getObject.
+
+Example  This script returns all the objects used Interactive:
+    for(Int i; i<InputSheeter_0.SheetCount; i++){
+
+        //Set the pagecontent variable
+        var pc = InputSheeter_0.SheetInfo[i].PageContent;
+
+        //Count the pagecontent objects
+        for(Int j=0;j<pc.ObjectCount;j++){
+            //Set a variable with the Object
+            var obj = pc.Object[j];
+
+            //Determine if the object type is DrawOverlay
+            if(obj.Type==ObjectType.DrawOverlay){
+                //Get the page content of the drawoverlayobject that is being verified
+             var drawOverlayPC=DrawOverlayObject(obj).PageContent;
+                for(Int k=0;k<drawOverlayPC.ObjectCount;k++){
+                    var drawOverlayObj = drawOverlayPC.Object[k];
+                    //If the object is a DrawImage
+                    if (drawOverlayObj.Type==ObjectType.DrawImage){
+                        //Check whether the object's path corresponds to the path of the Interactive block
+                        if(DrawImageObject(drawOverlayObj).Image.ImageLocation.contains("vcs://Interactive/Example/UserImages/Block/userImage")){
+                            logMessage("found Interacrive image:" + DrawImageObject(drawOverlayObj).Image.ImageLocation.Part[6,"/"].Part[4,"-"]);
+                           
+                        }
+                    }
+                }
+            }
+        }
+      
+    
+        OutputSheeter_0.addSheetInfo(InputSheeter_0.SheetInfo[i]);
+    }
+Scripting API | PageLevelObject Methods | PageContent Methods
+ObjectCount
+ObjectCount : Int
+getObjectCount () : Int
+Returns the number of page-level objects in the page content. Same as getObjectCount.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+removeClippingPaths
+removeClippingPaths () : Void
+Removes all clipping paths from the page content.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+removeObject
+removeObject (Int aP1) : Void
+Removes the specified page-level object from the page content.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+removeObjects
+removeObjects (Int aP1, Int aP2) : Void
+Removes all page-level object for the specified index range from the page content.
+
+Scripting API | PageLevelObject Methods | PageContent Methods
+transform
+transform (Transformation aP1) : Void
+Applies the specified transformation to the page content.
+
+PageContent pc = InputSheeter_0.SheetInfo[0].PageContent;
+Transformation tr;
+tr.rotate(90);
+tr.translate(0.297,0);
+pc.transform(tr);
+Path p;
+RRect r = RRect(0.02,0.02,0.29,0.1);
+p.addRect(r);
+pc.addClippingPath(p);
+OutputSheeter_0.addSheetWithPageContent(pc,"Main");

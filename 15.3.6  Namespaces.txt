@@ -1,0 +1,34 @@
+15.3.6  Namespaces
+Inspire Designer uses different types of namespaces, e.g. SYS, DATA, CR, FLOW, UP1, etc. These namespaces are used to reference the right fields (variables) in the correct context in scripts. Some of the namespaces are available only under certain conditions – e.g. the ROWSETS (or FLOWS) namespace is available after a repeated rowset (flow) is created, etc. The following sections will describe the SYS, CR and UP1 (UP2) namespaces.
+
+SYS Namespace
+This namespace enables access to system variables in any script in Layout. You can then reference e.g. GlobalPageCounter in variables placed on any level of the data structure. The reference SYS.GlobalPageCounter is a shorter way of referencing DATA.SystemVariable.GlobalPageCounter.
+
+
+
+
+Example  Here is an example how to use a script with system variable referenced by SYS namespace for the page selection.
+not SYS.PageCounter.isEven()
+
+If the value of current PageCounter (number of pages for one record) is odd, the filling page (e.g. advertising) can be added.
+
+
+
+
+
+CR Namespace
+The CR namespace can be used in scripts in Layout and it refers to the value of the current record. For the first record, the expression CR.CustName equals DATA.Records[0].CustName ... DATA.Records[n].CustName. You can then easily reference the content of a certain variable for all records without referencing via indexes.
+
+
+
+UP1 (UP2) Namespace
+The namespaces UP1 (and UP2 up to UPn) are useful when referencing variables from a different level of the data structure. It is used in Data Transformer and its usage is related to the option Mark Array for Save or Mark Root for Save. Using one of these options and the UP1 (UPn) namespace enables you to reference the fields from a higher level of the data tree structure.
+
+
+To reference the content of a field from a higher level do the following:
+
+Select the "Mark Array for Save" (e.g. Banks in the example above) or "Mark Root for Save" option according to the intended usage. See also an example if necessary.
+
+In the Trans_Amount variable you are now able to reference the UP1 namespace (up one level) to work with fields under the Customers array.
+
+You can also use UP2 up to UPn according to the number of levels in the data structure.

@@ -1,0 +1,324 @@
+Path Methods
+Path methods are used on the Content tab of Scripted Areas to manipulate lines that can be used for drawing Layout objects. They can also be used to describe page-level objects via the Imposition Script module.
+
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+Scripting API | Path Methods
+assign
+assign (Path aP1) : Void
+Assigns another path to the path. Same as the = assignment statement.
+
+Scripting API | Path Methods
+addArc
+addArc (RVector Center, Double Radius, Double StartAngle, Double EndAngle) : Void
+Adds an arc based on the specified parameters.
+
+Scripting API | Path Methods
+addCircle
+addCircle (RVector Center, Double Radius) : Void
+Draws a circle based on the specified parameters.
+
+Example  
+Path p;
+p.addCircle(RVector (0, 0),(0.006));
+fillPath(Transformation (), RedFillStyle,p);
+Scripting API | Path Methods
+addNgon
+addNgon (RVector Center, Int AnglesCount, Double Radius, Double StartAngle) : Void
+Adds a polygon based on the specified parameters.
+
+Example  
+Path p;
+p.addNgon(RVector (0, 0),(8),(0.009),(1));
+fillPath(Transformation (), RedFillStyle,p); //draws a red octangle
+Scripting API | Path Methods
+addNgon2
+addNgon2 (RVector Center, Int AnglesCount, Double RadiusMajor, Double RadiusMinor, Double StartAngle) : Void
+Adds a polygon of a star type based on the specified parameters.
+
+Scripting API | Path Methods
+addNgon3
+addNgon3 (RVector Center, Int AnglesCount, Double Radius, Double StartAngle) : Void
+Adds a polygon based on the specified parameters.
+
+Scripting API | Path Methods
+addPath
+addPath (Path aP1) : Void
+Adds a path.
+
+Scripting API | Path Methods
+addRect
+Adds a rectangle based on the specified parameters.
+
+Syntax:
+
+addRect (RRect aP1) : Void
+Example  
+Path p;
+p.addRect(RRect ((0),(0.09),(0.06),(0)));
+fillPath(Transformation (), RedFillStyle,p);
+Scripting API | Path Methods
+addRoundRect
+addRoundRect (RRect Rect, RVector Corner) : Void
+Adds a rectangular with a Bezier curve using the specified point (parameter Corner).
+
+Example  
+Path p;
+p.addRoundRect(RRect(0,0.09,0.06,0),RVector(0.01,0.01));
+fillPath(Transformation (), BlackFill,p);
+Scripting API | Path Methods
+addTriangle
+addTriangle (RVector aP1, RVector aP2, RVector aP3) : Void
+Adds a triangle based on the specified parameters.
+
+Example  
+Path p;
+p.addTriangle(RVector(0.01,0.01),RVector(0.005,0.02), RVector(0.015,0.02));
+strokePath(Transformation (), RedFill, p);
+Scripting API | Path Methods
+bezierTo
+bezierTo (RVector ControlPoint1, RVector ControlPoint2, RVector EndPoint) : Void
+Appends Bezier curve based on the specified points.
+
+Example  
+Path p;
+p.moveTo(RVector(0.00264583, 0.00052917));
+p.bezierTo(RVector(0.0555625, 0.00635), RVector(0.053975, 0.02028472), RVector(0.0809625, 0.03042708));
+strokePath(Transformation (), BlackFill,LineStyle1,p);
+Scripting API | Path Methods
+binaryXor
+binaryXor (Path aP1) : Void
+Returns result of bitwise XOR operation on a given path.
+
+Scripting API | Path Methods
+clear
+clear () : Void
+Deletes the whole path.
+
+Scripting API | Path Methods
+close
+close () : Void
+Closes the path (makes the last segment of path connected to the starting point of the last segment).
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+p.lineTo(RVector(0.05423958, 0));
+p.lineTo(RVector(0.05423958, 0.022225));
+p.close(); //draws a right-angled triangle
+fillPath(Transformation (),RedFill,p);
+Scripting API | Path Methods
+conicTo
+conicTo (RVector ControlPoint1, RVector EndPoint) : Void
+Appends conic curve based on the specified points.
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+p.conicTo(RVector(0.0635, 0.01296458), RVector(0.0968375, 0.03915833));
+strokePath(Transformation (),BlackFill,LineStyle1,p);
+Scripting API | Path Methods
+Count
+Count : Int
+getCount () : Int
+Returns the number of points for path.
+
+Example  
+Path p;
+p.moveTo(RVector(0.00264583, 0.00052917));
+p.lineTo(RVector(0.0809625, 0.03042708));
+Int i=p.getCount();
+logMessage(i.toString());
+//a status message with the number of points is logged
+Scripting API | Path Methods
+createParallelPath
+createParallelPath (Double Distance, JoinType aP2, Double MiterLimit) : Path
+Creates a path parallel to the original path in the specified distance.
+
+Example  
+Path p;
+p.addRect(RRect(0,0.09,0.06,0));
+Transformation tr;
+p.addPath(p.createParallelPath(-0.05,JoinType.Miter,10));
+	//Positive distance value draws an parallel object inside the original one, while negative outside
+strokePath(tr,BlackFill,p);
+Scripting API | Path Methods
+fillPath
+fillPath (Transformation aP1, FillStyle aP2, Path aP3) : Bool
+Fills the path with a specified fill style at the given position Transformation aP1. Returns True if drawing was successful.
+
+Example  This script draws a red circle.
+Path p;
+p.addCircle(RVector (0, 0),(0.006));
+fillPath(Transformation (), RedFillStyle,p);
+Scripting API | Path Methods
+get
+get (Int SegmentIdx) : RVector
+Gets the coordinates of a point with the specified segment ID (index).
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+p.lineTo(RVector(0.064, 0));
+p.lineTo(RVector(0.064, 0.035));
+p.lineTo(RVector(0, 0.035));
+p.lineTo(RVector(0, 0));
+fillPath(Transformation (), BlackFill,p);
+logMessage(p.get(2).toString());
+//returns the coordinates of the point in the segment with index 2: 0.64,0.35
+Scripting API | Path Methods
+isLineOnly
+isLineOnly () : Bool
+If True is returned, the path is created only from straight lines.
+
+Scripting API | Path Methods
+LastMove
+LastMove : RVector
+getLastMove () : RVector
+Returns the coordinates of last Move to point.
+
+Scripting API | Path Methods
+lineTo
+lineTo (RVector aP1) : Void
+Makes a line to selected point.
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+p.lineTo(RVector(0.0809625, 0.03042708));
+Scripting API | Path Methods
+minus
+Subtracts the selected paths.
+
+Syntax:
+
+minus (Path aP1)
+Return value:
+
+Void
+Example  
+Path a;
+a.addCircle(RVector (0, 0),(0.01));
+Path b;
+b.addCircle(RVector (0.015, 0),(0.01));
+a.minus(b);
+strokePath(Transformation (), BlackFill,LineStyle,a);
+
+
+
+Scripting API | Path Methods
+moveTo
+moveTo (RVector aP1) : Void
+Moves the “drawing pen” to selected point.
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+Scripting API | Path Methods
+multiply
+Returns the intersection of the given paths.
+
+Syntax:
+
+multiply (Path aP1)
+Return value:
+
+Void
+Example  
+Path p;
+p.addCircle(RVector (0, 0),(0.01));
+Path a;
+a.addCircle(RVector (0.015, 0),(0.01));
+a.multiply(p);
+strokePath(Transformation (), BlackFill,LineStyle,a);
+
+
+
+Scripting API | Path Methods
+tryParseSVGPath
+tryParseSVGPath(svgPath): String
+Returns the true Boolean value if the specified SVG path is valid.
+
+Scripting API | Path Methods
+parseSVGPath
+parseSVGPath(svgPath): String
+Parses the specified SVG path.
+
+To check if the SVG path you want to parse is valid, use the tryParseSVGPath method.
+
+Example  
+String svgPath = "M150 0 L75 200 L225 200 Z";
+Bool parsed = Path.tryParseSVGPath(svgPath);
+logMessage("Parsed should be true "+parsed.toString());
+Path p = Path.parseSVGPath(svgPath);
+logMessage(p.toString());
+Scripting API | Path Methods
+plus
+Adds the selected path.
+
+Syntax:
+
+plus (Path aP1)
+Return value:
+
+Void
+Example  
+Path p;
+p.addCircle(RVector (0, 0),(0.01));
+Path a;
+a.addCircle(RVector (0.015, 0),(0.01));
+a.plus(p);
+strokePath(Transformation (), BlackFill,LineStyle,a);
+
+
+
+Scripting API | Path Methods
+strokePath
+strokePath (Transformation aP1, FillStyle aP2, LineStyle aP3, Path aP4) : Bool
+strokePath (Transformation aP1, FillStyle aP2, Path aP3) : Bool
+Draws a path using the specified fill style at the given position Transformation aP1, with selected line style. Returns True if drawing was successful.
+
+Scripting API | Path Methods
+toSimple
+toSimple () : Path
+Simplifies the given path. This has no effect on path appearance but it makes the path processing faster.
+
+Scripting API | Path Methods
+toString
+toString () : Path
+Converts the path into a string representation.
+
+Scripting API | Path Methods
+transform
+transform () : Void
+Applies the selected transformation.
+
+Scripting API | Path Methods
+Type
+Type [Int SegmentIdx] : Int
+getType (SegmentIdx) : Int
+Returns segment type as an integer:
+
+0 = pMove
+
+1 = pLine
+
+2 = pBezier1 (Bezier curve with 1 leading point)
+
+3 = pBezier2 (Bezier curve with 2 leading points)
+
+4 = pBezier3 (Bezier curve with 3 leading points)
+
+5 = pConic1 (conic curve with 1 leading point)
+
+6 = pConic2 (conic curve with 2 leading points)
+
+Example  
+Path p;
+p.moveTo(RVector(0, 0));
+p.bezierTo(RVector(0.025, 0), RVector(0.062, -0.02), RVector(0.076, 0));
+p.lineTo(RVector(0.076, 0.052));
+p.lineTo(RVector(0, 0.052));
+p.lineTo(RVector(0, 0));
+strokePath(Transformation(),BlackFill,p);
+logMessage(p.Type[1].toString());
+//returns "2" as the second segment (index: 1) is a Bezier curve with one leading point

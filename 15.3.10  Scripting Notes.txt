@@ -1,0 +1,71 @@
+15.3.10  Scripting Notes
+Backslashes in File Paths
+Inspire Designer displays only backslashes in file paths, i.e. the \ character.
+
+Problems may arise with workflows created in versions 6.1 and earlier where parsing patterns use forward slashes. In such cases where the file name is parsed from the whole path by searching for characters behind the last forward slash, it is recommended to use the FileNameExt function which is platform independent and does not distinguish between slash types.
+
+Calculating values
+When calculating values, keep in mind that the constant data-type should be chosen according to the size of the value. Moreover, if you are adding up, for example, Int values, then the result will remain as an integer (in the case of overflow, this cannot be recorded and thus the result may be wrong). Therefore, for bigger values it is recommended to use Int64 or Double:
+
+Example  
+For example, if Int64 a = 1000000000 + 1000000000 + 1000000000, then a = -1294967296 in Layout.
+
+In this example, the values are of Int data-type and so they are calculated in Int as well. Only afterwards, the result is converted to Int64 and because 3 times 1 000 000 000 overflows, the final value is not calculated correctly.
+
+In order to calculate bigger values correctly, use Int64 or Double:
+
+Int64 a = Int64(1000000000) + 1000000000 + 1000000000
+
+Int64 a = 3000000000
+
+Hexadecimal Numbers in Scripts
+It is possible to use numbers in hexadecimal form directly in scripts, i.e. without conversion. Such a number needs to start with 0x.
+
+return 0xf0  // will return 240 
+Non-Alphanumerical Characters in Variable Names
+You can use non-alphanumerical characters (e.g., +, -, #, $) in a variable name. However, the variable must be referenced in the scripts as follows:
+
+Non-alphanumeric characters must be converted to an underline character, e.g. the variable named Business plan-summary 1.1 must be referenced as Business_plan_summary_1_1.
+
+References to variables with a name that begins with a digit must have an underline character as the first character of the name, e.g. the variable named 1.1-summary must be referenced as _1_1_summary).
+
+Tip  Avoid using non-alphanumeric characters when converting names to "script form" if it would result in non-unique names.
+For example, the following variable, Business_plan_summary, would be used for any of the following:
+
+Business plan summary
+
+Business plan-summary
+
+Business plan+summary
+
+Static Variables
+Declaring a variable with the keyword static keeps the variable valid and accessible by all scripts during the whole run of a workflow. This can be used for sharing data among all scripts in the workflow.
+
+Syntax
+
+static Int myNumber;
+
+Example  If we need to do an operation only once while processing a workflow before running one of two different scripts but we don't know the order of their execution in advance, we can do it as follows:
+//script one
+static Bool operationDone;
+if (not operationDone)
+   {
+   doOperation();
+   operationDone = true;
+   }
+...
+//script two
+static Bool operationDone;
+if (not operationDone)
+   {
+   doOperation();
+   operationDone = true;
+   }
+...
+Note  Static variables defined inside a function are automatically prefixed with the function name, e.g. logIfMapContains.Map for the following example.
+Example  
+function logIfMapContains(String S)
+   {   
+   static Util.StringIntMap Map;   
+   //...
+   }         

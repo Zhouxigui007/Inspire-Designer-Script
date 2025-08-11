@@ -1,0 +1,100 @@
+Page-Level Object Enumerators
+These enumerators types help assign different types of design features when scripting in the Imposition Script module.
+
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+Scripting API | Methods
+CapType
+CapType.Butt
+CapType.Round
+CapType.Square
+Identify the appearance at the end of a line: Butt, Round or Square.
+
+Scripting API | Methods
+ColorSpaceType
+ColorSpaceType.CMYK
+ColorSpaceType.HSB
+ColorSpaceType.LAB
+ColorSpaceType.RGB
+Identifies the color space in which a color has been defined: CMYK, HSB, LAB or RGB.
+
+Scripting API | Methods
+FillType
+FillType.Color
+FillType.Gradient
+FillType.Image
+FillType.Unset
+Identifies the type of fill: Color - a defined color; Gradient - a gradient blending of two or more colors; Image - a defined image; Unset - the fill type is left undefined.
+
+Example  In an Imposition Script module:
+PageContent pc = InputSheeter_0.SheetInfo[0].PageContent;
+DrawTextObject dto;
+
+Int count = pc.ObjectCount;
+
+for(Int i=0; i<count; i++)
+{
+   if( pc.Object[i].Type == ObjectType.DrawText )
+   { 
+       dto = DrawTextObject(pc.Object[i]);
+       logMessage(String(dto.FillType));
+     
+   }
+}
+Scripting API | Methods
+FontStyle
+FontStyle.Bold
+FontStyle.BoldItalic
+FontStyle.Italic
+FontStyle.Normal
+Identifies the font style: Bold - bold emphasis; BoldItalic - bold and italic emphasis combined; Italic - italic emphasis; Normal - no emphasis.
+
+Example  In an Imposition Script module:
+Font fnt=Font.createFromName("Blackadder ITC",FontStyle.Bold,false,false);
+Scripting API | Methods
+ImageType
+ImageType.Bit24
+ImageType.Pal2
+ImageType.Pal8
+Identifies the image type: Bit24 - 24-bit true color; Pal2 - 2 color palette i.e. black and white; Pal8 - 8 color palette for grey-scale or limited color with reduced image size.
+
+Example  In an Imposition Script module:
+Image pic;
+
+pic = Image.CreateFromFile("c:\Pict.png");
+
+logMessage(String(pic.Type));
+Scripting API | Methods
+JoinType
+JoinType.Miter
+JoinType.Round
+JoinType.Bevel
+Sets what shape of corners will be used: Miter - pointed corners; Round - rounded corners; Bevel - flattened corners.
+
+Scripting API | Methods
+ObjectType
+ObjectType.DrawImage
+ObjectType.DrawOverlay
+ObjectType.DrawPath
+ObjectType.DrawText
+ObjectType.DrawURL
+ObjectType.DrawVariableCapture
+ObjectType.SetAdvicePathMergingOff
+ObjectType.SetAdvicePathMergingOn
+ObjectType.SetLAPERGB2CMYK
+Identifies the page-content object type: DrawImage; DrawOverlay; DrawPath; DrawText; DrawURL; DrawVariableCapture; SetAdvicePathMergingOff; SetAdvicePathMergingOn; SetLAPERGB2CMYK.
+
+Example  In an Imposition Script module:
+var pc = InputSheeter_0.SheetInfo[0].PageContent;
+
+Int count = pc.ObjectCount;
+
+for(Int i=0; i<count; i++)
+    logMessage(String(pc.Object[i].Type));
+Scripting API | Methods
+TransformationType
+TransformationType.General
+TransformationType.Identity
+TransformationType.ScaleTrans
+TransformationType.Scaling
+TransformationType.Transposition
+Identifies the method of transformation for layout objects and page-level objects: General (combining more than one type); Identity (no transformation); ScaleTrans (Scaling and Transpostion); Scaling (scaling only); and Transposition (transposition only).

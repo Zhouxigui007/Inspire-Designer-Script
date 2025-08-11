@@ -1,0 +1,357 @@
+Workflow Methods
+Scripting API | Workflow Methods
+clickThroughUrl
+clickThroughUrl(String aP1) : String
+Returns an encrypted and Base64 encoded representation of the specified UTF-8 encoded string.
+
+String encryptedString = WorkFlow.clickThroughUrl("Hello World!");
+Scripting API | Workflow Methods
+CurrentOutputFileName
+CurrentOutputFileName : String
+getCurrentOutputFileName() : String
+Returns the name of the currently generated file.
+
+It can only be used in the after creating File event listener of the Event Script module, otherwise an error will be shown when processing.
+
+String currentOutputFileName = WorkFlow.CurrentOutputFileName;
+Scripting API | Workflow Methods
+detectDependencies
+detectDependencies(String aP1, StringList & aP2) : Bool
+Returns the Boolean value true if the dependencies (used files) of the specified workflow have been obtained correctly. In addition, a list of used files of a workflow is returned in the parameter aP2. This is the script alternative to Cross Reference Browser.
+
+File.FileInfoList fiv;
+File.list(fiv, File.ListParam.Files, "vcs://test");
+for(Int i=0; i<fiv.Size; i++)
+   {
+   Util.StringList deps;
+   if(not WorkFlow.detectDependencies(fiv[i].Location, deps))
+      continue;
+   Files.commit();
+   Files.File = fiv[i].Location;
+   for(Int j=0; j<deps.Size; j++)
+      {
+      Files.Depends.commit();
+      Files.Depends.Location=deps[j];
+      }
+   }
+Scripting API | Workflow Methods
+EngineName
+EngineName : String
+getEngineName() : String
+Returns the name of the currently used engine.
+
+String engineName = WorkFlow.EngineName;
+IAInputAttribute Methods
+The IAInputAttribute namespace contains methods for reading an Inspire Automation attributes XML file.
+
+The XML file can contain document and job attributes which can be used, for example, to relay information about how Inspire Automation has processed the workflow.
+
+Example  Job attributes from an IA attributes XML file:
+<o class="job" id="gmcpa-344">
+   <as>
+    <a name="completion-time">
+     <v>13.09.2011 09:37:40</v>
+    </a>
+    <a name="creation-time">
+     <v>13.09.2011 09:37:40</v>
+    </a>
+    <a name="current-processor-index">
+     <v>0</v>
+    </a>
+    <a name="current-queue">
+     <v>input</v>
+    </a>
+    <a empty="true" name="descriptor"/>
+    <a name="detailed-job-state">
+     <v>retained-ok</v>
+    </a>
+The file is usually determined using a workflow parameter immediately before processing, via the Workflow Parameters window-pane (Parameter named IA attributes file) or the Inspire Production Console (workflow processing parameter -importiaattributes). A default file for proof and test runs can be assigned via Default IA attributes file in the Current Workflow Options section of the Workflow Options dialog.
+
+Example  
+
+In the Script Data Input module, the above data structure is created and the below script is added to read job attributes from the IA attributes file into the structure.
+WorkFlow.IAInputAttributes.Attributes attr1; // declares Attributes object 
+attr1=WorkFlow.IAInputAttributes.JobAttributes;                        // assigns the list of job attributes to the object
+for(Int i=0;i<attr1.Count;i++)                                         // creates repetition for MyJobAttributes array
+   {
+   MyJobAttributes.Name=attr1.Name[i];                                 // reads name of attribute from file to Name field
+   for(Int j=0;j<attr1.ValuesCount[i];j++)                             // creates repetition for Values array
+      {
+      MyJobAttributes.Values.Value=attr1.Value[i,j];                   // reads value from file to Value field
+      MyJobAttributes.Values.commit();                                 // commits value 
+      }
+   MyJobAttributes.commit();                                           // commits MyJobAttributes record
+   }
+Attributes Methods
+WorkFlow.IAInputAttributes.Attributes declares an attribute object for inclusion in a list, which is used to store Inspire Automation attributes that have been read from the XML file.
+
+It is used inside a list because there can be many attributes. See IAInputAttribute Methods (above) for an example of use. Once declared, the following methods can be applied to the object:
+
+Scripting API | Workflow Methods | Workflow Methods | Workflow Methods
+assign
+assign(Attributes aP1) : Void
+Assigns the object (in brackets) to the current object. The same result can be achieved using the = assignment statement.
+
+Scripting API | Workflow Methods | Workflow Methods | Workflow Methods
+Count
+Count : Int
+getCount() : Int
+Returns the total number of attributes.
+
+Scripting API | Workflow Methods | Workflow Methods | Workflow Methods
+Name
+Name[Int aP1] : String
+getName(Int aP1) : String
+Returns the name of the attribute at the specified position.
+
+Scripting API | Workflow Methods | Workflow Methods | Workflow Methods
+Value
+Value[Int aP1] : String
+getValue(Int aP1) : String
+Returns all values of specified attribute aP1 in one string. Each separated by a newline.
+
+Value[Int aP1,Int aP2] : String
+getValue(Int aP1,Int aP2) : String
+Returns specified value aP2 of multi-value attribute, i.e. when ValuesCount>1.
+
+Scripting API | Workflow Methods | Workflow Methods | Workflow Methods
+ValuesCount
+ValuesCount : Int
+getValuesCount() : Int
+Returns the total number of values for any given attribute.
+
+Scripting API | Workflow Methods | Workflow Methods
+DocumentAttributes
+DocumentAttributes[Int aP1] : String
+getDocumentAttributes (Int aP1) : String
+Returns the document attribute (objects of the document class, e.g. contained like <o class="document" id="gmcpa-344.1"> </o>) found at the specified position.
+
+Example  
+
+In the Script Data Input module, the above data structure is created and the below script is added to read job attributes from the IA attributes file into the structure.
+for(Int doci=0;doci<IAInputAttributes.DocumentsCount;doci++)
+   {
+   WorkFlow.IAInputAttributes.Attributes attr;
+   attr=WorkFlow.IAInputAttributes.DocumentAttributes[doci];
+   for(Int i=0;i<attr.Count;i++)
+      {
+      MyDocuments.MyDocAttributes.Name=attr.Name[i];
+      for(Int j=0;j<attr.ValuesCount[i];j++)
+         {
+         MyDocuments.MyDocAttributes.Values.Value=attr.Value[i,j];
+         MyDocuments.MyDocAttributes.Values.commit();
+         }
+      MyDocuments.MyDocAttributes.commit();   
+      }   
+   MyDocuments.commit();
+   }
+Scripting API | Workflow Methods | Workflow Methods
+DocumentsCount
+DocumentsCount : Int
+getCount() : Int
+Returns the number of documents listed in the Inspire Automation attributes file.
+
+See DocumentAttributes (above) for an example of use.
+
+Scripting API | Workflow Methods | Workflow Methods
+JobAttributes
+JobAttributes : String
+getJobAttributes() : String
+Returns all job attributes (objects of the job class, e.g. contained like <o class="job" id="gmcpa-344"> </o>) listed in the Inspire Automation attributes file.
+
+See IAInputAttribute Methods for an example of use.
+
+Scripting API | Workflow Methods
+IAOutputAttribute
+IAOutputAttribute[String aP1] : String
+setIAOutputAttribute[String aP1] : String
+Sets the specified job report property to the specified value. The prefix _PA is assigned to the property name. This information is logged in the Inspire Content Manager job report and can be saved to a TXT file (of either system or user attributes) for Inspire Automation using the parameter -exportiaattributes via the Inspire Production Console.
+
+PAAttribute[String aP1] : String is a legacy version of this method.
+
+If entering values consisting of multiple words:
+
+Into Inspire Automation single-valued attributes, enter values as strings.
+
+WorkFlow.IAOutputAttribute["job.descriptor"] = "value one";
+Into Inspire Automation multi-valued attributes, use StringLists,
+
+Util.StringList attributes;
+attributes.add("value one");
+attributes.add("value two");
+WorkFlow.IAOutputAttribute["job.mutlivaluedAttribute"] = attributes;
+Or escape spaces in individual strings with back slashes:
+
+WorkFlow.IAOutputAttribute["job.mutlivaluedAttribute"] =  "value\ one value\ two";
+Scripting API | Workflow Methods
+IIAttribute
+IIAttribute[String aP1] : StringList
+Reads values of a specified attribute from a JSON file. These values are used for further processing and production purposes.
+
+This is a feature used for integration with Inspire Interactive, the documentation for that product explains how this feature is employed.
+
+Util.StringList values = WorkFlow.IIAttribute["paper_weight"];
+for (var i = 0; i < values.Size; i++)
+   {
+   var paper_weight = values[i];
+   return values[i];
+   } 
+Scripting API | Workflow Methods
+IsJobAborted
+IsJobAborted : Bool
+getIsJobAborted() : Bool
+Returns the Boolean value true if the job has been aborted by the user or finished with an error.
+
+Bool isJobOk = not WorkFlow.IsJobAborted;
+Scripting API | Workflow Methods
+IsProof
+IsProof : Bool
+getIsProof() : Bool
+Returns the Boolean value true if the Layout is being proofed.
+
+String message;
+if (WorkFlow.IsProof) message = "This workflow is now proofed.";
+else message = "This workflow is in production.";
+Scripting API | Workflow Methods
+JLDLocation
+JLDLocation : String
+getJLDLocation() : String
+When entered inside a workflow, the script returns an empty string. When entered inside an Inspire Interactive template, the script returns the file path of the current template and relevant ICM parameters.
+
+String filePath = WorkFlow.JLDLocation;
+// filePath = "vcs:V:1:S:Production//Templates/template.jld"
+Scripting API | Workflow Methods
+JobReportProperty
+JobReportProperty[String aName] : String
+setJobReportProperty(String aName, String aValue) : Void
+Sets the specified job report property to the specified value. This information is logged into Inspire Content Manager job report.
+
+WorkFlow.JobReportProperty["User"] = "admin";
+Scripting API | Workflow Methods
+OutputName
+OutputName : String
+getOutputName() : String
+Returns the name of the output module.
+
+String outputModuleName = WorkFlow.OutputName;
+Scripting API | Workflow Methods
+Parameter
+Parameter[String aP1, String aP2] : String
+getParameter(String aP1, String aP2) : String
+setParameter(String aP1, String aP2, String aP3) : Void
+Returns or sets a parameter of the specified module String aP1. The parameter is specified by its name String aP2. Commonly used with the Param Input module.
+
+String productID = WorkFlow.Parameter["ParamInput1", "ID"];
+WorkFlow.setParameter("Reports", "DateRange", "200901-200912");
+WorkFlow.Parameter["Reports", "Template"] = "landscape";
+Inspire Production Console Workflow modules parameters without the dash, e.g. the -dif parameter for the Data Input module would be WorkFlow.Parameter["DataInput1","dif"].
+
+To set parameters in external workflows, use the following syntax, in which aP1 defines the External Workflow module, aP2 the parameter and the module in the external workflow in which the parameter is used, and String the returned value:
+
+Parameter[String aP1, String aP2] : String
+Example  
+WorkFlow.Parameter["DataParent","difXML"] = sFileName;
+Scripting API | Workflow Methods
+ProductVersion
+ProductVersion : String
+getProductVersion() : String
+Returns a string that represents the version number of the product.
+
+String productVersion = WorkFlow.ProductVersion;   // productVersion = "6.1.35.0"
+Scripting API | Workflow Methods
+showDialog
+showDialog(String aMessage, Int aDialogType) : Int
+Returns a code that indicates which button of the dialog box with the specified message and of the specified type was pressed.
+
+There are two types of dialog boxes available:
+
+0 - An information dialog box with the OK button only. Returns always the value of 1.
+
+1 - An optional dialog box with the Yes and No buttons. Returns the value of 2 or 3 if the Yes or No button was pressed respectively. If the dialog is cancelled, the value of zero is returned.
+
+if (File.exist("C:\output.pdf")) {
+   if (WorkFlow.showDialog("Save the original file?", 1) == 2) {
+      File.move("C:\output.pdf", "C:\output_original.pdf");
+   } else {
+      logMessage("Original file has been overwritten.");
+   }
+}
+Note  As this method displays a dialog, it only works in the Designer GUI, e.g. it is not available for Inspire Production Server.
+Scripting API | Workflow Methods
+trackLogic
+trackLogic(Bool aP1) : Void
+trackLogic(Currency aP1) : Void
+trackLogic(DateTime aP1) : Void
+trackLogic(Double aP1) : Void
+trackLogic(Int aP1) : Void
+trackLogic(Int64 aP1) : Void
+trackLogic(String aP1) : Void
+Sets the specified value as the tracking condition. All records that do not match the condition can be logged into an external file. For more details see the Logic tracking section.
+
+Example  We have a limited space for address and we want to see in Proof only customers with different name lengths to check if all names fit there. To do so, we can run proofing with logic tracking based on the customer name variable.
+We create a new calculated variable Tracking of int 64 type (on the same level as customer name variable CustName) with the following code:
+
+WorkFlow.trackLogic(CustName.Length);
+
+In Data Layout Properties we enable the Use logic tracking option, select the variable Tracking and fill in the Error file name field:
+
+
+After we run proof, we will only see those records where customers’ names have different lengths.
+
+
+Note  If this is the first time Logic tracking is used, it will be necessary to change the status of the duplicate records message in Warnings config (set message 0616 to Ignore) before proofing takes place.
+
+Scripting API | Workflow Methods
+UsedFlow
+UsedFlow : StringList
+getUsedFlow(String layoutName, Int recordIndex) : StringList
+Returns the flow stack path of the flow with the specified index number and the display name set in Inspire Interactive, if applicable. Additionally, if the flow is used as an external block in Inspire Interactive, its path is included.
+
+Util.StringList usedFlow = WorkFlow.getUsedFlow("Layout1",0);
+The returned path is in JSON format.
+
+Example  
+
+{ 
+  "flowStack": [
+    {
+      "DotName":"Flows.Flow 1", 
+      "DisplayName":"Display name" 
+    },
+    {
+      "DotName":"Flows.Flow 2" 
+    }, 
+    {
+      "DotName":"Flows.DirectExternalFlow 1", 
+      "DisplayName":"External block",
+      "Location":"map://interactive/Blocks/Block.jld" 
+    } 
+  ]
+}
+
+Note  A flow's path can only be traced if Flow usage logging is checked on its Flow tab in the Layout module.
+Scripting API | Workflow Methods
+WorkFlowAsOfDate
+WorkFlowAsOfDate : DateTime
+getWorkFlowAsOfDate() : DateTime
+Returns any validity date value previously specified for when opening a workflow using the D: parameter in the path to the file in ICM.
+
+DateTime workflowAsOfDate = WorkFlow.WorkFlowAsOfDate;
+Note  All times in ICM are recorded in GMT, e.g. if you are in Los Angeles and it is July 2, 2012 10:00 a.m. local time, the GMT time will be July 2, 2012 5:00 p.m. Therefore, the returned value will be 20120702170000.
+Scripting API | Workflow Methods
+WorkFlowLocation
+WorkFlowLocation : String
+getWorkFlowLocation() : String
+When entered inside a workflow, the script returns the file path of the current workflow. When entered inside an Inspire Interactive template, the script returns the file path of the base template.
+
+String filePath = WorkFlow.WorkFlowLocation;
+// filePath = "C:\test.wfd"
+Scripting API | Workflow Methods
+WorkFlowVersionID
+WorkFlowVersionId : Int
+getWorkFlowVersionId() : Int
+Returns an integer value that represents the version number of the given workflow if it is versioned via Inspire Content Manager.
+
+Returns -1 if the given workflow is not versioned.
+
+Int workflowVersion = WorkFlow.WorkFlowVersionID;

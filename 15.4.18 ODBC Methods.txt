@@ -1,0 +1,754 @@
+ODBC Methods
+ODBC methods can be used for connecting to a database (typically via the Script Data Input module), determining available tables, querying of the stored data and its manipulation.
+
+Note  If you do not see the get method during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Database Methods
+Database methods can be used for connecting to a database, determining available tables and executing queries over them.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options dialog is not checked.
+Scripting API | ODBC Methods | Database Methods
+connect
+connect(String aP1) : String
+Returns a connection string if connecting to the given database using the specified connection string has been finished successfully, otherwise returns an empty value.
+
+The connection string is a set of attributes used to connecting to the database and depends on the given ODBC driver. Details can be obtained from ODBC driver vendor.
+
+Tip  There are connection string samples available on the internet, see www.connectionstrings.com.
+Alternatively, you can also add an ODBC Data Input module into the workflow, and create a connection string to your database there.
+
+ODBC.Database db;
+String connectionString = "Driver=SQL Server;" +
+                          "Server=myServerAddress;" +
+                          "Database=myDataBase;" +
+                          "Trusted_Connection=True;";
+logMessage(db.connect(connectionString));
+db.disconnect();
+Scripting API | ODBC Methods | Database Methods
+createRecordSet
+createRecordSet(String aP1) : RecordSet
+createRecordSet(String aP1, DBVariantList & aP2) : RecordSet
+createRecordSet(String aP1, ...) : RecordSet
+Returns a record set of the specified query to the given database.
+
+If the query is parametrized, the second parameter can be previously declared DBVariantList or a comma-separated list of any number of variables, e.g db.createRecordSet("SELECT FirstName, LastName, SSN FROM [users$] where SSN=? OR Info=? OR ZIP=?",ID,info,ZIPcode). See the section ODBC DBVariantList Methods.
+
+The record set is used to hold a set of records from a database table. It consists of records and columns matching the given criteria.
+
+ODBC.Database db;
+ODBC.RecordSet recordset;
+db.connect("Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=C:\");
+recordset = db.createRecordSet("SELECT * FROM data.csv");
+while(recordset.fetchNextRow()) 
+   {
+   logMessage(recordset.StringValue[0]);
+   }
+db.disconnect();
+To close the record set and read other data from a database table:
+
+ODBC.Database db;
+db.connect("connection string");
+ODBC.RecordSet rs=db.createRecordSet("SELECT * FROM users");   //create recordset
+rs.fetchNextRow();
+logMessage(rs.StringValue["Name"]);
+rs=ODBC.RecordSet();   //this row is used for closing and a new select can start (you are assigning a new recordset to rs) 
+rs=db.createRecordSet("SELECT * FROM groups");
+If the fields FirstName and LastName are created in the Script Data Input module, e.g.:
+
+
+You can build a record set using database-query values determined by the Param Input module and return to those fields:
+
+ODBC.Database db; 
+String ID = WorkFlow.Parameter["ParamInput1","id"]; 
+String info = WorkFlow.Parameter["ParamInput1","info"];
+String dblocation = WorkFlow.Parameter["ParamInput1","XLS path"];
+// ID and info fields and the location of the db is determined by values from module ParamInput1
+
+db.connect("DSN=ExcelFiles;DBQ="+dblocation+";DefaultDir=D:;DriverId=790;FIL=excel 8.0;MaxBufferSize=2048;PageTimeout=5;");
+// connects to db @ dblocation
+
+ODBC.RecordSet rs = db.createRecordSet("SELECT FirstName, LastName, SSN FROM [users$] where SSN=? OR Info=?",ID,info); 
+// create record set with records from db which match ID and info field values
+
+while (rs.fetchNextRow())
+      {
+      CustomerRecords.FirstName=rs.StringValue["FirstName"];
+      CustomerRecords.LastName=rs.StringValue["LastName"];
+      CustomerRecords.commit();
+      }  
+// commits FirstName field from ODBC to FirstName field in module.
+Scripting API | ODBC Methods | Database Methods
+disconnect
+disconnect() : Void
+Terminates the connection to the given database.
+
+ODBC.Database db;
+logMessage(db.connect("DSN=Excel Files;DBQ=C:\data.xls"));
+db.disconnect();
+Scripting API | ODBC Methods | Database Methods
+Error
+Error : String
+getError() : String
+Returns an error message.
+
+ODBC.Database db;
+db.connect("DSN=Excel Files;DBQ=C:\data.xls");
+if (db.isError()) {
+   logError(db.Error);
+   }
+db.disconnect();
+Scripting API | ODBC Methods | Database Methods
+execute
+execute(String aP1) : Bool
+execute(String aP1, DBVariantList & aP2) : Bool
+Returns a Boolean value true if the specified command has been executed successfully.
+
+If the command is parametrized, the second parameter refers to the list of parameter values. See the section ODBC DBVariantList Methods.
+
+ODBC.Database db;
+db.connect("DSN=Excel Files;DBQ=C:\data.xls");
+db.execute("CREATE TABLE names (name TEXT, surname TEXT)");
+db.execute("INSERT INTO names (name, surname) VALUES ('John', 'Doe')");
+db.disconnect();
+Scripting API | ODBC Methods | Database Methods
+isError
+isError() : Bool
+Returns a Boolean value true if an database related error has occurred when processing.
+
+ODBC.Database db;
+ODBC.RecordSet rsNames;
+db.connect("DSN=Excel Files;DBQ=C:\data.xls");
+if (not db.isError()) {
+   rsNames = db.createRecordSet("SELECT COUNT(*) FROM names");
+   rsNames.fetchNextRow();
+   Int64 itemCount = rsNames.getInt64Value(0);
+   }
+db.disconnect();
+Scripting API | ODBC Methods | Database Methods
+readTablesInfo
+readTablesInfo(StringList & aP1) : Void
+Creates a list of table names of the given database.
+
+ODBC.Database db;
+ODBC.StringList sheetNames;
+db.connect("DSN=Excel Files;DBQ=C:\data.xls");
+db.readTablesInfo(sheetNames);
+for(Int i;i<sheetNames.Size;i++) {
+   logMessage(sheetNames[i]);
+   }
+db.disconnect();
+DBVariant Methods
+For an introduction to variants and variant lists see the section DBVariantList Methods.
+
+Scripting API | ODBC Methods | DBVariant Methods
+assign
+assign(Binary aP1)
+assign(Bool aP1) : Void
+assign(DateTime aP1) : Void
+assign(DBVariant aP1) : Void
+assign(Double aP1) : Void
+assign(Int aP1) : Void
+assign(Int64 aP1) : Void
+assign(String aP1) : Void
+Assigns a DBVariant object to the the given variant variable. The same result can be achieved using the equal sign =.
+
+ODBC.DBVariant dbVariant;
+dbVariant.assign("Hello World!");
+Scripting API | ODBC Methods | DBVariant Methods
+BinaryValue
+BinaryValue : Binary
+getBinaryValue() : Binary
+setBinaryValue(Binary aP1) : Void
+Returns or sets a binary value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.BinaryValue = Binary.fromBase64("SGVsbG8gV29ybGQh");
+Scripting API | ODBC Methods | DBVariant Methods
+BoolValue
+BoolValue : Bool
+getBoolValue() : Bool
+setBoolValue(Bool aP1) : Void
+Returns or sets a Boolean value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.BoolValue = true;
+Scripting API | ODBC Methods | DBVariant Methods
+DateTimeValue
+DateTimeValue : DateTime
+getDateTimeValue() : DateTime
+setDateTimeValue(DateTime aP1) : Void
+Returns or sets a date-time value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.DateTimeValue = DateTime.fromDate(1, 1, 2000);
+Scripting API | ODBC Methods | DBVariant Methods
+DoubleValue
+DoubleValue : Double
+getDoubleValue() : Double
+setDoubleValue(Double aP1) : Void
+Returns or sets a double value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.DoubleValue = 12.12345678;
+Scripting API | ODBC Methods | DBVariant Methods
+Int64Value
+Int64Value : Int64
+getInt64Value() : Int64
+setInt64Value(Int64 aP1) : Void
+Returns or sets a 64-bit integer value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.Int64Value = 1234;
+Scripting API | ODBC Methods | DBVariant Methods
+IntValue
+IntValue : Int
+getIntValue() : Int
+setIntValue(Int aP1) : Void
+Returns or sets an integer value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.IntValue = 1234;
+Scripting API | ODBC Methods | DBVariant Methods
+isNull
+isNull : Bool
+Returns the Boolean value true if the variant is NULL.
+
+Scripting API | ODBC Methods | DBVariant Methods
+Null
+Null : DBVariant
+getNull() : DBVariant
+Returns a variant representing the NULL.
+
+ODBC.RecordSet rs = db.createRecordSet("SELECT FirstName, LastName, SSN FROM [users$] where SSN=?",ODBC.DBVariant.Null); 
+Scripting API | ODBC Methods | DBVariant Methods
+StringValue
+StringValue : String
+getStringValue() : String
+setStringValue(String aP1) : Void
+Returns or sets a string value of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.StringValue = "Hello World!";
+Scripting API | ODBC Methods | DBVariant Methods
+Type
+Type : TypeKeeper
+Returns the data type of the given variant variable.
+
+ODBC.DBVariant dbVariant;
+dbVariant.assign(1234);
+if (not (dbVariant.Type is Int)) logError("Value is not integer.");
+DBVariantList Methods
+Variants and variant lists are intended for creating parametrized SQL statements. This is a useful feature for preventing SQL injection attacks. Variable values are not entered directly into the SQL statement but are represented by a parameter which is defined elsewhere.
+
+In the script, the SQL statement always remains the same and the user input comes via a variant (which is a kind of variable). The variant is represented in the statement by a parameter, which has the form of a question mark. These parameters are replaced by the values of variants from a variant list in the order of occurrence – the first parameter is replaced by the first variant, etc.
+
+In the following piece of script there is a variant list (variants always have to be included in a variant list) that contains two variants: viString and viInt. The SQL statement inserts values to the columns named Name and Number. The first question mark in the statement is replaced by the value of the viString variant and the second one by that of the viInt variant.
+
+ODBC.DBVariantList varList;
+varList.add(viString);
+varList.add(viInt);
+db.execute("insert into MyTable (Name, Number) values (?, ?)", varList);
+Example  This is an example of script that inserts values into a database using a parametrized SQL statement.
+ODBC.DBVariant viInt;
+viInt = Clients.OrderNum;
+if (not (viInt.Type is Int)) logError("Value is not integer.");
+
+ODBC.DBVariant viString;
+viString = Clients.Names;
+if (not (viString.Type is String)) logError("Value is not string.");
+
+ODBC.Database db;
+db.connect("OCI:UID=user;PWD=pass;SERVER=server/orcl;PREFETCH_ROW_COUNT=50;");
+
+db.execute("drop table MyTable");
+if(db.isError())
+  logWarning(db.Error);
+else
+  logMessage("drop table OK");
+  
+db.execute("create table MyTable (Name VARCHAR(50), Number INTEGER)");
+if(db.isError())
+  logError(db.Error);
+else
+  logMessage("create table OK");
+
+ODBC.DBVariantList varList;
+varList.add(viString);
+varList.add(viInt);
+db.execute("insert into MyTable (Name, Number) values (?, ?)", varList);
+if(db.isError())
+  logError(db.Error);
+else
+  logMessage("create table OK");
+db.disconnect();
+Parameters can also be used for reading data from a database. The part of the script defining the SQL statement will then look as follows:
+
+ODBC.RecordSet rs;
+varList.clear();
+varList.add(viString);
+rs = db.createRecordSet("SELECT Name, Number FROM MyTable WHERE Name = ?", varList);
+while (rs.fetchNextRow())
+   {
+   logMessage(rs.StringValue[0]);
+   logMessage(rs.DoubleValue[1].toString());
+   }
+Caution  This example uses the default login credentials. Make sure to change the default password to enhance security and prevent misuse.
+Scripting API | ODBC Methods | DBVariantList Methods
+add
+add(DBVariant aP1) : Void
+Adds a variant list item to the given variant list.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariant;
+dbVariant.IntValue = 1234;
+dbVariantList.add(dbVariant);
+Scripting API | ODBC Methods | DBVariantList Methods
+assign
+assign(DBVariantList aP1) : Void
+Assigns a DBVariantList object to the the given list. The same result can be achieved using the equal sign =.
+
+ODBC.DBVariantList originalList, clonedList;
+ODBC.DBVariant dbVariant;
+dbVariant.StringValue = "Hello World!";
+originalList.add(dbVariant);
+clonedList.assign(originalList);
+Scripting API | ODBC Methods | DBVariantList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbEnglish, dbGreek;
+dbEnglish.StringValue = "Hello World!";
+dbGreek.StringValue = "Καλημέρα κόσμε";
+dbVariantList.add(dbEnglish);
+dbVariantList.add(dbGreek);
+stringList.clear();
+Scripting API | ODBC Methods | DBVariantList Methods
+get
+get(Int aP1) : DBVariant
+Returns a value of a list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbEnglish, dbGreek;
+dbEnglish.StringValue = "Hello World!";
+dbGreek.StringValue = "Καλημέρα κόσμε";
+dbVariantList.add(dbEnglish);
+dbVariantList.add(dbGreek);
+for (Int i=0;i<dbVariantList.Size;i++) {
+   logMessage(dbVariantList.get(i).StringValue);
+   // alternative syntax:
+   logMessage(dbVariantList[i].StringValue);   
+}
+Scripting API | ODBC Methods | DBVariantList Methods
+insert
+insert(Int aP1, DBVariant aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariant;
+dbVariant.StringValue = "Hello World!";
+dbVariantList.add(dbVariant);
+dbVariant.StringValue = "Καλημέρα κόσμε";
+dbVariantList.insert(0, dbVariant);
+Scripting API | ODBC Methods | DBVariantList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariant;
+dbVariant.IntValue = 1234;
+dbVariantList.add(dbVariant);
+dbVariantList.remove(0);
+Scripting API | ODBC Methods | DBVariantList Methods
+resize
+resize(Int aP1, DBVariant aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariant;
+dbVariant.IntValue = 1234;
+dbVariantList.resize(3, dbVariant);
+Scripting API | ODBC Methods | DBVariantList Methods
+set
+set(Int aP1, DBVariant aP2) : Void
+Sets a value of a list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariantDefault, dbVariant;
+dbVariantDefault.StringValue = "";
+dbVariantList.resize(1, dbVariantDefault);
+dbVariant.StringValue = "Hello World!";
+dbVariantList.set(0, dbVariant);
+// alternative syntax:
+dbVariantList[0] = dbVariant;
+Scripting API | ODBC Methods | DBVariantList Methods
+Size
+Size : Int
+Returns the total number of list items in the given list.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariantDefault, dbVariant;
+dbVariantDefault.StringValue = "";
+dbVariantList.resize(2, dbVariantDefault);
+Int listSize = dbVariantList.Size;
+Scripting API | ODBC Methods | DBVariantList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Number values are sorted in ascending order, while individual characters of the string are compared using their Unicode code points.
+
+ODBC.DBVariantList dbVariantList;
+ODBC.DBVariant dbVariant;
+dbVariant.StringValue = "b";
+dbVariantList.add(dbVariant);
+dbVariant.IntValue = 100;
+dbVariantList.add(dbVariant);
+dbVariant.StringValue = "a";
+dbVariantList.add(dbVariant);
+dbVariant.IntValue = 10;
+dbVariantList.add(dbVariant);
+dbVariantList.sort();
+for (Int i=0;i<dbVariantList.Size;i++) {
+   logMessage(dbVariantList[i].StringValue);
+   // the final order will be 10, 100, "a", "b"
+}
+RecordSet Methods
+RecordSet methods can be used for manipulation with data stored in the recordset. The recordset is used to hold a set of records from a database table.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | ODBC Methods | RecordSet Methods
+assign
+assign(RecordSet aP1) : Void
+Assigns a RecordSet object to the given recordset. The same result can be achieved using an equal sign =.
+
+ODBC.Database db;
+ODBC.RecordSet recordset;
+String connectionString = "Driver=SQL Server;" +
+                          "Server=myServerAddress;" +
+                          "Database=myDataBase;" +
+                          "Trusted_Connection=True;";
+db.connect(connectionString);
+if (not db.isError()) {
+   recordset.assign(db.createRecordSet("SELECT * FROM myTable"));
+   }
+else {
+   logError(db.Error);
+   }
+db.disconnect();
+Scripting API | ODBC Methods | RecordSet Methods
+BinaryValue
+BinaryValue[Int aP1] : Binary
+BinaryValue[String aP1] : Binary
+getBinaryValue(Int aP1) : Binary
+getBinaryValue(String aP1) : Binary
+Returns a binary value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+Util.BinaryList imageDataList;
+recordset = db.createRecordSet("SELECT imageData FROM myTable");
+while (recordset.fetchNextRow()) {
+   imageDataList.add(recordset.BinaryValue["imageData"]);
+   }
+Scripting API | ODBC Methods | RecordSet Methods
+BoolValue
+BoolValue[Int aP1] : Bool
+BoolValue[String aP1] : Bool
+getBoolValue(Int aP1) : Bool
+getBoolValue(String aP1) : Bool
+Returns a Boolean value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+recordset = db.createRecordSet("SELECT isProcessed FROM myTable");
+while (recordset.fetchNextRow()) {
+   if (not recordset.BoolValue[isProcessed]) {
+      // do something
+   }
+}
+Scripting API | ODBC Methods | RecordSet Methods
+ColumnCount
+ColumnCount : Int
+getColumnCount() : Int
+Returns the total number of columns in the given recordset.
+
+ODBC.RecordSet recordset;
+recordset = db.createRecordSet("SELECT * FROM myTable");
+Int columnCount = recordset.ColumnCount;
+Scripting API | ODBC Methods | RecordSet Methods
+ColumnName
+ColumnName[Int aP1] : String
+getColumnName(Int aP1) : String
+Returns a column name of the specified index in the given recordset.
+
+ODBC.RecordSet recordset;
+recordset = db.createRecordSet("SELECT * FROM myTable");
+String firstColumnName = recordset.ColumnName[0];
+Scripting API | ODBC Methods | RecordSet Methods
+ColumnType
+ColumnType[Int aP1] : TypeKeeper
+getColumnType(Int aP1) : TypeKeeper
+Returns a TypeKeeper value of the specified column index in the given recordset.
+
+The TypeKeeper value can only be evaluated using 'is' operator.
+
+ODBC.RecordSet recordset;
+recordset = db.createRecordSet("SELECT * FROM myTable");
+if (recordset.ColumnType[1] is String) { 
+  // do something
+  }
+Scripting API | ODBC Methods | RecordSet Methods
+DateTimeValue
+DateTimeValue[Int aP1] : DateTime
+DateTimeValue[String aP1] : DateTime
+getDateTimeValue(Int aP1) : DateTime
+getDateTimeValue(String aP1) : DateTime
+Returns a DateTime value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+Util.DateTimeList birthDateList;
+recordset = db.createRecordSet("SELECT * FROM myTable");
+while (recordset.fetchNextRow()) {
+   birthDateList.add(recordset.DateTimeValue[0]);
+}
+Scripting API | ODBC Methods | RecordSet Methods
+DoubleValue
+DoubleValue[Int aP1] : Double
+DoubleValue[String aP1] : Double
+getDoubleValue(Int aP1) : Double
+getDoubleValue(String aP1) : Double
+Returns a double value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+Double averageAge;
+recordset = db.createRecordSet("SELECT AVG(age) FROM myTable");
+if (recordset.fetchNextRow()) {
+   averageAge = recordset.DoubleValue[0];
+}
+Scripting API | ODBC Methods | RecordSet Methods
+fetchNextRow
+fetchNextRow() : Bool
+Returns a Boolean value true if moving to the next record in the given recordset has been finished successfully.
+
+ODBC.Database db;
+ODBC.RecordSet recordset;
+db.connect("Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=C:\");
+recordset = db.createRecordSet("SELECT name, birthdate FROM data.csv");
+/*
+   the following structure is filled in the code below:
+
+   PersonInfo : Array
+    |_ Name : String
+    |_ BirthDate : DateTime
+*/
+while (recordset.fetchNextRow()) {
+   PersonInfo.Name = recordset.StringValue[0];
+   PersonInfo.BirthDate = recordset.DateTimeValue[0];
+   PersonInfo.commit();
+   }
+db.disconnect();
+Scripting API | ODBC Methods | RecordSet Methods
+Int64Value
+Int64Value[Int aP1] : Int64
+Int64Value[String aP1] : Int64
+getInt64Value(Int aP1) : Double
+getInt64Value(String aP1) : Double
+Returns a 64-bit integer value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+Int64 fileSize;
+recordset = db.createRecordSet("SELECT fileSize FROM myTable");
+while (recordset.fetchNextRow()) {
+   fileSize = recordset.Int64Value[0];
+}
+Scripting API | ODBC Methods | RecordSet Methods
+IntValue
+IntValue[Int aP1] : Int
+IntValue[String aP1] : Int
+getIntValue(Int aP1) : Int
+getIntValue(String aP1) : Int
+Returns an integer value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+Int age;
+recordset = db.createRecordSet("SELECT age FROM myTable");
+while (recordset.fetchNextRow()) {
+   age = recordset.IntValue[0];
+}
+Scripting API | ODBC Methods | RecordSet Methods
+isOpen
+isOpen() : Bool
+Returns a Boolean value true if the given recordset is open.
+
+ODBC.Database db;
+ODBC.RecordSet recordset;
+db.connect("Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=C:\");
+recordset = db.createRecordSet("SELECT * FROM notExisting.csv");
+if (not recordset.isOpen()) {
+   logError(db.Error);
+   }
+db.disconnect();
+Scripting API | ODBC Methods | RecordSet Methods
+isNull
+isNull(Int aP1) : Bool
+isNull(String aP1) : Bool
+Returns the Boolean value true if the value of the specified column (specified by index or by name) is NULL.
+
+ODBC.Database db;
+
+db.connect("DRIVER={SQL server};SERVER=oracle;DATABASE=D10679;UID=pa;PWD=GMC;APP=InspireDesigner");
+
+if(db.isError())
+   {
+   logError("Error with database");
+   } 
+
+String SQL = "SELECT ID, stringdata, date, int, text FROM dbo.Tabledata" ;
+ODBC.RecordSet rs = db.createRecordSet(SQL);
+
+while (rs.fetchNextRow())
+   {
+   BoolDATA.ID_bool=rs.isNull(0);
+   BoolDATA.stringdata_bool=rs.isNull(1);
+   BoolDATA.date_bool=rs.isNull(2);
+   BoolDATA.int_bool=rs.isNull(3);
+   BoolDATA.text_bool=rs.isNull(4);
+   BoolDATA.commit();
+   
+   BoolDATA.ID_bool=rs.isNull("ID");
+   BoolDATA.stringdata_bool=rs.isNull("stringdata");
+   BoolDATA.date_bool=rs.isNull("date");
+   BoolDATA.int_bool=rs.isNull("int");
+   BoolDATA.text_bool=rs.isNull("text");
+   BoolDATA.commit();   
+   }
+Scripting API | ODBC Methods | RecordSet Methods
+StringValue
+StringValue[Int aP1] : String
+StringValue[String aP1] : String
+getStringValue(Int aP1) : String
+getStringValue(String aP1) : String
+Returns a string value of the specified column (specified by index or by name) of the current record in the given recordset.
+
+ODBC.RecordSet recordset;
+String fullName;
+recordset = db.createRecordSet("SELECT name, surname FROM myTable");
+while (recordset.fetchNextRow()) {
+   fullName = recordset.StringValue["name"] +
+              recordset.StringValue["surname"];
+}
+StringList Methods
+StringList methods can be used for storing, manipulating and retrieving string values.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in Workflow Options Dialog is not checked.
+Scripting API | ODBC Methods | StringList Methods
+add
+add(String aP1) : Void
+Adds a list item with the specified value to the given list.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+Scripting API | ODBC Methods | StringList Methods
+assign
+assign(StringList aP1) : Void
+Assigns a StringList object to the given list. The same result can be achieved using the equal sign =.
+
+ODBC.StringList originalList, clonedList;
+originalList.add("Hello World!");
+clonedList.assign(originalList);
+Scripting API | ODBC Methods | StringList Methods
+clear
+clear() : Void
+Removes all the list items from the given list.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+stringList.add("Καλημέρα κόσμε");
+stringList.clear();
+Scripting API | ODBC Methods | StringList Methods
+get
+get(Int aP1) : String
+Returns the value of the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+stringList.add("Καλημέρα κόσμε");
+for (Int i=0;i<stringList.Size;i++) {
+   logMessage(stringList.get(i));
+   // alternative syntax:
+   logMessage(stringList[i]);   
+}
+Scripting API | ODBC Methods | StringList Methods
+insert
+insert(Int aP1, String aP2) : Void
+Inserts a list item at the specified position in the given list and sets its value to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+stringList.insert(0, "Καλημέρα κόσμε");
+Scripting API | ODBC Methods | StringList Methods
+remove
+remove(Int aP1) : Void
+Removes the list item from the specified position of the given list.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+stringList.remove(0);
+Scripting API | ODBC Methods | StringList Methods
+resize
+resize(Int aP1, String aP2) : Void
+Changes the total number of list items in the given list. If the new size is larger, the default value of all new list items is set to the specified value.
+
+ODBC.StringList stringList;
+stringList.add("Hello World!");
+stringList.resize(3, "default value");
+Scripting API | ODBC Methods | StringList Methods
+set
+set(Int aP1, String aP2) : Void
+Sets the value of the list item at the specified position in the given list to the specified value.
+
+If that zero based position is out of the available range, an error will be shown when processing.
+
+ODBC.StringList stringList;
+stringList.resize(2, "");
+stringList.set(0, "Hello World!");
+// alternative syntax:
+stringList[0] = "Hello World!";
+Scripting API | ODBC Methods | StringList Methods
+Size
+Size : Int
+getSize() : Int
+Returns the total number of list items in the given list.
+
+ODBC.StringList stringList;
+stringList.resize(2, "");
+Int listSize = stringList.Size;
+Scripting API | ODBC Methods | StringList Methods
+sort
+sort() : Void
+Sorts all list items in the given list by their values.
+
+Individual characters are compared using their Unicode code points.
+
+ODBC.StringList stringList;
+stringList.add("Tokyo");
+stringList.add("Seoul");
+stringList.add("Mexico City");
+stringList.sort();
+for (Int i=0;i<stringList.Size;i++) {
+   logMessage(stringList[i]);
+}

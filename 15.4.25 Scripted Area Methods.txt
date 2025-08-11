@@ -1,0 +1,31 @@
+Scripting API | ScriptedArea Methods
+queryObjectTransformationAndSize
+queryObjectTransformationAndSize (String aP1, Transformation & aP2, RVector & aP3) : Bool
+Returns True, if an area with given transformation and size was found.
+
+Example  To achieve this result, the method queryObjectTransformationAndSize was used as indicated below the image.
+
+
+Transformation tr;
+RVector size;
+Bool ret=queryObjectTransformationAndSize("Pages.Page1.Shape1", tr, size);
+Transformation tmp;
+RVector bsize;
+ret=queryObjectTransformationAndSize("Pages.Page1.Barcode1", tmp, bsize);
+tr.scale(size/bsize);
+drawBarcode(tr, Barcode1);
+
+However, this example serves for illustration purposes only, i.e. it might not be suitable for all barcode types as scaling affects a barcode's readability.
+
+Scripting API | ScriptedArea Methods
+removeFromWhiteSpace
+removeFromWhiteSpace (RRect aP1) : Void
+removeFromWhiteSpace (String aP1) : Void
+Intended to be used with message areas. Removes the extent of the scripted area from the available white space.
+
+The method with the RRect parameter enables you to use your own defined rectangle, while the method with the String parameter requires entering the coordinates in string format, typically taken from a sheet name. See also the Text in Rect module.
+
+Scripting API | ScriptedArea Methods
+Size
+Size : RVector
+Returns size of the scripted area.

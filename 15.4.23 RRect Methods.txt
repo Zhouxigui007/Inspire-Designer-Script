@@ -1,0 +1,241 @@
+RRect Methods
+RRect methods can be used for retrieving or setting the properties of rectangle objects.
+
+Note  If you do not see the get methods during scripting in Inspire Designer, it is because the option Show getters in the Workflow Options Dialog is not checked.
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+Scripting API | RRect Methods
+Area
+Area : Double
+getArea() : Double
+Returns the area of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double area = rect.Area;   //  area = 5000
+Scripting API | RRect Methods
+assign
+assign(Double aP1, Double aP2, Double aP3, Double aP4) : Void
+assign(RRect aP1) : Void
+Assigns either the specified x and y coordinates of the upper-left and bottom-right corners or the specified RRect object to the given rectangle. The same result of the latter method can be achieved using the equal sign =.
+
+RRect originalRect, clonedRect;
+originalRect.assign(0, 0, 100, 50);
+clonedRect.assign(originalRect);
+Scripting API | RRect Methods
+Bottom
+Bottom : Double
+getBottom() : Double
+setBottom(Double aP1) : Void
+Returns or sets the y-coordinate that is the sum of the Top and Height values of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double bottom = rect.Bottom;   //  bottom = 50
+Scripting API | RRect Methods
+Center
+Center : RVector
+getCenter() : RVector
+setCenter(RVector aP1) : Void
+Returns or sets the coordinates of the center of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector center = rect.Center;   
+Double centerX = center.X;   //  centerX = 50
+Double centerY = center.Y;   //  centerY = 25
+Scripting API | RRect Methods
+Dim
+Dim : RVector
+getDim() : RVector
+setDim(RVector aP1) : Void
+Returns or sets the size of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector size = rect.Dim;
+Double sizeX = size.X;   //  sizeX = 100
+Double sizeY = size.Y;   //  sizeY = 50
+Scripting API | RRect Methods
+equal
+equal(RRect aP1) : Bool
+Returns the Boolean value true if the specified rectangle equals to the given rectangle.
+
+RRect rect_01, rect_02;
+rect_01.assign(0, 0, 100, 50);
+rect_02.assign(100, 50, 0, 0);
+Bool isEqual = rect_01.equal(rect_02);   //  isEqual = false
+Scripting API | RRect Methods
+Height
+Height : Double
+getHeight() : Double
+setHeight(Double aP1) : Void
+Returns or sets the height of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double height = rect.Height;   //  height = 50
+Scripting API | RRect Methods
+include
+include(RRect aP1) : Void
+include(RVector aP1) : Void
+Incorporates the specified point or rectangle to the given rectangle and if necessary, changes the size of the original rectangle.
+
+RRect rect_01, rect_02;
+rect_01.assign(0, 0, 100, 50);
+rect_02.assign(50, 50, 150, 100);
+rect_01.include(rect_02);
+RVector size = rect_01.Dim;
+Double sizeX = size.X;   //  sizeX = 150
+Double sizeY = size.Y;   //  sizeY = 100
+Scripting API | RRect Methods
+isEmpty
+isEmpty() : Bool
+Returns the Boolean value true if either the width or the height of the given rectangle has the value of zero.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+rect.Bottom = 0;
+Bool isEmpty = rect.isEmpty();   //  isEmpty = true
+Scripting API | RRect Methods
+isInside
+isInside(RRect aP1) : Bool
+isInside(RVector aP1) : Bool
+Returns the Boolean value true if the specified point or rectangle lies within the given rectangle.
+
+RRect rect;
+RVector point;
+rect.assign(0, 0, 100, 50);
+point.assign(50, 25);
+Bool isPointInside = rect.isInside(point);   
+// isPointInside = true
+Scripting API | RRect Methods
+Left
+Left : Double
+getLeft() : Double
+setLeft(Double aP1) : Void
+Returns or sets the x-coordinate of the left edge of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double left = rect.Left;   //  left = 0
+Scripting API | RRect Methods
+LowerLeft
+LowerLeft : RVector
+getLowerLeft() : RVector
+setLowerLeft(RVector aP1) : Void
+Returns or sets the coordinates of the bottom-left corner of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector bottomLeft = rect.LowerLeft;
+Double bottomLeftX = bottomLeft.X;   //  bottomLeftX = 0
+Double bottomLeftY = bottomLeft.Y;   //  bottomLeftY = 50
+Scripting API | RRect Methods
+LowerRight
+LowerRight : RVector
+getLowerRight() : RVector
+setLowerRight(RVector aP1) : Void
+Returns or sets the coordinates of the bottom-right corner of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector bottomRight = rect.LowerRight;
+Double bottomRightX = bottomRight.X;   //  bottomRightX = 100
+Double bottomRightY = bottomRight.Y;   //  bottomRightY = 50
+Scripting API | RRect Methods
+normalize
+normalize() : Void
+Resets the coordinates of the given rectangle so the upper-left corner has lower values than the bottom-right corner.
+
+RRect rect;
+rect.assign(100, 50, 0, 0);
+rect.normalize();
+String coords = rect.toString();
+// coords = "[[0,0],[100,50]]"
+Scripting API | RRect Methods
+Right
+Right : Double
+getRight() : Double
+setRight(Double aP1) : Void
+Returns or sets the x-coordinate that is the sum of the Left and Width values of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double right = rect.Right;   //  right = 100
+Scripting API | RRect Methods
+Top
+Top : Double
+getTop() : Double
+setTop(Double aP1) : Void
+Returns or sets the y-coordinate of the top edge of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double top = rect.Top;   //  top = 0
+Scripting API | RRect Methods
+toString
+toString() : String
+Returns a string that represents coordinates of the upper-left and bottom-right corner of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+String coords = rect.toString();
+// coords = "[[0,0],[100,50]]"
+Scripting API | RRect Methods
+transform
+transform(Transformation aP1) : Void
+Applies the specified transformation to the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Transformation scaleDown;
+scaleDown.scale(0.5);
+rect.transform(scaleDown);
+String coords = rect.toString();
+// coords = "[[0,0],[50,25]]"
+Scripting API | RRect Methods
+translate
+translate(RVector aP1) : Void
+Moves the given rectangle by the value of the specified vector. The same result can be achieved using the += operator.
+
+RRect rect;
+RVector shift;
+rect.assign(0, 0, 100, 50);
+shift.assign(100, 50);
+rect.translate(shift);
+String coords = rect.toString();
+// coords = "[[100,50],[200,100]]"
+Scripting API | RRect Methods
+UpperLeft
+UpperLeft : RVector
+getUpperLeft() : RVector
+setUpperLeft(RVector aP1) : Void
+Returns or sets the coordinates of the upper-left corner of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector upperLeft = rect.UpperLeft;
+Double upperLeftX = upperLeft.X;   //  upperLeftX = 0
+Double upperLeftY = upperLeft.Y;   //  upperLeftY = 0
+Scripting API | RRect Methods
+UpperRight
+UpperRight : RVector
+getUpperRight() : RVector
+setUpperRight(RVector aP1) : Void
+Returns or sets the coordinates of the upper-right corner of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+RVector upperRight = rect.UpperRight;
+Double upperRightX = upperRight.X;   //  upperRightX = 100
+Double upperRightY = upperRight.Y;   //  upperRightY = 0
+Scripting API | RRect Methods
+Width
+Width : Double
+getWidth() : Double
+setWidth(Double aP1) : Void
+Returns or sets the width of the given rectangle.
+
+RRect rect;
+rect.assign(0, 0, 100, 50);
+Double width = rect.Width;   //  width = 100

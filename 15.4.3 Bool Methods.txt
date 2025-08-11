@@ -1,0 +1,99 @@
+Bool Methods
+Bool methods can be used for manipulation with Boolean values.
+
+Scripting API | Bool Methods
+assign
+assign(Bool aP1) : Void
+Assigns a Boolean value to the given Boolean variable. The same result can be achieved using the equal sign =.
+
+Bool isFileExists;
+isFileExists.assign(File.exist("C:\test.txt"));
+Scripting API | Bool Methods
+booleanAnd2
+booleanAnd2(Bool aP1) : Bool
+Returns the result of the Boolean conjunction of the given Boolean variable with the specified value.
+
+The same result can be achieved using the and operator.
+
+Bool finished = true;
+Bool isResultOk = false;
+Bool finishedSuccessfully = finished.booleanAnd2(isResultOk);
+// finishedSuccessfully = false
+Scripting API | Bool Methods
+booleanNot
+booleanNot() : Bool
+Returns the result of the Boolean negation of the given Boolean variable.
+
+The same result can be achieved using the not operator.
+
+Bool isGrayscale = false;
+Bool isFullColor = isGrayscale.booleanNot();
+// isFullColor = true
+Scripting API | Bool Methods
+booleanOr2
+booleanOr2(Bool aP1) : Bool
+Returns the result of the Boolean disjunction of the given Boolean variable with the specified value.
+
+The same result can be achieved using the or operator.
+
+Bool isWeekend = false;
+Bool isNationalHoliday = true;
+Bool isDayOff = isWeekend.booleanOr2(isNationalHoliday);
+// isDayOff = true
+Scripting API | Bool Methods
+booleanXor2
+booleanXor2(Bool aP1) : Bool
+Returns the result of the exclusive Boolean disjunction of the given Boolean variable with the specified value.
+
+The same result can be achieved using the xor operator.
+
+Bool isRegistered = true;
+Bool isAddressProvided = false;
+Bool isDataIncorrect = isRegistered.booleanXor2(isAddressProvided);
+// isDataIncorrect = true
+// both items must be either true or false
+Scripting API | Bool Methods
+equal
+equal(Bool aP1) : Bool
+Returns the Boolean value true if the specified value equals to the given Boolean variable.
+
+The same result can be achieved using the equality operator ==.
+
+Bool isInRange = true;
+Bool needToBeClipped = isOutOfRange.equal(false);
+// Bool needToBeClipped = not isOutOfRange;
+// needToBeClipped = false
+Scripting API | Bool Methods
+equalCaseInsensitive
+equalCaseInsensitive(Bool aP1) : Bool
+Returns true if the given variable's value equals to a specified string regardless of the case.
+
+String x="Contract";
+x.equalCaseInsensitive("contract") // returns true
+This method is used by Inspire Interactive (to call display rules saved in a JSON file), for more information please see the documentation of that application.
+
+Scripting API | Bool Methods
+less
+less(Bool aP1) : Bool
+Returns the Boolean value true if the given Boolean variable is lower than the specified value.
+
+The same result can be achieved using the less than operator <.
+
+Bool a = true;
+Bool b = false;
+Bool result = a.less(b);  // result = false
+Scripting API | Bool Methods
+toInt
+toInt() : Int
+Returns an integer representation of the given Boolean value.
+
+Double sum;
+Bool toBeIncluded = true;
+sum += 1 * Int(toBeIncluded);
+// sum = 1
+Scripting API | Bool Methods
+toString
+toString() : String
+Returns a string representation of the given Boolean value.
+
+logMessage(File.exist("C:\test.txt").toString());

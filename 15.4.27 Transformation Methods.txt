@@ -1,0 +1,198 @@
+Transformation Methods
+Transformation methods are used on the Content tab of Scripted Areas in order to describe transformations which manipulate different Layout objects. They can also be used to manipulate page-level objects via the Imposition Script module.
+
+To employ transformations:
+
+Create a transformation object and name it.
+
+Assign transformation methods to the transformation object and set the parameters.
+
+Specify an object to which the transformation method will be applied.
+
+You can use the same transformation object at various places further in the script (the same methods and parameters will be applied in all the cases) or use the reset method and repeat steps 2 and 3.
+
+Example  
+
+Transformation t; // creates a new empty transformation object, which is called t
+t.scale(0.3); // assign a transformation method and set the parameters (in this case an object will be scaled)   
+t.rotate(-180); // rotate the object by 180 degrees
+t.translate (x,y); // translate the object by values for x,y 
+drawImage(t,picture1); // when drawing the picture, apply all the transformation methods defined above
+t.reset(); // reset the transformation methods assigned to the transformation object, i.e. the transformation object will be empty again
+
+Transformation is in principle a matrix and therefore, when using the transformation methods (see for example get or set methods), it is important to know the transformation matrix and positions of the individual points. By default, the matrix is set in the following way:
+
+1 0 0
+0 1 0
+Positions of the individual points are as follows:
+
+0 2 4
+1 3 5
+Tip  In Inspire Designer, these methods use meter (m) as a default measurement unit. You can use the Math Methods to convert the parameters to meters or to convert the results to required units. e.g. frommm converts a parameter from milimeters to meters and tomm converts the result from meters to milimeters.
+Scripting API | Transformation Methods
+assign
+assign (Double aC0, Double aC1, Double aC2, Double aC3, Double aC4, Double aC5) : Void
+assign (Double aScale) : Void
+assign (NormalTransformation aNT) : Void
+assign (RVector aVector) : Void
+assign (Transformation aT) : Void
+Assigns: Coordinates of a transformation matrix (aC0-aC5); a scaling operation (aScale); a normal transformation (aNT); a repositioning for an object (RVector); or another transformation (aT). Same as the = assignment statement.
+
+Scripting API | Transformation Methods
+Epsilon
+Epsilon : Double
+getEpsilon () : Double
+Returns epsilon (number so small that it is considered zero).
+
+Scripting API | Transformation Methods
+Expansion
+Expansion : Double
+getExpansion () : Double
+Returns the scale value, from which you can find out whether an object is smaller/larger than before transformation.
+
+Scripting API | Transformation Methods
+flipX / flip Y
+flipX () : Void
+flipY () : Void
+Flips on the X/Y axis.
+
+Example  
+Transformation t;
+t.flipY();
+drawImage(t,Image01);
+Scripting API | Transformation Methods
+get
+get (Int aP1) : Double
+Returns the value of the specified point in the transformation matrix.
+
+Example  
+
+Transformation t;
+Double d2=t.get(2); // returns the value of the point which is located at position 2
+
+Scripting API | Transformation Methods
+invert
+invert () : Void
+Inverts transformation.
+
+Scripting API | Transformation Methods
+isRectilinear
+isRectilinear () : Bool
+If True is returned, transformation may take place for X independently on Y.
+
+Scripting API | Transformation Methods
+less
+less (Transformation aT) : Bool
+Compares two transformations; returns True if the transformation produces a smaller object that the one to which it is compared.
+
+Example  
+Transformation t;
+t.scale(0.3);
+Transformation r;
+r.scale(0.45);
+Bool b=t.less(r);
+logMessage (b.toString());
+Scripting API | Transformation Methods
+OnlyTransposition
+OnlyTransposition : RVector
+getOnlyTransposition () : RVector
+Repositions with the selected transposition.
+
+Scripting API | Transformation Methods
+reset
+reset () : Void
+Resets the transformation matrix to the default values, i.e. so that any subsequent transformation applied to the object is applied relative to the origin.
+
+Example  Draws four images on a page (2x2) with 5mm space between each other.
+
+Transformation move;
+for (Int i= 0; i<2; i++)
+   {
+   for (Int j= 0; j<2; j++)
+   {
+   move.translate(i*0.005,j*0.005);
+   drawImage(move,picture1);
+   move.reset();
+//move has to be reset, else it would continue from the last point where the object was moved to
+   }
+}
+
+Scripting API | Transformation Methods
+rotate
+rotate (Double aR) : Void
+Rotates object by the specified angle.
+
+Example  
+Transformation t;
+t.rotate(-45);
+drawImage(t,Image01);
+Scripting API | Transformation Methods
+scale
+scale (Double aScale) : Void
+scale (Double aScaleX, Double aScaleY) : Void
+scale (RVector aVector) : Void
+Changes scale as a percentage as a whole on both axis (aScale or aVector) or on independent axis (aScaleX, aScaleY).
+
+Example  
+Transformation t;
+t.scale(0.3); //decreases the size to 30% of the original on both axis
+drawImage(t,Image01);
+
+Transformation t;
+t.scale(0.3,0.6); // decreases the size to 30% on X and 60% on Y
+drawImage(t,Image01);
+
+Scripting API | Transformation Methods
+set
+set (Int aP1, Double aVector) : Void
+Sets the specified point in the transformation matrix.
+
+Example  
+
+Transformation t;
+t.set(4,1); // the point which is located at position 4 will have the value set to 1
+
+Scripting API | Transformation Methods
+shearX / shearY
+shearX (Double aR) : Void
+shearY (Double aR) : Void
+Sets shear value for X.
+
+Example  
+Transformation t;
+t.shearX(10);
+drawImage(t,Image);
+Scripting API | Transformation Methods
+toString
+toString () : String
+Converts Transformation into a string representation.
+
+Scripting API | Transformation Methods
+translate
+translate (Double aP1, Double aVector) : Void
+translate (RVector aVector) : Void
+Set translation [x,y] to the transformation.
+
+Example  
+Transformation center;
+RVector flowSize=formatFlowTo(Size,Flow1);   //size of flow from e.g script data input module
+RVector startPosition=(Size/2)-(flowSize/2); //starting position, the center of the scripted object
+center.translate(startPosition);             //moves to the starting position
+drawFlow(center,Size,Flow1);                 //places the flow to the starting position
+Scripting API | Transformation Methods
+Type
+Type : TransformationType
+getType () : TransformationType
+Gets the transformation type ( General, Identity, ScaleTrans, Scaling, Transposition).
+
+Scripting API | Transformation Methods
+WithoutTransposition
+WithoutTransposition : Transformation
+getWithoutTransposition () : Transformation
+Creates copy of transformation without transposition.
+
+Scripting API | Transformation Methods
+x / y
+x (Double aX) : Double
+y (Double aY) : Double
+Applies transformation on X / Y.
